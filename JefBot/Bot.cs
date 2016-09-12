@@ -124,6 +124,11 @@ namespace JefBot
             {
                 ChatClient.SendMessage(" BabyRage MAWDS BabyRage ");
             }
+
+            if (command == "modlist")
+            {
+                ChatClient.SendMessage("Rimworld Modlist: http://jefmajor.com/modlist.png");
+            }
         }
 
         /// <summary>
@@ -149,8 +154,21 @@ namespace JefBot
         
         private void Quote(TwitchChatClient.OnCommandReceivedArgs e)
         {
+            bool quoted = false;
             try
             {
+                try
+                {
+                    if (e.ArgumentsAsString[0] == '"')
+                    {
+                        quoted = true;
+                    }
+                }
+                catch (Exception meh)
+                {
+                    //fuck it, quote is just empty
+                }
+                
                 MailMessage mail = new MailMessage();
                 SmtpClient smtpserver = new SmtpClient(settings["serveraddress"]);
                 mail.From = new MailAddress(settings["mailfrom"]);
@@ -171,7 +189,13 @@ namespace JefBot
                 Console.WriteLine(er.Message);
                 Console.WriteLine(er.InnerException);
             }
-            ChatClient.SendMessage("Quote Sent for review, thanks for the help!");
+            if (!quoted)
+            {
+                ChatClient.SendMessage("Quote Sent for review, thanks for the help!");
+            }else
+            {
+                ChatClient.SendMessage("Quote Sent for review, please don't add \" to the quotes yourself :)");
+            }
             
         }
 

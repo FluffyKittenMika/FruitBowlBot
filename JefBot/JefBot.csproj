@@ -105,7 +105,6 @@
     <None Include="FodyWeavers.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <Content Include=".gitignore" />
     <Content Include="Settings\Settings_example.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
