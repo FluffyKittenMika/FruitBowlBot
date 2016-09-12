@@ -84,13 +84,13 @@ namespace JefBot
         private void RecivedResub(object sender, TwitchChatClient.OnReSubscriberArgs e)
         {
             Console.WriteLine($@"{e.ReSubscriber.DisplayName} subbed for {e.ReSubscriber.Months} with the message '{e.ReSubscriber.ResubMessage}' :)");
-            ChatClient.SendMessage($"panicBasket {e.ReSubscriber.DisplayName} panicBasket ");
+            //ChatClient.SendMessage($"panicBasket {e.ReSubscriber.DisplayName} panicBasket ");
         }
 
         private void RecivedNewSub(object sender, TwitchChatClient.OnNewSubscriberArgs e)
         {
             Console.WriteLine($@"{e.Subscriber.Name} Just subbed! What a bro!' :)");
-            ChatClient.SendMessage("panicBasket " + e.Subscriber.Name + " panicBasket");
+            //ChatClient.SendMessage("panicBasket " + e.Subscriber.Name + " panicBasket");
         }
 
         /// <summary>
@@ -118,11 +118,6 @@ namespace JefBot
             if (command == "uptime" || command == "up" || command == "u")
             {
                 Uptime();
-            }
-
-            if (command == "mods")
-            {
-                ChatClient.SendMessage(" BabyRage MAWDS BabyRage ");
             }
 
             if (command == "modlist")
@@ -191,10 +186,10 @@ namespace JefBot
             }
             if (!quoted)
             {
-                ChatClient.SendMessage("Quote Sent for review, thanks for the help!");
+                ChatClient.SendMessage("👌 Thanks!");
             }else
             {
-                ChatClient.SendMessage("Quote Sent for review, please don't add \" to the quotes yourself :)");
+                ChatClient.SendMessage("👌 please don't add \" to the quotes yourself :)");
             }
             
         }
