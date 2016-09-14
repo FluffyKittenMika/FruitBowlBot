@@ -122,7 +122,7 @@ namespace JefBot
 
             if (command == "modlist")
             {
-                ChatClient.SendMessage("Rimworld Modlist: http://jefmajor.com/modlist.png");
+                ChatClient.SendMessage("Rimworld Modlist: http://i.imgur.com/z6Mh76F.png");
             }
         }
 
