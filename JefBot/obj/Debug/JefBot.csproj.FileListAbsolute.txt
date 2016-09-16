@@ -1,12 +1,6 @@
-C:\Users\Mikael\Desktop\WORK\Projects\JefBot\JefBot\bin\Debug\JefBot.exe.config
-C:\Users\Mikael\Desktop\WORK\Projects\JefBot\JefBot\obj\Debug\JefBot.csprojResolveAssemblyReference.cache
-C:\Users\Mikael\Desktop\WORK\Projects\JefBot\JefBot\obj\Debug\JefBot.exe.manifest
-C:\Users\Mikael\Desktop\WORK\Projects\JefBot\JefBot\obj\Debug\JefBot.exe
-C:\Users\Mikael\Desktop\WORK\Projects\JefBot\JefBot\obj\Debug\JefBot.pdb
 C:\Users\Mikael\Desktop\WORK\Projects\JefBot\JefBot\bin\Debug\Settings\Settings_example.txt
 C:\Users\Mikael\Desktop\WORK\Projects\JefBot\JefBot\bin\Debug\FodyWeavers.xml
-C:\Users\Mikael\Desktop\WORK\Projects\JefBot\JefBot\bin\Debug\JefBot.exe.manifest
-C:\Users\Mikael\Desktop\WORK\Projects\JefBot\JefBot\bin\Debug\JefBot.application
+C:\Users\Mikael\Desktop\WORK\Projects\JefBot\JefBot\bin\Debug\JefBot.exe.config
 C:\Users\Mikael\Desktop\WORK\Projects\JefBot\JefBot\bin\Debug\JefBot.exe
 C:\Users\Mikael\Desktop\WORK\Projects\JefBot\JefBot\bin\Debug\JefBot.pdb
 C:\Users\Mikael\Desktop\WORK\Projects\JefBot\JefBot\bin\Debug\log4net.dll
@@ -17,4 +11,6 @@ C:\Users\Mikael\Desktop\WORK\Projects\JefBot\JefBot\bin\Debug\TwitchLib.dll
 C:\Users\Mikael\Desktop\WORK\Projects\JefBot\JefBot\bin\Debug\log4net.xml
 C:\Users\Mikael\Desktop\WORK\Projects\JefBot\JefBot\bin\Debug\Newtonsoft.Json.xml
 C:\Users\Mikael\Desktop\WORK\Projects\JefBot\JefBot\bin\Debug\TwitchLib.xml
-C:\Users\Mikael\Desktop\WORK\Projects\JefBot\JefBot\obj\Debug\JefBot.application
+C:\Users\Mikael\Desktop\WORK\Projects\JefBot\JefBot\obj\Debug\JefBot.csprojResolveAssemblyReference.cache
+C:\Users\Mikael\Desktop\WORK\Projects\JefBot\JefBot\obj\Debug\JefBot.exe
+C:\Users\Mikael\Desktop\WORK\Projects\JefBot\JefBot\obj\Debug\JefBot.pdb
