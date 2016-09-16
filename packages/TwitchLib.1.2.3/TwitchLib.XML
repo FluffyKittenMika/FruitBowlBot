@@ -1,0 +1,2353 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>TwitchLib</name>
+    </assembly>
+    <members>
+        <member name="T:TwitchLib.TwitchAPIClasses.Block">
+            <summary>
+            Block object representing one blocked user.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.TwitchAPIClasses.Block.UpdatedAt">
+            <summary>
+            String form of a datetime json object representing when the block was last updated.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.TwitchAPIClasses.Block.User">
+            <summary>
+            User object of the user that has been blocked.
+            </summary>
+        </member>
+        <member name="M:TwitchLib.TwitchAPIClasses.Block.#ctor(Newtonsoft.Json.Linq.JToken)">
+            <summary>
+            Block object constructor.
+            </summary>
+            <param name="json"></param>
+        </member>
+        <member name="T:TwitchLib.TwitchAPIClasses.FeedResponse">
+            <summary>Class representing the response from fetching a channel feed via Twitch API</summary>
+        </member>
+        <member name="P:TwitchLib.TwitchAPIClasses.FeedResponse.Total">
+            <summary>Property representing total posts in a channel's feed.</summary>
+        </member>
+        <member name="P:TwitchLib.TwitchAPIClasses.FeedResponse.Cursor">
+            <summary>Property representing cursor value used for pagination.</summary>
+        </member>
+        <member name="P:TwitchLib.TwitchAPIClasses.FeedResponse.Topic">
+            <summary>Property representing the topic (likely internal).</summary>
+        </member>
+        <member name="P:TwitchLib.TwitchAPIClasses.FeedResponse.Posts">
+            <summary>Property representing a list of Post objects.</summary>
+        </member>
+        <member name="M:TwitchLib.TwitchAPIClasses.FeedResponse.#ctor(Newtonsoft.Json.Linq.JToken)">
+            <summary>FeedResponse object constructor.</summary>
+        </member>
+        <member name="T:TwitchLib.TwitchAPIClasses.FeedResponse.Post">
+            <summary>Class representing Post object found in FeedResponse</summary>
+        </member>
+        <member name="P:TwitchLib.TwitchAPIClasses.FeedResponse.Post.Id">
+            <summary>Property representing Id of post.</summary>
+        </member>
+        <member name="P:TwitchLib.TwitchAPIClasses.FeedResponse.Post.CreatedAt">
+            <summary>Property representing date time string of post creation.</summary>
+        </member>
+        <member name="P:TwitchLib.TwitchAPIClasses.FeedResponse.Post.Deleted">
+            <summary>Property representing whether or not post was deleted.</summary>
+        </member>
+        <member name="P:TwitchLib.TwitchAPIClasses.FeedResponse.Post.Body">
+            <summary>Property representing the body of the post.</summary>
+        </member>
+        <member name="P:TwitchLib.TwitchAPIClasses.FeedResponse.Post.Emotes">
+            <summary>Property representing list of Emote objects.</summary>
+        </member>
+        <member name="P:TwitchLib.TwitchAPIClasses.FeedResponse.Post.Reactions">
+            <summary>Property representing list of reaction objects.</summary>
+        </member>
+        <member name="P:TwitchLib.TwitchAPIClasses.FeedResponse.Post.User">
+            <summary>Property representing User object.</summary>
+        </member>
+        <member name="P:TwitchLib.TwitchAPIClasses.FeedResponse.Post.CommentsTotal">
+            <summary>Property representing total number of comments.</summary>
+        </member>
+        <member name="P:TwitchLib.TwitchAPIClasses.FeedResponse.Post.CommentsCursor">
+            <summary>Proeprty representing comments cursor used for pagination.</summary>
+        </member>
+        <member name="P:TwitchLib.TwitchAPIClasses.FeedResponse.Post.Comments">
+            <summary>Property representing list of Comment objects.</summary>
+        </member>
+        <member name="P:TwitchLib.TwitchAPIClasses.FeedResponse.Post.Permissions">
+            <summary>Property representing the list of permissions of the post fetch.</summary>
+        </member>
+        <member name="M:TwitchLib.TwitchAPIClasses.FeedResponse.Post.#ctor(Newtonsoft.Json.Linq.JToken)">
+            <summary>Post object constructor</summary>
+        </member>
+        <member name="T:TwitchLib.TwitchAPIClasses.FeedResponse.Post.Emote">
+            <summary>Class representing an emote found in a comment or post.</summary>
+        </member>
+        <member name="P:TwitchLib.TwitchAPIClasses.FeedResponse.Post.Emote.Id">
+            <summary>Property representing Id of emote.</summary>
+        </member>
+        <member name="P:TwitchLib.TwitchAPIClasses.FeedResponse.Post.Emote.Start">
+            <summary>Property representing start index of emote.</summary>
+        </member>
+        <member name="P:TwitchLib.TwitchAPIClasses.FeedResponse.Post.Emote.End">
+            <summary>Property representing end index of emote.</summary>
+        </member>
+        <member name="P:TwitchLib.TwitchAPIClasses.FeedResponse.Post.Emote.Set">
+            <summary>Property representing the emote set id.</summary>
+        </member>
+        <member name="M:TwitchLib.TwitchAPIClasses.FeedResponse.Post.Emote.#ctor(Newtonsoft.Json.Linq.JToken)">
+            <summary>Emote object construcotr.</summary>
+        </member>
+        <member name="T:TwitchLib.TwitchAPIClasses.FeedResponse.Post.Reaction">
+            <summary>Class representing a reaction as towards a post.</summary>
+        </member>
+        <member name="P:TwitchLib.TwitchAPIClasses.FeedResponse.Post.Reaction.Emote">
+            <summary>Property representing the emote of the reaciton.</summary>
+        </member>
+        <member name="P:TwitchLib.TwitchAPIClasses.FeedResponse.Post.Reaction.Count">
+            <summary>Property representing the number of people using reaction.</summary>
+        </member>
+        <member name="M:TwitchLib.TwitchAPIClasses.FeedResponse.Post.Reaction.#ctor(Newtonsoft.Json.Linq.JToken)">
+            <summary>Reaction object constructor.</summary>
+        </member>
+        <member name="T:TwitchLib.TwitchAPIClasses.FeedResponse.Post.Comment">
+            <summary>Class representing comments found on a post.</summary>
+        </member>
+        <member name="P:TwitchLib.TwitchAPIClasses.FeedResponse.Post.Comment.Id">
+            <summary>Property representing the Id of the comment.</summary>
+        </member>
+        <member name="P:TwitchLib.TwitchAPIClasses.FeedResponse.Post.Comment.CreatedAt">
+            <summary>Property representing the date time of the comment creation.</summary>
+        </member>
+        <member name="P:TwitchLib.TwitchAPIClasses.FeedResponse.Post.Comment.Deleted">
+            <summary>Property representing whether or not the comment was deleted.</summary>
+        </member>
+        <member name="P:TwitchLib.TwitchAPIClasses.FeedResponse.Post.Comment.Body">
+            <summary>Property representing the body of the comment.</summary>
+        </member>
+        <member name="P:TwitchLib.TwitchAPIClasses.FeedResponse.Post.Comment.Permissions">
+            <summary>Property representing the list of permissions assigned to comment fetch.</summary>
+        </member>
+        <member name="P:TwitchLib.TwitchAPIClasses.FeedResponse.Post.Comment.Emotes">
+            <summary>Property representing the list of Emote objects.</summary>
+        </member>
+        <member name="P:TwitchLib.TwitchAPIClasses.FeedResponse.Post.Comment.Reactions">
+            <summary>Property representing the list of Reaction objects.</summary>
+        </member>
+        <member name="P:TwitchLib.TwitchAPIClasses.FeedResponse.Post.Comment.User">
+            <summary>Property representing the commenter.</summary>
+        </member>
+        <member name="M:TwitchLib.TwitchAPIClasses.FeedResponse.Post.Comment.#ctor(Newtonsoft.Json.Linq.JToken)">
+            <summary>Comment object constructor.</summary>
+        </member>
+        <member name="T:TwitchLib.TwitchAPIClasses.Game">
+            <summary>Class representing Game object returned from Twitch API.</summary>
+        </member>
+        <member name="P:TwitchLib.TwitchAPIClasses.Game.Name">
+            <summary>Name of returned game.</summary>
+        </member>
+        <member name="P:TwitchLib.TwitchAPIClasses.Game.Popularity">
+            <summary>Popularity of returned game [nullable]</summary>
+        </member>
+        <member name="P:TwitchLib.TwitchAPIClasses.Game.Id">
+            <summary>Twitch ID of returned game [nullable]</summary>
+        </member>
+        <member name="P:TwitchLib.TwitchAPIClasses.Game.GiantBombId">
+            <summary>GiantBomb ID of returned game [nullable]</summary>
+        </member>
+        <member name="P:TwitchLib.TwitchAPIClasses.Game.Box">
+            <summary>Box class representing Box image URLs</summary>
+        </member>
+        <member name="P:TwitchLib.TwitchAPIClasses.Game.Logo">
+            <summary>Logo class representing Logo image URLs</summary>
+        </member>
+        <member name="M:TwitchLib.TwitchAPIClasses.Game.#ctor(Newtonsoft.Json.Linq.JToken)">
+            <summary>Constructor for Game object.</summary>
+        </member>
+        <member name="T:TwitchLib.TwitchAPIClasses.Game.BoxUrls">
+            <summary>Class representing game box image in various sizes.</summary>
+        </member>
+        <member name="P:TwitchLib.TwitchAPIClasses.Game.BoxUrls.Large">
+            <summary>Large box image.</summary>
+        </member>
+        <member name="P:TwitchLib.TwitchAPIClasses.Game.BoxUrls.Medium">
+            <summary>Medium box image.</summary>
+        </member>
+        <member name="P:TwitchLib.TwitchAPIClasses.Game.BoxUrls.Small">
+            <summary>Small box image.</summary>
+        </member>
+        <member name="P:TwitchLib.TwitchAPIClasses.Game.BoxUrls.Template">
+            <summary>Template box image.</summary>
+        </member>
+        <member name="M:TwitchLib.TwitchAPIClasses.Game.BoxUrls.#ctor(Newtonsoft.Json.Linq.JToken)">
+            <summary>Constructor for BoxUrls.</summary>
+        </member>
+        <member name="T:TwitchLib.TwitchAPIClasses.Game.LogoUrls">
+            <summary>Class representing game logo image in various sizes.</summary>
+        </member>
+        <member name="P:TwitchLib.TwitchAPIClasses.Game.LogoUrls.Large">
+            <summary>Large game logo.</summary>
+        </member>
+        <member name="P:TwitchLib.TwitchAPIClasses.Game.LogoUrls.Medium">
+            <summary>Medium game logo.</summary>
+        </member>
+        <member name="P:TwitchLib.TwitchAPIClasses.Game.LogoUrls.Small">
+            <summary>Small game logo.</summary>
+        </member>
+        <member name="P:TwitchLib.TwitchAPIClasses.Game.LogoUrls.Template">
+            <summary>Template game logo.</summary>
+        </member>
+        <member name="M:TwitchLib.TwitchAPIClasses.Game.LogoUrls.#ctor(Newtonsoft.Json.Linq.JToken)">
+            <summary>LogoUrls object constructor.</summary>
+        </member>
+        <member name="T:TwitchLib.TwitchAPIClasses.User">
+            <summary>Class representing a User object returned from Twitch API.</summary>
+        </member>
+        <member name="P:TwitchLib.TwitchAPIClasses.User.DisplayName">
+            <summary>Display name of user (CAN BE NULL, USE NAME)</summary>
+        </member>
+        <member name="P:TwitchLib.TwitchAPIClasses.User.Id">
+            <summary>Twitch Id of user.</summary>
+        </member>
+        <member name="P:TwitchLib.TwitchAPIClasses.User.Name">
+            <summary>Username of user.</summary>
+        </member>
+        <member name="P:TwitchLib.TwitchAPIClasses.User.Type">
+            <summary>Type of user assigned by Twitch.</summary>
+        </member>
+        <member name="P:TwitchLib.TwitchAPIClasses.User.Bio">
+            <summary>Bio of user.</summary>
+        </member>
+        <member name="P:TwitchLib.TwitchAPIClasses.User.CreatedAt">
+            <summary>Date and time user was created at.</summary>
+        </member>
+        <member name="P:TwitchLib.TwitchAPIClasses.User.UpdatedAt">
+            <summary>Date and time user was last updated (logged in generally)</summary>
+        </member>
+        <member name="P:TwitchLib.TwitchAPIClasses.User.Logo">
+            <summary>Link to logo of user.</summary>
+        </member>
+        <member name="M:TwitchLib.TwitchAPIClasses.User.#ctor(System.String)">
+            <summary>Constructor for User object.</summary>
+        </member>
+        <member name="T:TwitchLib.TwitchAPIClasses.BadgeResponse">
+            <summary>Class represents a response from the Chat Badge Twitch API query.</summary>
+        </member>
+        <member name="P:TwitchLib.TwitchAPIClasses.BadgeResponse.ChannelBadges">
+            <summary>List of all badges available in channel.</summary>
+        </member>
+        <member name="M:TwitchLib.TwitchAPIClasses.BadgeResponse.#ctor(System.String)">
+            <summary>BadgeResponse object constructor.</summary>
+        </member>
+        <member name="T:TwitchLib.TwitchAPIClasses.BadgeResponse.Badge">
+            <summary>Class representing a Badge as returned by the Twitch API.</summary>
+        </member>
+        <member name="P:TwitchLib.TwitchAPIClasses.BadgeResponse.Badge.BadgeName">
+            <summary>The name of the badge name.</summary>
+        </member>
+        <member name="P:TwitchLib.TwitchAPIClasses.BadgeResponse.Badge.Alpha">
+            <summary>The alpha version of the badge image.</summary>
+        </member>
+        <member name="P:TwitchLib.TwitchAPIClasses.BadgeResponse.Badge.Image">
+            <summary>The default image of the badge.</summary>
+        </member>
+        <member name="P:TwitchLib.TwitchAPIClasses.BadgeResponse.Badge.SVG">
+            <summary>The svg version of the badge image.</summary>
+        </member>
+        <member name="M:TwitchLib.TwitchAPIClasses.BadgeResponse.Badge.#ctor(System.String,Newtonsoft.Json.Linq.JToken)">
+            <summary>Badge object constructor.</summary>
+        </member>
+        <member name="T:TwitchLib.TwitchAPIClasses.Chatter">
+            <summary>Class representing a chatter as returned by the Twitch Api.</summary>
+        </member>
+        <member name="P:TwitchLib.TwitchAPIClasses.Chatter.Username">
+            <summary>Property representing the username of a chatter.</summary>
+        </member>
+        <member name="P:TwitchLib.TwitchAPIClasses.Chatter.UserType">
+            <summary>Property representing the user type of a chatter.</summary>
+        </member>
+        <member name="M:TwitchLib.TwitchAPIClasses.Chatter.#ctor(System.String,TwitchLib.Common.UserType)">
+            <summary>Constructor of Chatter.</summary>
+        </member>
+        <member name="T:TwitchLib.TwitchAPIClasses.Follow">
+            <summary>Object representing a follow between a user/viewer and a channel/streamer.</summary>
+        </member>
+        <member name="P:TwitchLib.TwitchAPIClasses.Follow.IsFollowing">
+            <summary>Bool representing if user follows channel. If false, all other properties are null.</summary>
+        </member>
+        <member name="P:TwitchLib.TwitchAPIClasses.Follow.CreatedAt">
+            <summary>DateTime object representing when a follow was created.</summary>
+        </member>
+        <member name="P:TwitchLib.TwitchAPIClasses.Follow.Notifications">
+            <summary>Bool representing whether or not the user receives notificaitons for their follow.</summary>
+        </member>
+        <member name="P:TwitchLib.TwitchAPIClasses.Follow.Channel">
+            <summary>Channel details returned along with the request.</summary>
+        </member>
+        <member name="M:TwitchLib.TwitchAPIClasses.Follow.#ctor(System.String,System.Boolean)">
+            <summary>Constructor for follow</summary>
+        </member>
+        <member name="T:TwitchLib.TwitchAPIClasses.FollowedUsersResponse">
+            <summary>Represents API response from user's followed list.</summary>
+        </member>
+        <member name="P:TwitchLib.TwitchAPIClasses.FollowedUsersResponse.Follows">
+            <summary>All follows returned in the api request.</summary>
+        </member>
+        <member name="P:TwitchLib.TwitchAPIClasses.FollowedUsersResponse.TotalFollowCount">
+            <summary>Total follow count.</summary>
+        </member>
+        <member name="M:TwitchLib.TwitchAPIClasses.FollowedUsersResponse.#ctor(System.String)">
+            <summary>FollowedUsersResponse constructor</summary>
+            <param name="apiResponse">Returned api response in string form.</param>
+        </member>
+        <member name="T:TwitchLib.TwitchAPIClasses.Channel">
+            <summary>Class representing a channel object from Twitch API.</summary>
+        </member>
+        <member name="P:TwitchLib.TwitchAPIClasses.Channel.Mature">
+            <summary>Property representing whether channel is mature or not.</summary>
+        </member>
+        <member name="P:TwitchLib.TwitchAPIClasses.Channel.Partner">
+            <summary>Property representing whether channel is partnered or not.</summary>
+        </member>
+        <member name="P:TwitchLib.TwitchAPIClasses.Channel.Followers">
+            <summary>Property representing number of followers the channel has.</summary>
+        </member>
+        <member name="P:TwitchLib.TwitchAPIClasses.Channel.Views">
+            <summary>Property representing number of views channel has.</summary>
+        </member>
+        <member name="P:TwitchLib.TwitchAPIClasses.Channel.Id">
+            <summary>Property representing channel Id.</summary>
+        </member>
+        <member name="P:TwitchLib.TwitchAPIClasses.Channel.Background">
+            <summary>Property representing background image url.</summary>
+        </member>
+        <member name="P:TwitchLib.TwitchAPIClasses.Channel.BroadcasterLanguage">
+            <summary>Property representing the language the broadcaster has flagged their channel as.</summary>
+        </member>
+        <member name="P:TwitchLib.TwitchAPIClasses.Channel.CreatedAt">
+            <summary>Property representing date time string of channel creation.</summary>
+        </member>
+        <member name="P:TwitchLib.TwitchAPIClasses.Channel.Delay">
+            <summary>Property representing channel delay, if applied.</summary>
+        </member>
+        <member name="P:TwitchLib.TwitchAPIClasses.Channel.DisplayName">
+            <summary>Property representing customized display name.</summary>
+        </member>
+        <member name="P:TwitchLib.TwitchAPIClasses.Channel.Game">
+            <summary>Property representing the game the channel is playing.</summary>
+        </member>
+        <member name="P:TwitchLib.TwitchAPIClasses.Channel.Language">
+            <summary>Property representing the signed language.</summary>
+        </member>
+        <member name="P:TwitchLib.TwitchAPIClasses.Channel.Logo">
+            <summary>Property representing the logo of the channel.</summary>
+        </member>
+        <member name="P:TwitchLib.TwitchAPIClasses.Channel.Name">
+            <summary>Property representing the channel name.</summary>
+        </member>
+        <member name="P:TwitchLib.TwitchAPIClasses.Channel.ProfileBanner">
+            <summary>Property representing the banner that stretches across the top.</summary>
+        </member>
+        <member name="P:TwitchLib.TwitchAPIClasses.Channel.Status">
+            <summary>Property representing current channel status.</summary>
+        </member>
+        <member name="P:TwitchLib.TwitchAPIClasses.Channel.UpdatedAt">
+            <summary>Property representing date time of last channel update.</summary>
+        </member>
+        <member name="M:TwitchLib.TwitchAPIClasses.Channel.#ctor(Newtonsoft.Json.Linq.JToken)">
+            <summary>Constructor for channel object.</summary>
+        </member>
+        <member name="T:TwitchLib.TwitchAPIClasses.Follower">
+            <summary>Class representing a follower as fetched via Twitch API</summary>
+        </member>
+        <member name="P:TwitchLib.TwitchAPIClasses.Follower.Notifications">
+            <summary>Property representing whether notifications are enabled or not.</summary>
+        </member>
+        <member name="P:TwitchLib.TwitchAPIClasses.Follower.CreatedAt">
+            <summary>Property representing date time of follow.</summary>
+        </member>
+        <member name="P:TwitchLib.TwitchAPIClasses.Follower.User">
+            <summary>Property representing the follower user.</summary>
+        </member>
+        <member name="M:TwitchLib.TwitchAPIClasses.Follower.#ctor(Newtonsoft.Json.Linq.JToken)">
+            <summary>Follower object constructor.</summary>
+        </member>
+        <member name="T:TwitchLib.TwitchAPIClasses.FollowersResponse">
+            <summary>Class representing response from Twitch API for followers.</summary>
+        </member>
+        <member name="P:TwitchLib.TwitchAPIClasses.FollowersResponse.Followers">
+            <summary>Property representing list of Follower objects.</summary>
+        </member>
+        <member name="P:TwitchLib.TwitchAPIClasses.FollowersResponse.TotalFollowerCount">
+            <summary>Property representing total follower count.</summary>
+        </member>
+        <member name="P:TwitchLib.TwitchAPIClasses.FollowersResponse.Cursor">
+            <summary>Property representing cursor for pagination.</summary>
+        </member>
+        <member name="M:TwitchLib.TwitchAPIClasses.FollowersResponse.#ctor(System.String)">
+            <summary>FollowersResponse object constructor.</summary>
+        </member>
+        <member name="T:TwitchLib.TwitchAPIClasses.Stream">
+            <summary>Class representing a stream as returned by Twitch API</summary>
+        </member>
+        <member name="P:TwitchLib.TwitchAPIClasses.Stream.IsPlaylist">
+            <summary>Property representing whether or not the stream is playlist or live.</summary>
+        </member>
+        <member name="P:TwitchLib.TwitchAPIClasses.Stream.AverageFps">
+            <summary>Property representing average frames per second.</summary>
+        </member>
+        <member name="P:TwitchLib.TwitchAPIClasses.Stream.Delay">
+            <summary>Property representing any delay on the stream (in seconds)</summary>
+        </member>
+        <member name="P:TwitchLib.TwitchAPIClasses.Stream.VideoHeight">
+            <summary>Property representing height dimension.</summary>
+        </member>
+        <member name="P:TwitchLib.TwitchAPIClasses.Stream.Viewers">
+            <summary>Property representing number of current viewers.</summary>
+        </member>
+        <member name="P:TwitchLib.TwitchAPIClasses.Stream.Id">
+            <summary>Property representing the stream id.</summary>
+        </member>
+        <member name="P:TwitchLib.TwitchAPIClasses.Stream.Preview">
+            <summary>Property representing the preview images in an object.</summary>
+        </member>
+        <member name="P:TwitchLib.TwitchAPIClasses.Stream.CreatedAt">
+            <summary>Property representing the date time the stream was created.</summary>
+        </member>
+        <member name="P:TwitchLib.TwitchAPIClasses.Stream.Game">
+            <summary>Property representing the current game.</summary>
+        </member>
+        <member name="P:TwitchLib.TwitchAPIClasses.Stream.Channel">
+            <summary>Property representing the channel the stream is from.</summary>
+        </member>
+        <member name="M:TwitchLib.TwitchAPIClasses.Stream.#ctor(Newtonsoft.Json.Linq.JToken)">
+            <summary>Stream object constructor.</summary>
+        </member>
+        <member name="T:TwitchLib.TwitchAPIClasses.Stream.PreviewObj">
+            <summary>Class representing the various sizes of previews.</summary>
+        </member>
+        <member name="P:TwitchLib.TwitchAPIClasses.Stream.PreviewObj.Small">
+            <summary>Property representing the small preview size.</summary>
+        </member>
+        <member name="P:TwitchLib.TwitchAPIClasses.Stream.PreviewObj.Medium">
+            <summary>Property representing the medium preview size.</summary>
+        </member>
+        <member name="P:TwitchLib.TwitchAPIClasses.Stream.PreviewObj.Large">
+            <summary>Property representing the large preview size.</summary>
+        </member>
+        <member name="P:TwitchLib.TwitchAPIClasses.Stream.PreviewObj.Template">
+            <summary>Property representing the template preview size.</summary>
+        </member>
+        <member name="M:TwitchLib.TwitchAPIClasses.Stream.PreviewObj.#ctor(Newtonsoft.Json.Linq.JToken)">
+            <summary>PreviewObj object constructor.</summary>
+        </member>
+        <member name="T:TwitchLib.TwitchAPIClasses.TeamMember">
+            <summary>Class representing a team member as returned by Twitch API.</summary>
+        </member>
+        <member name="P:TwitchLib.TwitchAPIClasses.TeamMember.IsLive">
+            <summary>Property representing whether streamer is live.</summary>
+        </member>
+        <member name="P:TwitchLib.TwitchAPIClasses.TeamMember.ImageSizes">
+            <summary>Property representing the various image sizes.</summary>
+        </member>
+        <member name="P:TwitchLib.TwitchAPIClasses.TeamMember.CurrentViews">
+            <summary>Property representing the current viewer count.</summary>
+        </member>
+        <member name="P:TwitchLib.TwitchAPIClasses.TeamMember.FollowerCount">
+            <summary>Property representing the current follower count.</summary>
+        </member>
+        <member name="P:TwitchLib.TwitchAPIClasses.TeamMember.TotalViews">
+            <summary>Property representing the total view count.</summary>
+        </member>
+        <member name="P:TwitchLib.TwitchAPIClasses.TeamMember.Description">
+            <summary>Property representing the channel description.</summary>
+        </member>
+        <member name="P:TwitchLib.TwitchAPIClasses.TeamMember.DisplayName">
+            <summary>Property representing the streamer customized display name.</summary>
+        </member>
+        <member name="P:TwitchLib.TwitchAPIClasses.TeamMember.Link">
+            <summary>Property representing the link to the channel.</summary>
+        </member>
+        <member name="P:TwitchLib.TwitchAPIClasses.TeamMember.MetaGame">
+            <summary>Property representing the meta game of the channel.</summary>
+        </member>
+        <member name="P:TwitchLib.TwitchAPIClasses.TeamMember.Name">
+            <summary>Property representing the name of the channel.</summary>
+        </member>
+        <member name="P:TwitchLib.TwitchAPIClasses.TeamMember.Title">
+            <summary>Property representing the title of the channel.</summary>
+        </member>
+        <member name="M:TwitchLib.TwitchAPIClasses.TeamMember.#ctor(Newtonsoft.Json.Linq.JToken)">
+            <summary>TeamMember constructor.</summary>
+        </member>
+        <member name="T:TwitchLib.TwitchAPIClasses.TeamMember.ImgSizes">
+            <summary>Class representing the various sizes of images.</summary>
+        </member>
+        <member name="P:TwitchLib.TwitchAPIClasses.TeamMember.ImgSizes.Size28">
+            <summary>Property representing the 28 size url.</summary>
+        </member>
+        <member name="P:TwitchLib.TwitchAPIClasses.TeamMember.ImgSizes.Size50">
+            <summary>Property representing the 50 size url.</summary>
+        </member>
+        <member name="P:TwitchLib.TwitchAPIClasses.TeamMember.ImgSizes.Size70">
+            <summary>Property representing the 70 size url.</summary>
+        </member>
+        <member name="P:TwitchLib.TwitchAPIClasses.TeamMember.ImgSizes.Size150">
+            <summary>Property representing the 150 size url.</summary>
+        </member>
+        <member name="P:TwitchLib.TwitchAPIClasses.TeamMember.ImgSizes.Size300">
+            <summary>Property representing the 300 size url.</summary>
+        </member>
+        <member name="P:TwitchLib.TwitchAPIClasses.TeamMember.ImgSizes.Size600">
+            <summary>Property representing the 600 size url.</summary>
+        </member>
+        <member name="M:TwitchLib.TwitchAPIClasses.TeamMember.ImgSizes.#ctor(Newtonsoft.Json.Linq.JToken)">
+            <summary>ImgSizes object constructor.</summary>
+        </member>
+        <member name="T:TwitchLib.TwitchAPIClasses.Video">
+            <summary>
+            Class representing returned Video object.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.TwitchAPIClasses.Video.Channel">
+            <summary>Object representing all channel data returned by this request.</summary>
+        </member>
+        <member name="P:TwitchLib.TwitchAPIClasses.Video.Fps">
+            <summary>Object representing the available FPSs of versions of the video (-1 representings property doesnt exist)</summary>
+        </member>
+        <member name="P:TwitchLib.TwitchAPIClasses.Video.Length">
+            <summary>Length of video in seconds.</summary>
+        </member>
+        <member name="P:TwitchLib.TwitchAPIClasses.Video.Views">
+            <summary>Number of recorded views.</summary>
+        </member>
+        <member name="P:TwitchLib.TwitchAPIClasses.Video.Resolutions">
+            <summary>All available resolutions of video.</summary>
+        </member>
+        <member name="P:TwitchLib.TwitchAPIClasses.Video.BroadcastId">
+            <summary>Unique identifier assigned to broadcast video originated from.</summary>
+        </member>
+        <member name="P:TwitchLib.TwitchAPIClasses.Video.Description">
+            <summary>Creator's description of video.</summary>
+        </member>
+        <member name="P:TwitchLib.TwitchAPIClasses.Video.Game">
+            <summary>Game being played in the video.</summary>
+        </member>
+        <member name="P:TwitchLib.TwitchAPIClasses.Video.Id">
+            <summary>Id of the particular video.</summary>
+        </member>
+        <member name="P:TwitchLib.TwitchAPIClasses.Video.Preview">
+            <summary>Video preview image link.</summary>
+        </member>
+        <member name="P:TwitchLib.TwitchAPIClasses.Video.RecordedAt">
+            <summary>Date and time string representing recorded date.</summary>
+        </member>
+        <member name="P:TwitchLib.TwitchAPIClasses.Video.Status">
+            <summary>Current status of the recorded video.</summary>
+        </member>
+        <member name="P:TwitchLib.TwitchAPIClasses.Video.TagList">
+            <summary>Tags assigned to video either automatically or by content creator.</summary>
+        </member>
+        <member name="P:TwitchLib.TwitchAPIClasses.Video.Title">
+            <summary>Title of video.</summary>
+        </member>
+        <member name="P:TwitchLib.TwitchAPIClasses.Video.Url">
+            <summary>Twitch URL to video.</summary>
+        </member>
+        <member name="M:TwitchLib.TwitchAPIClasses.Video.#ctor(Newtonsoft.Json.Linq.JToken)">
+            <summary>
+            Video constructor
+            </summary>
+            <param name="apiResponse">API response string from Twitch call.</param>
+        </member>
+        <member name="T:TwitchLib.TwitchAPIClasses.Video.FpsData">
+            <summary>Class representing FPS data.</summary>
+        </member>
+        <member name="P:TwitchLib.TwitchAPIClasses.Video.FpsData.AudioOnly">
+            <summary>Property representing FPS for audio only.</summary>
+        </member>
+        <member name="P:TwitchLib.TwitchAPIClasses.Video.FpsData.Medium">
+            <summary>Property representing FPS for medium quality.</summary>
+        </member>
+        <member name="P:TwitchLib.TwitchAPIClasses.Video.FpsData.Mobile">
+            <summary>Property representing FPS for mobile quality.</summary>
+        </member>
+        <member name="P:TwitchLib.TwitchAPIClasses.Video.FpsData.High">
+            <summary>Property representing FPS for high quality.</summary>
+        </member>
+        <member name="P:TwitchLib.TwitchAPIClasses.Video.FpsData.Low">
+            <summary>Property representing FPS for low quality.</summary>
+        </member>
+        <member name="P:TwitchLib.TwitchAPIClasses.Video.FpsData.Chunked">
+            <summary>Property representing FPS for chunked quality.</summary>
+        </member>
+        <member name="M:TwitchLib.TwitchAPIClasses.Video.FpsData.#ctor(System.Double,System.Double,System.Double,System.Double,System.Double,System.Double)">
+            <summary>
+            FPS Data constructor.
+            </summary>
+            <param name="audioOnly"></param>
+            <param name="medium"></param>
+            <param name="mobile"></param>
+            <param name="high"></param>
+            <param name="low"></param>
+            <param name="chunked"></param>
+        </member>
+        <member name="M:TwitchLib.TwitchAPIClasses.Video.FpsData.ToString">
+            <summary>Returns string in format: audio only: {}, mobile: {} etc.</summary>
+        </member>
+        <member name="T:TwitchLib.TwitchAPIClasses.Video.ResolutionsData">
+            <summary>Class representing resolution data.</summary>
+        </member>
+        <member name="P:TwitchLib.TwitchAPIClasses.Video.ResolutionsData.Medium">
+            <summary>Property representing relation for medium quality.</summary>
+        </member>
+        <member name="P:TwitchLib.TwitchAPIClasses.Video.ResolutionsData.Mobile">
+            <summary>Property representing relation for mobile quality.</summary>
+        </member>
+        <member name="P:TwitchLib.TwitchAPIClasses.Video.ResolutionsData.High">
+            <summary>Property representing relation for high quality.</summary>
+        </member>
+        <member name="P:TwitchLib.TwitchAPIClasses.Video.ResolutionsData.Low">
+            <summary>Property representing relation for low quality.</summary>
+        </member>
+        <member name="P:TwitchLib.TwitchAPIClasses.Video.ResolutionsData.Chunked">
+            <summary>Property representing relation for chunked quality.</summary>
+        </member>
+        <member name="M:TwitchLib.TwitchAPIClasses.Video.ResolutionsData.#ctor(System.String,System.String,System.String,System.String,System.String)">
+            <summary>
+            Resolutions data constructor
+            </summary>
+            <param name="medium"></param>
+            <param name="mobile"></param>
+            <param name="high"></param>
+            <param name="low"></param>
+            <param name="chunked"></param>
+        </member>
+        <member name="M:TwitchLib.TwitchAPIClasses.Video.ResolutionsData.ToString">
+            <summary>Returns string in format: mobile: {}, low: {} etc</summary>
+        </member>
+        <member name="T:TwitchLib.TwitchAPIClasses.Video.ChannelData">
+            <summary>Class representing channel data.</summary>
+        </member>
+        <member name="P:TwitchLib.TwitchAPIClasses.Video.ChannelData.Name">
+            <summary>Property representing Name of channel.</summary>
+        </member>
+        <member name="P:TwitchLib.TwitchAPIClasses.Video.ChannelData.DisplayName">
+            <summary>Property representing DisplayName of channel.</summary>
+        </member>
+        <member name="M:TwitchLib.TwitchAPIClasses.Video.ChannelData.#ctor(System.String,System.String)">
+            <summary>Channel data construcotr.</summary>
+        </member>
+        <member name="M:TwitchLib.TwitchAPIClasses.Video.ChannelData.ToString">
+            <summary>Returns string in format: {name}, {displayname}</summary>
+        </member>
+        <member name="T:TwitchLib.ChannelState">
+            <summary>Class representing a channel state as received from Twitch chat.</summary>
+        </member>
+        <member name="P:TwitchLib.ChannelState.R9K">
+            <summary>Property representing whether R9K is being applied to chat or not.</summary>
+        </member>
+        <member name="P:TwitchLib.ChannelState.SubOnly">
+            <summary>Property representing whether Sub Mode is being applied to chat or not.</summary>
+        </member>
+        <member name="P:TwitchLib.ChannelState.SlowMode">
+            <summary>Property representing whether Slow mode is being applied to chat or not.</summary>
+        </member>
+        <member name="P:TwitchLib.ChannelState.BroadcasterLanguage">
+            <summary>Property representing the current broadcaster language.</summary>
+        </member>
+        <member name="P:TwitchLib.ChannelState.Channel">
+            <summary>Property representing the current channel.</summary>
+        </member>
+        <member name="M:TwitchLib.ChannelState.#ctor(System.String)">
+            <summary>ChannelState object constructor.</summary>
+        </member>
+        <member name="T:TwitchLib.ChatMessage">
+            <summary>Class represents ChatMessage in a Twitch channel.</summary>
+        </member>
+        <member name="P:TwitchLib.ChatMessage.UserId">
+            <summary>Twitch-unique integer assigned on per account basis.</summary>
+        </member>
+        <member name="P:TwitchLib.ChatMessage.Username">
+            <summary>Username of sender of chat message.</summary>
+        </member>
+        <member name="P:TwitchLib.ChatMessage.DisplayName">
+            <summary>Case-sensitive username of sender of chat message.</summary>
+        </member>
+        <member name="P:TwitchLib.ChatMessage.ColorHex">
+            <summary>Hex representation of username color in chat (THIS CAN BE NULL IF VIEWER HASN'T SET COLOR).</summary>
+        </member>
+        <member name="P:TwitchLib.ChatMessage.EmoteSet">
+            <summary>Emote Ids that exist in message.</summary>
+        </member>
+        <member name="P:TwitchLib.ChatMessage.Message">
+            <summary>Twitch chat message contents.</summary>
+        </member>
+        <member name="P:TwitchLib.ChatMessage.UserType">
+            <summary>User type can be viewer, moderator, global mod, admin, or staff</summary>
+        </member>
+        <member name="P:TwitchLib.ChatMessage.Channel">
+            <summary>Twitch channel message was sent from (useful for multi-channel bots).</summary>
+        </member>
+        <member name="P:TwitchLib.ChatMessage.Subscriber">
+            <summary>Channel specific subscriber status.</summary>
+        </member>
+        <member name="P:TwitchLib.ChatMessage.Turbo">
+            <summary>Twitch site-wide turbo status.</summary>
+        </member>
+        <member name="P:TwitchLib.ChatMessage.IsModerator">
+            <summary>Channel specific moderator status.</summary>
+        </member>
+        <member name="P:TwitchLib.ChatMessage.IsMe">
+            <summary>Chat message /me identifier flag.</summary>
+        </member>
+        <member name="P:TwitchLib.ChatMessage.IsBroadcaster">
+            <summary>Chat message from broadcaster identifier flag</summary>
+        </member>
+        <member name="P:TwitchLib.ChatMessage.RawIrcMessage">
+            <summary>Raw IRC-style text received from Twitch.</summary>
+        </member>
+        <member name="P:TwitchLib.ChatMessage.EmoteReplacedMessage">
+            <summary>Text after emotes have been handled (if desired). Will be null if replaceEmotes is false.</summary>
+        </member>
+        <member name="P:TwitchLib.ChatMessage.Badges">
+            <summary>List of key-value pair badges.</summary>
+        </member>
+        <member name="P:TwitchLib.ChatMessage.CheerBadge">
+            <summary>If a cheer badge exists, this property represents the raw value and color (more later). Can be null.</summary>
+        </member>
+        <member name="P:TwitchLib.ChatMessage.Bits">
+            <summary>If viewer sent bits in their message, total amount will be here.</summary>
+        </member>
+        <member name="P:TwitchLib.ChatMessage.BitsInDollars">
+            <summary>Number of USD (United States Dollars) spent on bits.</summary>
+        </member>
+        <member name="M:TwitchLib.ChatMessage.#ctor(System.String,TwitchLib.MessageEmoteCollection@,System.Boolean)">
+            <summary>Constructor for ChatMessage object.</summary>
+            <param name="ircString">The raw string received from Twitch to be processed.</param>
+            <param name="emoteCollection">The <see cref="T:TwitchLib.MessageEmoteCollection"/> to register new emotes on and, if desired, use for emote replacement.</param>
+            <param name="replaceEmotes">Whether to replace emotes for this chat message. Defaults to false.</param>
+        </member>
+        <member name="T:TwitchLib.Common">
+            <summary>A common/utility class for frequently used functions and variables.</summary>
+        </member>
+        <member name="T:TwitchLib.Common.UserType">
+            <summary>Enum representing various user-types.</summary>
+        </member>
+        <member name="F:TwitchLib.Common.UserType.Viewer">
+            <summary>The standard user-type representing a standard viewer.</summary>
+        </member>
+        <member name="F:TwitchLib.Common.UserType.Moderator">
+            <summary>User-type representing viewers with channel-specific moderation powers.</summary>
+        </member>
+        <member name="F:TwitchLib.Common.UserType.GlobalModerator">
+            <summary>User-type representing viewers with Twitch-wide moderation powers.</summary>
+        </member>
+        <member name="F:TwitchLib.Common.UserType.Broadcaster">
+            <summary>User-type representing the broadcaster of the channel</summary>
+        </member>
+        <member name="F:TwitchLib.Common.UserType.Admin">
+            <summary>User-type representing viewers with Twitch-wide moderation powers that are paid.</summary>
+        </member>
+        <member name="F:TwitchLib.Common.UserType.Staff">
+            <summary>User-type representing viewers that are Twitch employees.</summary>
+        </member>
+        <member name="T:TwitchLib.Common.SortKey">
+            <summary>Enum representing sort keys available for /follows/channels/</summary>
+        </member>
+        <member name="F:TwitchLib.Common.SortKey.CreatedAt">
+            <summary>SortKey representing the date/time of account creation</summary>
+        </member>
+        <member name="F:TwitchLib.Common.SortKey.LastBroadcaster">
+            <summary>SortKey representing the date/time of the last broadcast of a channel</summary>
+        </member>
+        <member name="F:TwitchLib.Common.SortKey.Login">
+            <summary>SortKey representing the alphabetical sort based on usernames</summary>
+        </member>
+        <member name="T:TwitchLib.Exceptions.BadQueryCountException">
+            <summary>Exception representing an invalid cache size provided.</summary>
+        </member>
+        <member name="M:TwitchLib.Exceptions.BadQueryCountException.#ctor(System.String)">
+            <summary>Exception constructor.</summary>
+        </member>
+        <member name="T:TwitchLib.Exceptions.BadScopeException">
+            <summary>Exception representing a provided scope was not permitted.</summary>
+        </member>
+        <member name="M:TwitchLib.Exceptions.BadScopeException.#ctor(System.String)">
+            <summary>Exception constructor</summary>
+        </member>
+        <member name="T:TwitchLib.Exceptions.InvalidCredentialException">
+            <summary>Exception representing a detection that sent credentials were invalid.</summary>
+        </member>
+        <member name="M:TwitchLib.Exceptions.InvalidCredentialException.#ctor(System.String)">
+            <summary>Exception constructor</summary>
+        </member>
+        <member name="T:TwitchLib.Exceptions.ErrorLoggingInException">
+            <summary>Exception representing credentials provided for logging in were bad.</summary>
+        </member>
+        <member name="P:TwitchLib.Exceptions.ErrorLoggingInException.Username">
+            <summary>Exception representing username associated with bad login.</summary>
+        </member>
+        <member name="M:TwitchLib.Exceptions.ErrorLoggingInException.#ctor(System.String,System.String)">
+            <summary>Exception construtor.</summary>
+        </member>
+        <member name="T:TwitchLib.Exceptions.InvalidChannelException">
+            <summary>Exception representing a bad channel.</summary>
+        </member>
+        <member name="M:TwitchLib.Exceptions.InvalidChannelException.#ctor(System.String)">
+            <summary>Exception constructor</summary>
+        </member>
+        <member name="T:TwitchLib.TwitchClientClasses.ChatParsing">
+            <summary>Static parsing class handling all chat message parsing</summary>
+        </member>
+        <member name="M:TwitchLib.TwitchClientClasses.ChatParsing.getReadType(System.String,System.String)">
+            <summary>Function returning the type of message received from Twitch</summary>
+            <param name="message"></param>
+            <param name="channel"></param>
+            <returns>Message type (ie NOTICE, PRIVMSG, JOIN, etc)</returns>
+        </member>
+        <member name="M:TwitchLib.TwitchClientClasses.ChatParsing.detectConnected(System.String)">
+            <summary>[Works] Parse function to detect connected successfully</summary>
+            <param name="message"></param>
+            <returns></returns>
+        </member>
+        <member name="M:TwitchLib.TwitchClientClasses.ChatParsing.detectNewSubscriber(System.String,System.Collections.Generic.List{TwitchLib.TwitchClientClasses.JoinedChannel})">
+            <summary>[Untested] Parse function to detect new subscriber</summary>
+            <param name="message"></param>
+            <param name="channels"></param>
+            <returns></returns>
+        </member>
+        <member name="M:TwitchLib.TwitchClientClasses.ChatParsing.detectMessageReceived(System.String,System.Collections.Generic.List{TwitchLib.TwitchClientClasses.JoinedChannel})">
+            <summary>[Works] Parse function to detect new messages.</summary>
+            <param name="message"></param>
+            <param name="channels"></param>
+            <returns></returns>
+        </member>
+        <member name="M:TwitchLib.TwitchClientClasses.ChatParsing.detectCommandReceived(System.String,System.Collections.Generic.List{TwitchLib.TwitchClientClasses.JoinedChannel},TwitchLib.MessageEmoteCollection,System.Boolean,System.Collections.Generic.List{System.Char})">
+            <summary>[Works] Parse function to detect new commands.</summary>
+            <param name="message"></param>
+            <param name="channels"></param>
+            <param name="_channelEmotes"></param>
+            <param name="WillReplaceEmotes"></param>
+            <param name="_commandIdentifiers"></param>
+            <returns></returns>
+        </member>
+        <member name="M:TwitchLib.TwitchClientClasses.ChatParsing.detectViewerJoined(System.String,System.Collections.Generic.List{TwitchLib.TwitchClientClasses.JoinedChannel})">
+            <summary>[Works] Parse function to detect new viewers.</summary>
+            <param name="message"></param>
+            <param name="channels"></param>
+            <returns></returns>
+        </member>
+        <member name="M:TwitchLib.TwitchClientClasses.ChatParsing.detectedViewerLeft(System.String,System.Collections.Generic.List{TwitchLib.TwitchClientClasses.JoinedChannel})">
+            <summary>[Works] Parse function to detect leaving viewers.</summary>
+            <param name="message"></param>
+            <param name="channels"></param>
+            <returns></returns>
+        </member>
+        <member name="M:TwitchLib.TwitchClientClasses.ChatParsing.detectedModeratorJoined(System.String,System.Collections.Generic.List{TwitchLib.TwitchClientClasses.JoinedChannel})">
+            <summary>[Works] Parse function to detect new moderators.</summary>
+            <param name="message"></param>
+            <param name="channels"></param>
+            <returns></returns>
+        </member>
+        <member name="M:TwitchLib.TwitchClientClasses.ChatParsing.detectedModeatorLeft(System.String,System.Collections.Generic.List{TwitchLib.TwitchClientClasses.JoinedChannel})">
+            <summary>[Works] Parse function to detect leaving moderators.</summary>
+            <param name="message"></param>
+            <param name="channels"></param>
+            <returns></returns>
+        </member>
+        <member name="M:TwitchLib.TwitchClientClasses.ChatParsing.detectedIncorrectLogin(System.String,System.Collections.Generic.List{TwitchLib.TwitchClientClasses.JoinedChannel})">
+            <summary>[Works] Parse function to detect failed login.</summary>
+            <param name="message"></param>
+            <param name="channels"></param>
+            <returns></returns>
+        </member>
+        <member name="M:TwitchLib.TwitchClientClasses.ChatParsing.detectedMalformedOAuth(System.String,System.Collections.Generic.List{TwitchLib.TwitchClientClasses.JoinedChannel})">
+            <summary>[Works] Parse function to detect malformed oauth error.</summary>
+            <param name="message"></param>
+            <param name="channels"></param>
+            <returns></returns>
+        </member>
+        <member name="M:TwitchLib.TwitchClientClasses.ChatParsing.detectedHostLeft(System.String,System.Collections.Generic.List{TwitchLib.TwitchClientClasses.JoinedChannel})">
+            <summary>[Untested] Parse function to detect host leaving.</summary>
+            <param name="message"></param>
+            <param name="channels"></param>
+            <returns></returns>
+        </member>
+        <member name="M:TwitchLib.TwitchClientClasses.ChatParsing.detectedChannelStateChanged(System.String,System.Collections.Generic.List{TwitchLib.TwitchClientClasses.JoinedChannel})">
+            <summary>[Works] Parse function to detect new channel state.</summary>
+            <param name="message"></param>
+            <param name="channels"></param>
+            <returns></returns>
+        </member>
+        <member name="M:TwitchLib.TwitchClientClasses.ChatParsing.detectedUserStateChanged(System.String,System.Collections.Generic.List{TwitchLib.TwitchClientClasses.JoinedChannel})">
+            <summary>[Works] Parse function to detect new user states.</summary>
+            <param name="message"></param>
+            <param name="channels"></param>
+            <returns></returns>
+        </member>
+        <member name="M:TwitchLib.TwitchClientClasses.ChatParsing.detectedReSubscriber(System.String,System.Collections.Generic.List{TwitchLib.TwitchClientClasses.JoinedChannel})">
+            <summary>[Untested] Parse function to detect resubscriptions.</summary>
+            <param name="message"></param>
+            <param name="channels"></param>
+            <returns></returns>
+        </member>
+        <member name="M:TwitchLib.TwitchClientClasses.ChatParsing.detectedPing(System.String)">
+            <summary>[Works] Parse function to detect PING messages.</summary>
+            <param name="message"></param>
+            <returns></returns>
+        </member>
+        <member name="M:TwitchLib.TwitchClientClasses.ChatParsing.detectedHostingStopped(System.String)">
+            <summary>[Untested] Parse function to stopped hosting.</summary>
+            <param name="message"></param>
+            <returns></returns>
+        </member>
+        <member name="M:TwitchLib.TwitchClientClasses.ChatParsing.detectedHostingStarted(System.String)">
+            <summary>[Works] Parse function to detect started hosting.</summary>
+            <param name="message"></param>
+            <returns></returns>
+        </member>
+        <member name="M:TwitchLib.TwitchClientClasses.ChatParsing.detectedExistingUsers(System.String,System.String,System.Collections.Generic.List{TwitchLib.TwitchClientClasses.JoinedChannel})">
+            <summary>[Works] Parse function to detect existing user messages.</summary>
+            <param name="message"></param>
+            <param name="username"></param>
+            <param name="channels"></param>
+            <returns></returns>
+        </member>
+        <member name="T:TwitchLib.TwitchClientClasses.CheerBadge">
+            <summary>Class representing cheer badge.</summary>
+        </member>
+        <member name="T:TwitchLib.TwitchClientClasses.CheerBadge.Enums">
+            <summary>Cheer badge object related enums.</summary>
+        </member>
+        <member name="T:TwitchLib.TwitchClientClasses.CheerBadge.Enums.Color">
+            <summary>Color enum representing color based on cheer amount.</summary>
+        </member>
+        <member name="F:TwitchLib.TwitchClientClasses.CheerBadge.Enums.Color.Red">
+            <summary>Red = 10000+</summary>
+        </member>
+        <member name="F:TwitchLib.TwitchClientClasses.CheerBadge.Enums.Color.Blue">
+            <summary>Blue = 5000 -> 9999</summary>
+        </member>
+        <member name="F:TwitchLib.TwitchClientClasses.CheerBadge.Enums.Color.Green">
+            <summary>Green = 1000 -> 4999</summary>
+        </member>
+        <member name="F:TwitchLib.TwitchClientClasses.CheerBadge.Enums.Color.Purple">
+            <summary>Purple = 100 -> 999</summary>
+        </member>
+        <member name="F:TwitchLib.TwitchClientClasses.CheerBadge.Enums.Color.Gray">
+            <summary>Gray = 1 -> 99</summary>
+        </member>
+        <member name="P:TwitchLib.TwitchClientClasses.CheerBadge.CheerAmount">
+            <summary>Property representing raw cheer amount represented by badge.</summary>
+        </member>
+        <member name="P:TwitchLib.TwitchClientClasses.CheerBadge.Color">
+            <summary>Property representing the color of badge via an enum.</summary>
+        </member>
+        <member name="M:TwitchLib.TwitchClientClasses.CheerBadge.#ctor(System.Int32)">
+            <summary>Constructor for CheerBadge</summary>
+        </member>
+        <member name="T:TwitchLib.TwitchClientClasses.DetectionReturn">
+            <summary>Class representing a detection return object.</summary>
+        </member>
+        <member name="P:TwitchLib.TwitchClientClasses.DetectionReturn.Successful">
+            <summary>Property representing whether detection was successful.</summary>
+        </member>
+        <member name="P:TwitchLib.TwitchClientClasses.DetectionReturn.Channel">
+            <summary>Property representing the detected channel, could be null.</summary>
+        </member>
+        <member name="M:TwitchLib.TwitchClientClasses.DetectionReturn.#ctor(System.Boolean,System.String)">
+            <summary>DetectionReturn object constructor.</summary>
+        </member>
+        <member name="T:TwitchLib.TwitchClientClasses.JoinedChannel">
+            <summary>Class representing a joined channel.</summary>
+        </member>
+        <member name="P:TwitchLib.TwitchClientClasses.JoinedChannel.ChannelState">
+            <summary>Object representing current state of channel (r9k, slow, etc).</summary>
+        </member>
+        <member name="P:TwitchLib.TwitchClientClasses.JoinedChannel.Channel">
+            <summary>The current channel the TwitcChatClient is connected to.</summary>
+        </member>
+        <member name="P:TwitchLib.TwitchClientClasses.JoinedChannel.PreviousMessage">
+            <summary>The most recent message received.</summary>
+        </member>
+        <member name="M:TwitchLib.TwitchClientClasses.JoinedChannel.#ctor(System.String)">
+            <summary>JoinedChannel object constructor.</summary>
+        </member>
+        <member name="M:TwitchLib.TwitchClientClasses.JoinedChannel.HandleMessage(TwitchLib.ChatMessage)">
+            <summary>Handles a message</summary>
+        </member>
+        <member name="T:TwitchLib.TwitchClientClasses.WhisperParsing">
+            <summary>Static class used for detecting whisper commands and messages.</summary>
+        </member>
+        <member name="M:TwitchLib.TwitchClientClasses.WhisperParsing.detectedWhisperReceived(System.String,System.String)">
+            <summary>Function used to detect if a whisper was received or not.</summary>
+        </member>
+        <member name="M:TwitchLib.TwitchClientClasses.WhisperParsing.detectedWhisperCommandReceived(System.String,System.String,System.Collections.Generic.List{System.Char})">
+            <summary>Function used to detect if a whisper command was received or not.</summary>
+        </member>
+        <member name="T:TwitchLib.MessageEmote">
+            <summary>Class for maintaining emotes that may be substituted into messages.</summary>
+            <remarks>
+                Also contains helpers to aid in performing actual replacements.
+                Expected to be called from the context of <see cref="T:TwitchLib.ChatMessage"/> and <see cref="T:TwitchLib.WhisperMessage"/>.
+            </remarks>
+        </member>
+        <member name="T:TwitchLib.MessageEmote.ReplaceEmoteDelegate">
+            <summary>
+                Delegate allowing Emotes to handle their replacement text on a case-by-case basis.
+            </summary>
+            <returns>The string for the calling emote to be replaced with.</returns>
+        </member>
+        <member name="F:TwitchLib.MessageEmote.TwitchEmoteUrls">
+            <summary>
+                Collection of Composite Format Strings which will substitute an
+                emote ID to get a URL for an image from the Twitch CDN
+            </summary>
+            <remarks>
+                These are sorted such that the <see cref="T:TwitchLib.MessageEmote.EmoteSize"/> enum can be used as an index,
+                eg TwitchEmoteUrls[<see cref="F:TwitchLib.MessageEmote.EmoteSize.Small"/>]
+            </remarks>
+        </member>
+        <member name="F:TwitchLib.MessageEmote.FrankerFaceZEmoteUrls">
+            <summary>
+                Collection of Composite Format Strings which will substitute an
+                emote ID to get a URL for an image from the FFZ CDN
+            </summary>
+            <remarks>
+                These are sorted such that the <see cref="T:TwitchLib.MessageEmote.EmoteSize"/> enum can be used as an index,
+                eg FrankerFaceZEmoteUrls[<see cref="F:TwitchLib.MessageEmote.EmoteSize.Small"/>]
+                WARNING: FrankerFaceZ does not require users to submit all sizes,
+                so using something other than Small images may result in broken links!
+            </remarks>
+        </member>
+        <member name="F:TwitchLib.MessageEmote.BetterTwitchTvEmoteUrls">
+            <summary>
+                Collection of Composite Format Strings which will substitute
+                an emote ID to get a URL for an image from the BTTV CDN
+                </summary>
+            <remarks>
+                These are sorted such that the <see cref="T:TwitchLib.MessageEmote.EmoteSize"/> enum can be used as an index,
+                eg BetterTwitchTvEmoteUrls[<see cref="F:TwitchLib.MessageEmote.EmoteSize.Small"/>]
+            </remarks>
+        </member>
+        <member name="M:TwitchLib.MessageEmote.SourceMatchingReplacementText(TwitchLib.MessageEmote)">
+            <summary>
+                A delegate which attempts to match the calling <see cref="T:TwitchLib.MessageEmote"/> with its
+                <see cref="T:TwitchLib.MessageEmote.EmoteSource"/> and pulls the <see cref="F:TwitchLib.MessageEmote.EmoteSize.Small">small</see> version
+                of the URL.
+            </summary>
+            <param name="caller"></param>
+            <returns></returns>
+        </member>
+        <member name="T:TwitchLib.MessageEmote.EmoteSource">
+            <summary> Enum supplying the supported sites which provide Emote images.</summary>
+        </member>
+        <member name="F:TwitchLib.MessageEmote.EmoteSource.Twitch">
+            <summary>Emotes hosted by Twitch.tv natively</summary>
+        </member>
+        <member name="F:TwitchLib.MessageEmote.EmoteSource.FrankerFaceZ">
+            <summary>Emotes hosted by FrankerFaceZ.com</summary>
+        </member>
+        <member name="F:TwitchLib.MessageEmote.EmoteSource.BetterTwitchTv">
+            <summary>Emotes hosted by BetterTTV.net</summary>
+        </member>
+        <member name="T:TwitchLib.MessageEmote.EmoteSize">
+            <summary> Enum denoting the emote sizes</summary>
+        </member>
+        <member name="F:TwitchLib.MessageEmote.EmoteSize.Small">
+            <summary>
+                Best support
+                Small-sized emotes are the standard size used in the Twitch web chat.
+            </summary>
+        </member>
+        <member name="F:TwitchLib.MessageEmote.EmoteSize.Medium">
+            <summary>
+                Medium-sized emotes are not supported by all browsers, and
+                FrankerFaceZ does not require emotes to be submitted in this size
+            </summary>
+        </member>
+        <member name="F:TwitchLib.MessageEmote.EmoteSize.Large">
+            <summary>
+                Large-sized emotes are not supported by all browsers, and
+                FrankerFaceZ does not require emotes to be submitted in this size
+                </summary>
+        </member>
+        <member name="P:TwitchLib.MessageEmote.Id">
+            <summary>
+                Emote ID as used by the emote source. Will be provided as {0}
+                to be substituted into the indicated URL if needed.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.MessageEmote.Text">
+            <summary>
+                Emote text which appears in a message and is meant to be replaced by the emote image.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.MessageEmote.Source">
+            <summary>
+                The specified <see cref="T:TwitchLib.MessageEmote.EmoteSource"/> for this emote.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.MessageEmote.Size">
+            <summary>
+                The specified <see cref="T:TwitchLib.MessageEmote.EmoteSize"/> for this emote.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.MessageEmote.ReplacementString">
+            <summary>
+               The string to substitute emote text for.
+            </summary>
+        </member>
+        <member name="P:TwitchLib.MessageEmote.ReplacementDelegate">
+            <summary>
+                The desired <see cref="T:TwitchLib.MessageEmote.ReplaceEmoteDelegate"/> to use for replacing text in a given emote.
+                Default: <see cref="M:TwitchLib.MessageEmote.SourceMatchingReplacementText(TwitchLib.MessageEmote)"/>
+            </summary>
+        </member>
+        <member name="P:TwitchLib.MessageEmote.EscapedText">
+            <summary>
+                The emote text <see cref="M:System.Text.RegularExpressions.Regex.Escape(System.String)">regex-escaped</see>
+                so that it can be embedded into a regex pattern.
+            </summary>
+        </member>
+        <member name="M:TwitchLib.MessageEmote.#ctor(System.String,System.String,TwitchLib.MessageEmote.EmoteSource,TwitchLib.MessageEmote.EmoteSize,TwitchLib.MessageEmote.ReplaceEmoteDelegate)">
+            <summary>
+                Constructor for a new MessageEmote instance.
+            </summary>
+            <param name="id">
+                The unique identifier which the emote provider uses to generate CDN URLs.
+            </param>
+            <param name="text">
+                The string which users type to create this emote in chat.
+            </param>
+            <param name="source">
+                An <see cref="T:TwitchLib.MessageEmote.EmoteSource"/> where an image can be found for this emote.
+                Default: <see cref="F:TwitchLib.MessageEmote.EmoteSource.Twitch"/>
+            </param>
+            <param name="size">
+                An <see cref="T:TwitchLib.MessageEmote.EmoteSize"/> to pull for this image.
+                Default: <see cref="F:TwitchLib.MessageEmote.EmoteSize.Small"/>
+            </param>
+            <param name="replacementDelegate">
+                A string (optionally Composite Format with "{0}" representing
+                <paramref name="id"/>) which will be used instead of any of the emote URLs.
+                Default: null
+            </param>
+        </member>
+        <member name="T:TwitchLib.MessageEmoteCollection">
+            <summary>
+                Helper class which maintains a collection of all emotes active for a given channel.
+            </summary>
+        </member>
+        <member name="F:TwitchLib.MessageEmoteCollection._currentPattern">
+            <summary> Do not access directly! Backing field for <see cref="P:TwitchLib.MessageEmoteCollection.CurrentPattern"/> </summary>
+        </member>
+        <member name="P:TwitchLib.MessageEmoteCollection.CurrentPattern">
+            <summary>
+                Property so that we can be confident <see cref="P:TwitchLib.MessageEmoteCollection.PatternChanged"/>
+                always reflects changes to <see cref="P:TwitchLib.MessageEmoteCollection.CurrentPattern"/>.
+            </summary>
+        </member>
+        <member name="M:TwitchLib.MessageEmoteCollection.#ctor">
+            <summary>
+                Default, empty constructor initializes the list and sets the preferred
+                <see cref="T:TwitchLib.MessageEmoteCollection.EmoteFilterDelegate"/> to <see cref="M:TwitchLib.MessageEmoteCollection.AllInclusiveEmoteFilter(TwitchLib.MessageEmote)"/>
+            </summary>
+        </member>
+        <member name="M:TwitchLib.MessageEmoteCollection.#ctor(TwitchLib.MessageEmoteCollection.EmoteFilterDelegate)">
+            <summary>
+                Constructor which specifies a particular preferred <see cref="T:TwitchLib.MessageEmoteCollection.EmoteFilterDelegate"/>
+            </summary>
+            <param name="preferredFilter"></param>
+        </member>
+        <member name="M:TwitchLib.MessageEmoteCollection.Add(TwitchLib.MessageEmote)">
+            <summary>
+                Adds an <see cref="T:TwitchLib.MessageEmote"/> to the collection. Duplicate emotes
+                (judged by <see cref="P:TwitchLib.MessageEmote.Text"/>) are ignored.
+            </summary>
+            <param name="emote">The <see cref="T:TwitchLib.MessageEmote"/> to add to the collection.</param>
+        </member>
+        <member name="M:TwitchLib.MessageEmoteCollection.Merge(System.Collections.Generic.IEnumerable{TwitchLib.MessageEmote})">
+            <summary>
+                Adds every <see cref="T:TwitchLib.MessageEmote"/> from an <see cref="T:System.Collections.Generic.IEnumerable`1">enumerable</see>
+                collection to the internal collection.
+                Duplicate emotes (judged by <see cref="P:TwitchLib.MessageEmote.Text"/>) are ignored.
+            </summary>
+            <param name="emotes">A collection of <see cref="T:TwitchLib.MessageEmote"/>s.</param>
+        </member>
+        <member name="M:TwitchLib.MessageEmoteCollection.Remove(TwitchLib.MessageEmote)">
+            <summary>
+                Removes the specified <see cref="T:TwitchLib.MessageEmote"/> from the collection.
+            </summary>
+            <param name="emote">The <see cref="T:TwitchLib.MessageEmote"/> to remove.</param>
+        </member>
+        <member name="M:TwitchLib.MessageEmoteCollection.RemoveAll">
+            <summary>
+                Removes all <see cref="T:TwitchLib.MessageEmote"/>s from the collection.
+            </summary>
+        </member>
+        <member name="M:TwitchLib.MessageEmoteCollection.ReplaceEmotes(System.String,TwitchLib.MessageEmoteCollection.EmoteFilterDelegate)">
+            <summary>
+                Replaces all instances of all registered emotes passing the provided
+                <see cref="T:TwitchLib.MessageEmoteCollection.EmoteFilterDelegate"/> with their designated
+                <see cref="P:TwitchLib.MessageEmote.ReplacementString"/>s
+            </summary>
+            <param name="originalMessage">
+                The original message which needs to be processed for emotes.
+            </param>
+            <param name="del">
+                An <see cref="T:TwitchLib.MessageEmoteCollection.EmoteFilterDelegate"/> which returns true if its
+                received <see cref="T:TwitchLib.MessageEmote"/> is to be replaced.
+                Defaults to <see cref="P:TwitchLib.MessageEmoteCollection.CurrentEmoteFilter"/>.
+            </param>
+            <returns>
+                A string where all of the original emote text has been replaced with
+                its designated <see cref="P:TwitchLib.MessageEmote.ReplacementString"/>s
+            </returns>
+        </member>
+        <member name="T:TwitchLib.MessageEmoteCollection.EmoteFilterDelegate">
+            <summary>
+                A delegate function which, when given a <see cref="T:TwitchLib.MessageEmote"/>,
+                determines whether it should be replaced.
+            </summary>
+            <param name="emote">The <see cref="T:TwitchLib.MessageEmote"/> to be considered</param>
+            <returns>true if the <see cref="T:TwitchLib.MessageEmote"/> should be replaced.</returns>
+        </member>
+        <member name="M:TwitchLib.MessageEmoteCollection.AllInclusiveEmoteFilter(TwitchLib.MessageEmote)">
+            <summary>
+                The default emote filter includes every <see cref="T:TwitchLib.MessageEmote"/> registered on this list.
+            </summary>
+            <param name="emote">An emote which is ignored in this filter.</param>
+            <returns>true always</returns>
+        </member>
+        <member name="M:TwitchLib.MessageEmoteCollection.TwitchOnlyEmoteFilter(TwitchLib.MessageEmote)">
+            <summary>
+                This emote filter includes only <see cref="T:TwitchLib.MessageEmote"/>s provided by Twitch.
+            </summary>
+            <param name="emote">
+                A <see cref="T:TwitchLib.MessageEmote"/> which will be replaced if its
+                <see cref="P:TwitchLib.MessageEmote.Source">Source</see> is <see cref="F:TwitchLib.MessageEmote.EmoteSource.Twitch"/>
+            </param>
+            <returns>true always</returns>
+        </member>
+        <member name="T:TwitchLib.ReSubscriber">
+            <summary>Class representing a resubscriber.</summary>
+        </member>
+        <member name="P:TwitchLib.ReSubscriber.Badges">
+            <summary>Property representing list of badges assigned.</summary>
+        </member>
+        <member name="P:TwitchLib.ReSubscriber.ColorHex">
+            <summary>Property representing the colorhex of the resubscriber.</summary>
+        </member>
+        <member name="P:TwitchLib.ReSubscriber.DisplayName">
+            <summary>Property representing resubscriber's customized display name.</summary>
+        </member>
+        <member name="P:TwitchLib.ReSubscriber.EmoteSet">
+            <summary>Property representing emote set of resubscriber.</summary>
+        </member>
+        <member name="P:TwitchLib.ReSubscriber.Login">
+            <summary>Property representing login of resubscription event.</summary>
+        </member>
+        <member name="P:TwitchLib.ReSubscriber.SystemMessage">
+            <summary>Property representing internval system message value.</summary>
+        </member>
+        <member name="P:TwitchLib.ReSubscriber.ResubMessage">
+            <summary>Property representing </summary>
+        </member>
+        <member name="P:TwitchLib.ReSubscriber.Months">
+            <summary>Property representing number of months of being subscribed.</summary>
+        </member>
+        <member name="P:TwitchLib.ReSubscriber.RoomId">
+            <summary>Property representing the room id.</summary>
+        </member>
+        <member name="P:TwitchLib.ReSubscriber.UserId">
+            <summary>Property representing the user's id.</summary>
+        </member>
+        <member name="P:TwitchLib.ReSubscriber.Mod">
+            <summary>Property representing whether or not the resubscriber is a moderator.</summary>
+        </member>
+        <member name="P:TwitchLib.ReSubscriber.Turbo">
+            <summary>Property representing whether or not the resubscriber is a turbo member.</summary>
+        </member>
+        <member name="P:TwitchLib.ReSubscriber.Sub">
+            <summary>Property representing whether or not the resubscriber is a subscriber (YES).</summary>
+        </member>
+        <member name="P:TwitchLib.ReSubscriber.UserType">
+            <summary>Property representing the user type of the resubscriber.</summary>
+        </member>
+        <member name="P:TwitchLib.ReSubscriber.RawIrc">
+            <summary>Property representing the raw IRC message (for debugging/customized parsing)</summary>
+        </member>
+        <member name="P:TwitchLib.ReSubscriber.Channel">
+            <summary>Property representing the channel the resubscription happened in.</summary>
+        </member>
+        <member name="M:TwitchLib.ReSubscriber.#ctor(System.String)">
+            <summary>ReSubscriber object constructor.</summary>
+        </member>
+        <member name="M:TwitchLib.ReSubscriber.ToString">
+            <summary>Overriden ToString method, prints out all properties related to resub.</summary>
+        </member>
+        <member name="T:TwitchLib.Services.FollowerService">
+            <summary>Service that allows customizability and subscribing to detection of new Twitch followers.</summary>
+        </member>
+        <member name="P:TwitchLib.Services.FollowerService.Channel">
+            <summary>Property representing Twitch channel service is monitoring.</summary>
+        </member>
+        <member name="P:TwitchLib.Services.FollowerService.ClientId">
+            <summary>Property representing application client Id, also updates it in TwitchApi.</summary>
+        </member>
+        <member name="P:TwitchLib.Services.FollowerService.QueryCount">
+            <summary>Property representing number of recent followers that service should request. Recommended: 25, increase for larger channels. MAX: 100, MINIMUM: 1</summary>
+            <exception cref="T:TwitchLib.Exceptions.BadQueryCountException">Throws BadQueryCountException if queryCount is larger than 100 or smaller than 1.</exception>
+        </member>
+        <member name="P:TwitchLib.Services.FollowerService.ActiveCache">
+            <summary>Property representing the cache where detected followers are stored and compared against.</summary>
+        </member>
+        <member name="P:TwitchLib.Services.FollowerService.CheckIntervalSeconds">
+            <summary>Property representing interval between Twitch Api calls, in seconds. Recommended: 60</summary>
+        </member>
+        <member name="M:TwitchLib.Services.FollowerService.#ctor(System.String,System.Int32,System.Int32,System.String)">
+            <summary>Service constructor.</summary>
+            <exception cref="T:TwitchLib.Exceptions.InvalidChannelException">If channel is invalid, an InvalidChannelException will be thrown.</exception>
+            <param name="channel">Param representing the channel the service should monitor.</param>
+            <param name="checkIntervalSeconds">Param representing number of seconds between calls to Twitch Api.</param>
+            <param name="queryCount">Number of recent followers service should request from Twitch Api. Max: 100, Min: 1</param>
+            <param name="clientId">Optional param representing Twitch Api-required application client id, not required if already set.</param>
+        </member>
+        <member name="M:TwitchLib.Services.FollowerService.StartService">
+            <summary>Downloads recent followers from Twitch, starts service, fires OnServiceStarted event.</summary>
+        </member>
+        <member name="M:TwitchLib.Services.FollowerService.StopService">
+            <summary>Stops service and fires OnServiceStopped event.</summary>
+        </member>
+        <member name="E:TwitchLib.Services.FollowerService.OnServiceStarted">
+            <summary>Event fires when service starts.</summary>
+        </member>
+        <member name="E:TwitchLib.Services.FollowerService.OnServiceStopped">
+            <summary>Event fires when service stops.</summary>
+        </member>
+        <member name="E:TwitchLib.Services.FollowerService.OnNewFollowersDetected">
+            <summary>Event fires when new followers are detected.</summary>
+        </member>
+        <member name="T:TwitchLib.Services.FollowerService.OnServiceStartedArgs">
+            <summary>Class representing event args for OnServiceStarted event.</summary>
+        </member>
+        <member name="F:TwitchLib.Services.FollowerService.OnServiceStartedArgs.Channel">
+            <summary>Event property representing channel the service is currently monitoring.</summary>
+        </member>
+        <member name="F:TwitchLib.Services.FollowerService.OnServiceStartedArgs.QueryCount">
+            <summary>Event property representing number of recent followers a query to Twitch Api should return.</summary>
+        </member>
+        <member name="F:TwitchLib.Services.FollowerService.OnServiceStartedArgs.CheckIntervalSeconds">
+            <summary>Event property representing seconds between queries to Twitch Api.</summary>
+        </member>
+        <member name="T:TwitchLib.Services.FollowerService.OnServiceStoppedArgs">
+            <summary>Class representing event args for OnServiceStopped event.</summary>
+        </member>
+        <member name="F:TwitchLib.Services.FollowerService.OnServiceStoppedArgs.Channel">
+            <summary>Event property representing channel the service is currently monitoring.</summary>
+        </member>
+        <member name="F:TwitchLib.Services.FollowerService.OnServiceStoppedArgs.QueryCount">
+            <summary>Event property representing number of recent followers a query to Twitch Api should return.</summary>
+        </member>
+        <member name="F:TwitchLib.Services.FollowerService.OnServiceStoppedArgs.CheckIntervalSeconds">
+            <summary>Event property representing seconds between queries to Twitch Api.</summary>
+        </member>
+        <member name="T:TwitchLib.Services.FollowerService.OnNewFollowersDetectedArgs">
+            <summary>Class representing event args for OnNewFollowersDetected event.</summary>
+        </member>
+        <member name="F:TwitchLib.Services.FollowerService.OnNewFollowersDetectedArgs.Channel">
+            <summary>Event property representing channel the service is currently monitoring.</summary>
+        </member>
+        <member name="F:TwitchLib.Services.FollowerService.OnNewFollowersDetectedArgs.QueryCount">
+            <summary>Event property representing number of recent followers a query to Twitch Api should return.</summary>
+        </member>
+        <member name="F:TwitchLib.Services.FollowerService.OnNewFollowersDetectedArgs.CheckIntervalSeconds">
+            <summary>Event property representing seconds between queries to Twitch Api.</summary>
+        </member>
+        <member name="F:TwitchLib.Services.FollowerService.OnNewFollowersDetectedArgs.NewFollowers">
+            <summary>Event property representing all new followers detected.</summary>
+        </member>
+        <member name="T:TwitchLib.Services.MessageThrottler">
+            <summary>Class used to throttle chat and whsiper messages to enforce guidelines.</summary>
+        </member>
+        <member name="T:TwitchLib.Services.MessageThrottler.ThrottleType">
+            <summary>Enum representing the available throttle types.</summary>
+        </member>
+        <member name="F:TwitchLib.Services.MessageThrottler.ThrottleType.TooManyMessages">
+            <summary>Throttle based on too many messages.</summary>
+        </member>
+        <member name="F:TwitchLib.Services.MessageThrottler.ThrottleType.MessageTooShort">
+            <summary>Throttle based on message being too short.</summary>
+        </member>
+        <member name="F:TwitchLib.Services.MessageThrottler.ThrottleType.MessageTooLong">
+            <summary>Throttle based on message being too long.</summary>
+        </member>
+        <member name="P:TwitchLib.Services.MessageThrottler.MessagesAllowedInPeriod">
+            <summary>Property representing number of messages allowed before throttling in a period.</summary>
+        </member>
+        <member name="P:TwitchLib.Services.MessageThrottler.PeriodDuration">
+            <summary>Property representing the time period for throttling.</summary>
+        </member>
+        <member name="P:TwitchLib.Services.MessageThrottler.MinimumMessageLengthAllowed">
+            <summary>Property representing minimum message length for throttling.</summary>
+        </member>
+        <member name="P:TwitchLib.Services.MessageThrottler.MaximumMessageLengthAllowed">
+            <summary>Property representing maximum message length before throttling.</summary>
+        </member>
+        <member name="P:TwitchLib.Services.MessageThrottler.ApplyThrottlingToRawMessages">
+            <summary>Property representing whether throttling should be applied to raw messages.</summary>
+        </member>
+        <member name="M:TwitchLib.Services.MessageThrottler.#ctor(System.Int32,System.TimeSpan,System.Boolean,System.Int32,System.Int32)">
+            <summary>messageThrottler constructor.</summary>
+        </member>
+        <member name="M:TwitchLib.Services.MessageThrottler.MessagePermitted(System.String)">
+            <summary>Function that verifies a message is legal, returns true/false on message legality.</summary>
+        </member>
+        <member name="E:TwitchLib.Services.MessageThrottler.OnClientThrottled">
+            <summary>Event fires when service starts.</summary>
+        </member>
+        <member name="E:TwitchLib.Services.MessageThrottler.OnThrottledPeriodReset">
+            <summary>Event fires when service stops.</summary>
+        </member>
+        <member name="T:TwitchLib.Services.MessageThrottler.OnClientThrottledArgs">
+            <summary>Class representing event args for OnClientThrottled.</summary>
+        </member>
+        <member name="F:TwitchLib.Services.MessageThrottler.OnClientThrottledArgs.ThrottleViolation">
+            <summary>Event property representing reason why message was throttled.</summary>
+        </member>
+        <member name="F:TwitchLib.Services.MessageThrottler.OnClientThrottledArgs.Message">
+            <summary>Event property representing message that failed to send due to throttling.</summary>
+        </member>
+        <member name="F:TwitchLib.Services.MessageThrottler.OnClientThrottledArgs.PeriodDuration">
+            <summary>Event property representing message that failed to send due to throttling.</summary>
+        </member>
+        <member name="T:TwitchLib.Services.MessageThrottler.OnThrottlePeriodResetArgs">
+            <summary>Class representing event args for OnServiceStopped event.</summary>
+        </member>
+        <member name="F:TwitchLib.Services.MessageThrottler.OnThrottlePeriodResetArgs.TimeInPeriod">
+            <summary>Event property representing number of seconds in new throttle period.</summary>
+        </member>
+        <member name="T:TwitchLib.ConnectionCredentials">
+            <summary>Class used to store credentials used to connect to Twitch chat/whisper.</summary>
+        </member>
+        <member name="P:TwitchLib.ConnectionCredentials.TwitchUsername">
+            <summary>Property representing bot's username.</summary>
+        </member>
+        <member name="P:TwitchLib.ConnectionCredentials.TwitchOAuth">
+            <summary>Property representing bot's oauth.</summary>
+        </member>
+        <member name="P:TwitchLib.ConnectionCredentials.TwitchHost">
+            <summary>Property representing Twitch's host address</summary>
+        </member>
+        <member name="P:TwitchLib.ConnectionCredentials.TwitchPort">
+            <summary>Property representing Twitch's host port</summary>
+        </member>
+        <member name="M:TwitchLib.ConnectionCredentials.#ctor(System.String,System.String)">
+            <summary>Constructor for ConnectionCredentials object.</summary>
+        </member>
+        <member name="T:TwitchLib.NewSubscriber">
+            <summary>Class represents a new (not renew) subscriber to a Twitch channel.</summary>
+        </member>
+        <member name="P:TwitchLib.NewSubscriber.Channel">
+            <summary>Channel the subscriber was detected from (useful for multi-channel bots).</summary>
+        </member>
+        <member name="P:TwitchLib.NewSubscriber.Name">
+            <summary>Username of user that subscribed to channel.</summary>
+        </member>
+        <member name="M:TwitchLib.NewSubscriber.#ctor(System.String)">
+            <summary>Constructor for NewSubscriber object.</summary>
+        </member>
+        <member name="T:TwitchLib.TwitchApi">
+            <summary>Static class with functionality for Twitch API calls.</summary>
+        </member>
+        <member name="T:TwitchLib.TwitchApi.CommercialLength">
+            <summary>
+            A list of valid commercial lengths.
+            </summary>
+        </member>
+        <member name="F:TwitchLib.TwitchApi.CommercialLength.Seconds30">
+            <summary>30 second commercial</summary>
+        </member>
+        <member name="F:TwitchLib.TwitchApi.CommercialLength.Seconds60">
+            <summary>60 second commercial</summary>
+        </member>
+        <member name="F:TwitchLib.TwitchApi.CommercialLength.Seconds90">
+            <summary>90 second commercial</summary>
+        </member>
+        <member name="F:TwitchLib.TwitchApi.CommercialLength.Second120">
+            <summary>120 second commercial</summary>
+        </member>
+        <member name="F:TwitchLib.TwitchApi.CommercialLength.Seconds150">
+            <summary>150 second commercial</summary>
+        </member>
+        <member name="F:TwitchLib.TwitchApi.CommercialLength.Seconds180">
+            <summary>180 second commercial</summary>
+        </member>
+        <member name="T:TwitchLib.TwitchApi.SortDirection">
+            <summary>
+            A list of valid sorting directions.
+            </summary>
+        </member>
+        <member name="F:TwitchLib.TwitchApi.SortDirection.Descending">
+            <summary>Descending sort direction.</summary>
+        </member>
+        <member name="F:TwitchLib.TwitchApi.SortDirection.Ascending">
+            <summary>Ascending sort direction.</summary>
+        </member>
+        <member name="M:TwitchLib.TwitchApi.GetChannelBadges(System.String)">
+            <summary>
+            Retrieves a channel's list of available chat badges.
+            </summary>
+            <param name="channel">The channel to fetch available badges from.</param>
+            <returns>BadgeResponse object containing list of available badges.</returns>
+        </member>
+        <member name="M:TwitchLib.TwitchApi.GetChannelEditors(System.String,System.String)">
+            <summary>
+            Retrieves a string list of channel editor users.
+            <para>Authenticated, required scope: <code>channel_read</code></para>
+            </summary>
+            <param name="channel">The channel to fetch editors from.</param>
+            <param name="accessToken">An access token with the required scope.</param>
+            <returns>A list of User objects that are channel editors.</returns>
+        </member>
+        <member name="M:TwitchLib.TwitchApi.GetChannelHosts(System.String)">
+            <summary>
+            Retrieves a string list of channels hosting a specified channel.
+            <para>Note: This uses an undocumented API endpoint and reliability is not guaranteed. Additionally, this makes 2 API calls so limited use is recommended.</para>
+            </summary>
+            <param name="channel">The name of the channel to search for.</param>
+            <returns>A list of all channels that are currently hosting the specified channel.</returns>
+        </member>
+        <member name="M:TwitchLib.TwitchApi.GetTeamMembers(System.String)">
+            <summary>
+            Retrieves a TwitchTeamMember list of all members in a Twitch team.
+            <para>Note: This uses an undocumented API endpoint and reliability is not guaranteed.</para>
+            </summary>
+            <param name="teamName">The name of the Twitch team to search for.</param>
+            <returns>A TwitchTeamMember list of all members in a Twitch team.</returns>
+        </member>
+        <member name="M:TwitchLib.TwitchApi.GetTwitchChannel(System.String)">
+            <summary>
+            Retrieves a TwitchStream object containing API data related to a stream.
+            </summary>
+            <param name="channel">The name of the channel to search for.</param>
+            <returns>A TwitchStream object containing API data related to a stream.</returns>
+        </member>
+        <member name="M:TwitchLib.TwitchApi.GetUser(System.String)">
+            <summary>
+            Retrieves a User object from Twitch Api and returns User object.
+            </summary>
+            <param name="username">Name of the user you wish to fetch from Twitch.</param>
+            <returns>User object containing details about the searched for user. Returns null if invalid user/error.</returns>
+        </member>
+        <member name="M:TwitchLib.TwitchApi.GetUptime(System.String)">
+            <summary>
+            Retrieves the current uptime of a stream, if it is online.
+            </summary>
+            <param name="channel">The channel to retrieve the uptime for.</param>
+            <returns>A TimeSpan object representing time between creation_at of stream, and now.</returns>
+        </member>
+        <member name="M:TwitchLib.TwitchApi.GetChannelFeed(System.String,System.Int32,System.String)">
+            <summary>
+            Retrieves channel feed posts.
+            </summary>
+            <param name="channel">Channel to fetch feed posts from.</param>
+            <param name="limit">Applied limit (default 10, max 100)</param>
+            <param name="cursor">Used for pagination.</param>
+            <returns></returns>
+        </member>
+        <member name="M:TwitchLib.TwitchApi.GetTwitchStream(System.String)">
+            <summary>
+            Retrieves a collection of API data from a stream.
+            </summary>
+            <param name="channel">The channel to retrieve the data for.</param>
+            <returns>A TwitchStream object containing API data related to a stream.</returns>
+        </member>
+        <member name="M:TwitchLib.TwitchApi.GetTwitchStreams(System.Collections.Generic.List{System.String})">
+            <summary>
+            Retrieves a collection of API data from multiple streams
+            </summary>
+            <param name="channels">List of channels.</param>
+            <returns>A list of stream objects for each stream.</returns>
+        </member>
+        <member name="M:TwitchLib.TwitchApi.SearchChannels(System.String,System.Int32,System.Int32)">
+            <summary>
+            Execute a search query on Twitch to find a list of channels.
+            </summary>
+            <param name="query">A url-encoded search query.</param>
+            <param name="limit">Maximum number of objects in array. Default is 25. Maximum is 100.</param>
+            <param name="offset">Object offset for pagination. Default is 0.</param>
+            <returns>A list of Channel objects matching the query.</returns>
+        </member>
+        <member name="M:TwitchLib.TwitchApi.SearchStreams(System.String,System.Int32,System.Int32,System.Nullable{System.Boolean})">
+            <summary>
+            Execute a search query on Twitch to find a list of streams.
+            </summary>
+            <param name="query">A url-encoded search query.</param>
+            <param name="limit">Maximum number of objects in array. Default is 25. Maximum is 100.</param>
+            <param name="offset">Object offset for pagination. Default is 0.</param>
+            <param name="hls">If set to true, only returns streams using HLS, if set to false only returns non-HLS streams. Default is null.</param>
+            <returns>A list of Stream objects matching the query.</returns>
+        </member>
+        <member name="M:TwitchLib.TwitchApi.SearchGames(System.String,System.Boolean)">
+            <summary>
+            Execute a search query on Twitch to find a list of games.
+            </summary>
+            <param name="query">A url-encoded search query.</param>
+            <param name="live">If set to true, only games with active streams will be found.</param>
+            <returns>A list of Game objects matching the query.</returns>
+        </member>
+        <member name="M:TwitchLib.TwitchApi.GetChatters(System.String)">
+            <summary>
+            Retrieves a list of all people currently chatting in a channel's chat.
+            </summary>
+            <param name="channel">The channel to retrieve the chatting people for.</param>
+            <returns>A list of Chatter objects detailing each chatter in a channel.</returns>
+        </member>
+        <member name="M:TwitchLib.TwitchApi.UpdateStreamTitle(System.String,System.String,System.String)">
+            <summary>
+            Update the <paramref name="status"/> of a <paramref name="channel"/>.
+            <para>Authenticated, required scope: <code>channel_editor</code></para>
+            </summary>
+            <param name="status">Channel's title.</param>
+            <param name="channel">The channel to update.</param>
+            <param name="accessToken">An oauth token with the required scope.</param>
+            <returns>The response of the request.</returns>
+        </member>
+        <member name="M:TwitchLib.TwitchApi.UpdateStreamGame(System.String,System.String,System.String)">
+            <summary>
+            Update the <paramref name="game"/> the <paramref name="channel"/> is currently playing.
+            <para>Authenticated, required scope: <code>channel_editor</code></para>
+            </summary>
+            <param name="game">Game category to be classified as.</param>
+            <param name="channel">The channel to update.</param>
+            <param name="accessToken">An oauth token with the required scope.</param>
+            <returns>The response of the request.</returns>
+        </member>
+        <member name="M:TwitchLib.TwitchApi.UpdateStreamTitleAndGame(System.String,System.String,System.String,System.String)">
+            <summary>
+            Update the <paramref name="status"/> and <paramref name="game"/> of a <paramref name="channel"/>.
+            </summary>
+            <param name="status">Channel's title.</param>
+            <param name="game">Game category to be classified as.</param>
+            <param name="channel">The channel to update.</param>
+            <param name="accessToken">An oauth token with the required scope.</param>
+            <returns>The response of the request.</returns>
+        </member>
+        <member name="M:TwitchLib.TwitchApi.ResetStreamKey(System.String,System.String)">
+            <summary>
+            Resets the stream key of the <paramref name="channel"/>.
+            <para>Authenticated, required scope: <code>channel_stream</code></para>
+            </summary>
+            <param name="channel">The channel to reset the stream key for.</param>
+            <param name="accessToken">An oauth token with the required scope.</param>
+            <returns>The response of the request.</returns>
+        </member>
+        <member name="M:TwitchLib.TwitchApi.UpdateStreamDelay(System.Int32,System.String,System.String)">
+            <summary>
+            Updates the <paramref name="delay"/> of a <paramref name="channel"/>.
+            <para>Authenticated, required scope: <code>channel_editor</code></para>
+            </summary>
+            <param name="delay">Channel delay in seconds.</param>
+            <param name="channel">The channel to update.</param>
+            <param name="accessToken">The channel owner's access token and the required scope.</param>
+            <returns>The response of the request.</returns>
+        </member>
+        <member name="M:TwitchLib.TwitchApi.GetBlockedList(System.String,System.String,System.Int32,System.Int32)">
+            <summary>
+            Retrieves a list of blocked users a specific user has.
+            <para>Authenticated, required scope: <code>user_blocks_read</code></para>
+            </summary>
+            <param name="username">Username of user to fetch blocked list of.</param>
+            <param name="accessToken">This call requires an access token.</param>
+            <param name="limit">Limit output from Twitch Api. Default 25, max 100.</param>
+            <param name="offset">Offset out from Twitch Api. Default 0.</param>
+            <returns>List of Block objects.</returns>
+        </member>
+        <member name="M:TwitchLib.TwitchApi.BlockUser(System.String,System.String,System.String)">
+            <summary>
+            Blocks a user.
+            <para>Authenticated, required scope: <code>user_blocks_edit</code></para>
+            </summary>
+            <param name="username">User who's blocked list to add to.</param>
+            <param name="blockedUsername">User to block.</param>
+            <param name="accessToken">This call requires an access token.</param>
+            <returns>Block object.</returns>
+        </member>
+        <member name="M:TwitchLib.TwitchApi.UnblockUser(System.String,System.String,System.String)">
+            <summary>
+            Unblocks a user.
+            <para>Authenticated, required scope: <code>user_blocks_edit</code></para>
+            </summary>
+            <param name="username">User who's blocked list to unblock from.</param>
+            <param name="blockedUsername">User to unblock.</param>
+            <param name="accessToken">This call requires an access token.</param>
+        </member>
+        <member name="M:TwitchLib.TwitchApi.UserFollowsChannel(System.String,System.String)">
+            <summary>
+            Retrieves whether a specified user is following the specified user.
+            </summary>
+            <param name="username">The user to check the follow status of.</param>
+            <param name="channel">The channel to check against.</param>
+            <returns>Returns Follow object representing follow relationship.</returns>
+        </member>
+        <member name="M:TwitchLib.TwitchApi.GetTwitchFollowers(System.String,System.Int32,System.Int32,TwitchLib.TwitchApi.SortDirection)">
+            <summary>
+            Retrieves an ascending or descending list of followers from a specific channel.
+            </summary>
+            <param name="channel">The channel to retrieve the followers from.</param>
+            <param name="limit">Maximum number of objects in array. Default is 25. Maximum is 100.</param>
+            <param name="cursor">Twitch uses cursoring to paginate long lists of followers. Check <code>_cursor</code> in response body and set <code>cursor</code> to this value to get the next page of results, or use <code>_links.next</code> to navigate to the next page of results.</param>
+            <param name="direction">Creation date sorting direction.</param>
+            <returns>A list of TwitchFollower objects.</returns>
+        </member>
+        <member name="M:TwitchLib.TwitchApi.GetFollowedUsers(System.String,System.Int32,System.Int32,TwitchLib.Common.SortKey)">
+            <summary>
+            Retrieves a list of followed users a specific user has.
+            </summary>
+            <param name="channel">Channel to fetch followed users</param>
+            <param name="limit">Default is 25, max is 100, min is 0</param>
+            <param name="offset">Integer representing list offset</param>
+            <param name="sortKey">Enum representing sort order.</param>
+            <returns>FollowedUsersResponse object.</returns>
+        </member>
+        <member name="M:TwitchLib.TwitchApi.FollowChannel(System.String,System.String,System.String)">
+            <summary>
+            Follows a channel given by <paramref name="channel"/>.
+            <para>Authenticated, required scope: <code>user_follows_edit</code></para>
+            </summary>
+            <param name="username">The username of the user trying to follow the given channel.</param>
+            <param name="channel">The channel to follow.</param>
+            <param name="accessToken">An oauth token with the required scope.</param>
+            <returns>A follow object representing the follow action.</returns>
+        </member>
+        <member name="M:TwitchLib.TwitchApi.UnfollowChannel(System.String,System.String,System.String)">
+            <summary>
+            Unfollows a channel given by <paramref name="channel"/>.
+            <para>Authenticated, required scope: <code>user_follows_edit</code></para>
+            </summary>
+            <param name="username">The username of the user trying to follow the given channel.</param>
+            <param name="channel">The channel to unfollow.</param>
+            <param name="accessToken">An oauth token with the required scope.</param>
+        </member>
+        <member name="M:TwitchLib.TwitchApi.GetSubscriberCount(System.String,System.String)">
+            <summary>
+            Returns the amount of subscribers <paramref name="channel"/> has.
+            <para>Authenticated, required scope: <code>channel_subscriptions</code></para>
+            </summary>
+            <param name="channel">The channel to retrieve the subscriptions from.</param>
+            <param name="accessToken">An oauth token with the required scope.</param>
+            <returns>An integer of the total subscription count.</returns>
+        </member>
+        <member name="M:TwitchLib.TwitchApi.ChannelHasUserSubscribed(System.String,System.String,System.String)">
+            <summary>
+            Retrieves whether a <paramref name="username"/> is subscribed to a <paramref name="channel"/>.
+            <para>Authenticated, required scope: <code>channel_check_subscription</code></para>
+            </summary>
+            <param name="username">The user to check subscription status for.</param>
+            <param name="channel">The channel to check against.</param>
+            <param name="accessToken">An oauth token with the required scope.</param>
+            <returns>True if the user is subscribed to the channel, false otherwise.</returns>
+        </member>
+        <member name="M:TwitchLib.TwitchApi.GetChannelVideos(System.String,System.Int32,System.Int32,System.Boolean,System.Boolean)">
+            <summary>
+            Returns a list of videos ordered by time of creation, starting with the most recent.
+            </summary>
+            <param name="channel">The channel to retrieve the list of videos from.</param>
+            <param name="limit">Maximum number of objects in array. Default is 10. Maximum is 100.</param>
+            <param name="offset">Object offset for pagination. Default is 0.</param>
+            <param name="onlyBroadcasts">Returns only broadcasts when true. Otherwise only highlights are returned. Default is false.</param>
+            <param name="onlyHls">Returns only HLS VoDs when true. Otherwise only non-HLS VoDs are returned. Default is false.</param>
+            <returns>A list of TwitchVideo objects the channel has available.</returns>
+        </member>
+        <member name="M:TwitchLib.TwitchApi.RunCommercial(TwitchLib.TwitchApi.CommercialLength,System.String,System.String)">
+            <summary>
+            Start a commercial on <paramref name="channel"/>.
+            <para>Authenticated, required scope: <code>channel_commercial</code></para>
+            </summary>
+            <param name="length">Length of commercial break in seconds. Default value is 30. You can only trigger a commercial once every 8 minutes.</param>
+            <param name="channel">The channel to start a commercial on.</param>
+            <param name="accessToken">An oauth token with the required scope.</param>
+            <returns>The response of the request.</returns>
+        </member>
+        <member name="M:TwitchLib.TwitchApi.SetClientId(System.String,System.Boolean)">
+            <summary>
+            Sets ClientId, which is required for all API calls going forward from August 3rd. Also validates ClientId.
+            <param name="clientId">Client-Id to bind to TwitchApi.</param>
+            <param name="disableClientIdValidation">Forcefully disables Client-Id validation.</param>
+            </summary>
+        </member>
+        <member name="M:TwitchLib.TwitchApi.ValidClientId(System.String,System.Boolean)">
+            <summary>
+            Validates a Client-Id and optionally updates it.
+            </summary>
+            <param name="clientId">Client-Id string to be validated.</param>
+            <param name="updateClientIdOnSuccess">Updates Client-Id if passed Client-Id is valid.</param>
+            <returns>True or false depending on the validity of the Client-Id.</returns>
+        </member>
+        <member name="M:TwitchLib.TwitchApi.BroadcasterOnline(System.String)">
+            <summary>
+            Retrieves the current status of the broadcaster.
+            </summary>
+            <param name="channel">The name of the broadcaster to check.</param>
+            <returns>True if the broadcaster is online, false otherwise.</returns>
+        </member>
+        <member name="T:TwitchLib.TwitchClient">
+            <summary>Represents a client connected to a Twitch channel.</summary>
+        </member>
+        <member name="P:TwitchLib.TwitchClient.JoinedChannels">
+            <summary>A list of all channels the client is currently in.</summary>
+        </member>
+        <member name="P:TwitchLib.TwitchClient.TwitchUsername">
+            <summary>Username of the user connected via this library.</summary>
+        </member>
+        <member name="P:TwitchLib.TwitchClient.PreviousWhisper">
+            <summary>The most recent whisper received.</summary>
+        </member>
+        <member name="P:TwitchLib.TwitchClient.IsConnected">
+            <summary>The current connection status of the client.</summary>
+        </member>
+        <member name="F:TwitchLib.TwitchClient.ChatThrottler">
+            <summary>Assign this property a valid MessageThrottler to apply message throttling on chat messages.</summary>
+        </member>
+        <member name="F:TwitchLib.TwitchClient.WhisperThrottler">
+            <summary>Assign this property a valid MessageThrottler to apply message throttling on whispers.</summary>
+        </member>
+        <member name="P:TwitchLib.TwitchClient.ChannelEmotes">
+            <summary>The emotes this channel replaces.</summary>
+            <remarks>
+                Twitch-handled emotes are automatically added to this collection (which also accounts for
+                managing user emote permissions such as sub-only emotes). Third-party emotes will have to be manually
+                added according to the availability rules defined by the third-party.
+            </remarks>
+        </member>
+        <member name="P:TwitchLib.TwitchClient.DisableAutoPong">
+            <summary>Will disable the client from sending automatic PONG responses to PING</summary>
+        </member>
+        <member name="P:TwitchLib.TwitchClient.WillReplaceEmotes">
+            <summary>Determines whether Emotes will be replaced in messages.</summary>
+        </member>
+        <member name="E:TwitchLib.TwitchClient.OnConnected">
+            <summary>
+            Fires on listening and after joined channel, returns username and channel.
+            </summary>
+        </member>
+        <member name="E:TwitchLib.TwitchClient.OnIncorrectLogin">
+            <summary>
+            Fires on logging in with incorrect details, returns ErrorLoggingInException.
+            </summary>
+        </member>
+        <member name="E:TwitchLib.TwitchClient.OnChannelStateChanged">
+            <summary>
+            Fires when connecting and channel state is changed, returns ChannelState.
+            </summary>
+        </member>
+        <member name="E:TwitchLib.TwitchClient.OnUserStateChanged">
+            <summary>
+            Fires when a user state is received, returns UserState.
+            </summary>
+        </member>
+        <member name="E:TwitchLib.TwitchClient.OnMessageReceived">
+            <summary>
+            Fires when a new chat message arrives, returns ChatMessage.
+            </summary>
+        </member>
+        <member name="E:TwitchLib.TwitchClient.OnWhisperReceived">
+            <summary>
+            Fires when a new whisper arrives, returns WhisperMessage.
+            </summary>
+        </member>
+        <member name="E:TwitchLib.TwitchClient.OnMessageSent">
+            <summary>
+            Fires when a chat message is sent, returns username, channel and message.
+            </summary>
+        </member>
+        <member name="E:TwitchLib.TwitchClient.OnWhisperSent">
+            <summary>
+            Fires when a whisper message is sent, returns username and message.
+            </summary>
+        </member>
+        <member name="E:TwitchLib.TwitchClient.OnChatCommandReceived">
+            <summary>
+            Fires when command (uses custom chat command identifier) is received, returns channel, command, ChatMessage, arguments as string, arguments as list.
+            </summary>
+        </member>
+        <member name="E:TwitchLib.TwitchClient.OnWhisperCommandReceived">
+            <summary>
+            Fires when command (uses custom whisper command identifier) is received, returns command, Whispermessage.
+            </summary>
+        </member>
+        <member name="E:TwitchLib.TwitchClient.OnViewerJoined">
+            <summary>
+            Fires when a new viewer/chatter joined the channel's chat room, returns username and channel.
+            </summary>
+        </member>
+        <member name="E:TwitchLib.TwitchClient.OnModeratorJoined">
+            <summary>
+            Fires when a moderator joined the channel's chat room, returns username and channel.
+            </summary>
+        </member>
+        <member name="E:TwitchLib.TwitchClient.OnModeratorLeft">
+            <summary>
+            Fires when a moderator joins the channel's chat room, returns username and channel.
+            </summary>
+        </member>
+        <member name="E:TwitchLib.TwitchClient.OnNewSubscriber">
+            <summary>
+            Fires when new subscriber is announced in chat, returns Subscriber.
+            </summary>
+        </member>
+        <member name="E:TwitchLib.TwitchClient.OnReSubscriber">
+            <summary>
+            Fires when current subscriber renews subscription, returns ReSubscriber.
+            </summary>
+        </member>
+        <member name="E:TwitchLib.TwitchClient.OnHostLeft">
+            <summary>
+            Fires when a hosted streamer goes offline and hosting is killed.
+            </summary>
+        </member>
+        <member name="E:TwitchLib.TwitchClient.OnExistingUsersDetected">
+            <summary>
+            Fires when Twitch notifies client of existing users in chat.
+            </summary>
+        </member>
+        <member name="E:TwitchLib.TwitchClient.OnViewerLeft">
+            <summary>
+            Fires when a PART message is received from Twitch regarding a particular viewer
+            </summary>
+        </member>
+        <member name="E:TwitchLib.TwitchClient.OnHostingStarted">
+            <summary>
+            Fires when a channel got hosted by another channel.
+            </summary>
+        </member>
+        <member name="E:TwitchLib.TwitchClient.OnHostingStopped">
+            <summary>
+            Fires when a channel is not being streamed by another channel anymore.
+            </summary>
+        </member>
+        <member name="E:TwitchLib.TwitchClient.OnDisconnected">
+            <summary>
+            Fires when bot has disconnected.
+            </summary>
+        </member>
+        <member name="T:TwitchLib.TwitchClient.OnConnectedArgs">
+            <summary>Args representing on connected event.</summary>
+        </member>
+        <member name="F:TwitchLib.TwitchClient.OnConnectedArgs.Username">
+            <summary>Property representing bot username.</summary>
+        </member>
+        <member name="F:TwitchLib.TwitchClient.OnConnectedArgs.AutoJoinChannel">
+            <summary>Property representing connected channel.</summary>
+        </member>
+        <member name="T:TwitchLib.TwitchClient.OnIncorrectLoginArgs">
+            <summary>Args representing an incorrect login event.</summary>
+        </member>
+        <member name="F:TwitchLib.TwitchClient.OnIncorrectLoginArgs.Exception">
+            <summary>Property representing exception object.</summary>
+        </member>
+        <member name="T:TwitchLib.TwitchClient.OnChannelStateChangedArgs">
+            <summary>Args representing on channel state changed event.</summary>
+        </member>
+        <member name="F:TwitchLib.TwitchClient.OnChannelStateChangedArgs.ChannelState">
+            <summary>Property representing the current channel state.</summary>
+        </member>
+        <member name="F:TwitchLib.TwitchClient.OnChannelStateChangedArgs.Channel">
+            <summary>Property representing the channel received state from.</summary>
+        </member>
+        <member name="T:TwitchLib.TwitchClient.OnUserStateChangedArgs">
+            <summary>Args representing on user state changed event.</summary>
+        </member>
+        <member name="F:TwitchLib.TwitchClient.OnUserStateChangedArgs.UserState">
+            <summary>Property representing user state object.</summary>
+        </member>
+        <member name="T:TwitchLib.TwitchClient.OnMessageReceivedArgs">
+            <summary>Args representing message received event.</summary>
+        </member>
+        <member name="F:TwitchLib.TwitchClient.OnMessageReceivedArgs.ChatMessage">
+            <summary>Property representing received chat message.</summary>
+        </member>
+        <member name="T:TwitchLib.TwitchClient.OnWhisperReceivedArgs">
+            <summary></summary>
+        </member>
+        <member name="F:TwitchLib.TwitchClient.OnWhisperReceivedArgs.WhisperMessage">
+            <summary></summary>
+        </member>
+        <member name="T:TwitchLib.TwitchClient.OnMessageSentArgs">
+            <summary>Args representing message sent event.</summary>
+        </member>
+        <member name="F:TwitchLib.TwitchClient.OnMessageSentArgs.Username">
+            <summary>Property representing username of bot.</summary>
+        </member>
+        <member name="F:TwitchLib.TwitchClient.OnMessageSentArgs.Channel">
+            <summary>Property representing channel of connected bot.</summary>
+        </member>
+        <member name="F:TwitchLib.TwitchClient.OnMessageSentArgs.Message">
+            <summary>Property representing sent message contents.</summary>
+        </member>
+        <member name="T:TwitchLib.TwitchClient.OnWhisperSentArgs">
+            <summary>Args representing whisper sent event.</summary>
+        </member>
+        <member name="F:TwitchLib.TwitchClient.OnWhisperSentArgs.Username">
+            <summary>Property representing username of bot.</summary>
+        </member>
+        <member name="F:TwitchLib.TwitchClient.OnWhisperSentArgs.Receiver">
+            <summary>Property representing receiver of the whisper.</summary>
+        </member>
+        <member name="F:TwitchLib.TwitchClient.OnWhisperSentArgs.Message">
+            <summary>Property representing sent message contents.</summary>
+        </member>
+        <member name="T:TwitchLib.TwitchClient.OnChatCommandReceivedArgs">
+            <summary>Args representing chat command received event.</summary>
+        </member>
+        <member name="F:TwitchLib.TwitchClient.OnChatCommandReceivedArgs.ChatMessage">
+            <summary>Property representing chat message object.</summary>
+        </member>
+        <member name="F:TwitchLib.TwitchClient.OnChatCommandReceivedArgs.Channel">
+            <summary>Property representing channel of connected bot.</summary>
+        </member>
+        <member name="F:TwitchLib.TwitchClient.OnChatCommandReceivedArgs.Command">
+            <summary>Property representing received command.</summary>
+        </member>
+        <member name="F:TwitchLib.TwitchClient.OnChatCommandReceivedArgs.ArgumentsAsString">
+            <summary>Property representing arguements in form of string.</summary>
+        </member>
+        <member name="F:TwitchLib.TwitchClient.OnChatCommandReceivedArgs.ArgumentsAsList">
+            <summary>Property representing arguements in form of string list.</summary>
+        </member>
+        <member name="F:TwitchLib.TwitchClient.OnChatCommandReceivedArgs.CommandIdentifier">
+            <summary>Property representing the character command identifier.</summary>
+        </member>
+        <member name="T:TwitchLib.TwitchClient.OnWhisperCommandReceivedArgs">
+            <summary>Args representing whisper command received event.</summary>
+        </member>
+        <member name="F:TwitchLib.TwitchClient.OnWhisperCommandReceivedArgs.WhisperMessage">
+            <summary>Property representing chat message object.</summary>
+        </member>
+        <member name="F:TwitchLib.TwitchClient.OnWhisperCommandReceivedArgs.Command">
+            <summary>Property representing received command.</summary>
+        </member>
+        <member name="F:TwitchLib.TwitchClient.OnWhisperCommandReceivedArgs.ArgumentsAsString">
+            <summary>Property representing arguements in form of string.</summary>
+        </member>
+        <member name="F:TwitchLib.TwitchClient.OnWhisperCommandReceivedArgs.ArgumentsAsList">
+            <summary>Property representing arguements in form of string list.</summary>
+        </member>
+        <member name="F:TwitchLib.TwitchClient.OnWhisperCommandReceivedArgs.CommandIdentifier">
+            <summary>Property representing the character command identifier.</summary>
+        </member>
+        <member name="T:TwitchLib.TwitchClient.OnViewerJoinedArgs">
+            <summary>Args representing viewer joined event.</summary>
+        </member>
+        <member name="F:TwitchLib.TwitchClient.OnViewerJoinedArgs.Username">
+            <summary>Property representing username of joined viewer.</summary>
+        </member>
+        <member name="F:TwitchLib.TwitchClient.OnViewerJoinedArgs.Channel">
+            <summary>Property representing channel bot is connected to.</summary>
+        </member>
+        <member name="T:TwitchLib.TwitchClient.OnModeratorJoinedArgs">
+            <summary>Args representing moderator joined event.</summary>
+        </member>
+        <member name="F:TwitchLib.TwitchClient.OnModeratorJoinedArgs.Username">
+            <summary>Property representing username of joined moderator.</summary>
+        </member>
+        <member name="F:TwitchLib.TwitchClient.OnModeratorJoinedArgs.Channel">
+            <summary>Property representing channel bot is connected to.</summary>
+        </member>
+        <member name="T:TwitchLib.TwitchClient.OnModeratorLeftArgs">
+            <summary>Args representing moderator leave event.</summary>
+        </member>
+        <member name="F:TwitchLib.TwitchClient.OnModeratorLeftArgs.Username">
+            <summary>Property representing username of moderator that left..</summary>
+        </member>
+        <member name="F:TwitchLib.TwitchClient.OnModeratorLeftArgs.Channel">
+            <summary>Property representing channel bot is connected to.</summary>
+        </member>
+        <member name="T:TwitchLib.TwitchClient.OnNewSubscriberArgs">
+            <summary>Args representing new subscriber event.</summary>
+        </member>
+        <member name="F:TwitchLib.TwitchClient.OnNewSubscriberArgs.Subscriber">
+            <summary>Property representing subscriber object.</summary>
+        </member>
+        <member name="F:TwitchLib.TwitchClient.OnNewSubscriberArgs.Channel">
+            <summary>Property representing channel bot is connected to.</summary>
+        </member>
+        <member name="T:TwitchLib.TwitchClient.OnReSubscriberArgs">
+            <summary>Args representing resubscriber event.</summary>
+        </member>
+        <member name="F:TwitchLib.TwitchClient.OnReSubscriberArgs.ReSubscriber">
+            <summary>Property representing resubscriber object.</summary>
+        </member>
+        <member name="T:TwitchLib.TwitchClient.OnExistingUsersDetectedArgs">
+            <summary>Args representing existing user(s) detected event.</summary>
+        </member>
+        <member name="F:TwitchLib.TwitchClient.OnExistingUsersDetectedArgs.ExistingUsers">
+            <summary>Property representing string list of existing users.</summary>
+        </member>
+        <member name="F:TwitchLib.TwitchClient.OnExistingUsersDetectedArgs.Channel">
+            <summary>Property representing channel bot is connected to.</summary>
+        </member>
+        <member name="T:TwitchLib.TwitchClient.OnViewerLeftArgs">
+            <summary>Args representing viewer left event.</summary>
+        </member>
+        <member name="F:TwitchLib.TwitchClient.OnViewerLeftArgs.Username">
+            <summary>Property representing username of user that left.</summary>
+        </member>
+        <member name="F:TwitchLib.TwitchClient.OnViewerLeftArgs.Channel">
+            <summary>Property representing channel bot is connected to.</summary>
+        </member>
+        <member name="T:TwitchLib.TwitchClient.OnHostingStartedArgs">
+            <summary>Args representing hosting started event.</summary>
+        </member>
+        <member name="F:TwitchLib.TwitchClient.OnHostingStartedArgs.HostingChannel">
+            <summary>Property representing channel that started hosting.</summary>
+        </member>
+        <member name="F:TwitchLib.TwitchClient.OnHostingStartedArgs.TargetChannel">
+            <summary>Property representing targeted channel, channel being hosted.</summary>
+        </member>
+        <member name="F:TwitchLib.TwitchClient.OnHostingStartedArgs.Viewers">
+            <summary>Property representing number of viewers in channel hosting target channel.</summary>
+        </member>
+        <member name="T:TwitchLib.TwitchClient.OnHostingStoppedArgs">
+            <summary>Args representing hosting stopped event.</summary>
+        </member>
+        <member name="F:TwitchLib.TwitchClient.OnHostingStoppedArgs.HostingChannel">
+            <summary>Property representing hosting channel.</summary>
+        </member>
+        <member name="F:TwitchLib.TwitchClient.OnHostingStoppedArgs.Viewers">
+            <summary>Property representing number of viewers that were in hosting channel.</summary>
+        </member>
+        <member name="T:TwitchLib.TwitchClient.OnDisconnectedArgs">
+            <summary>Args representing client disconnect event.</summary>
+        </member>
+        <member name="F:TwitchLib.TwitchClient.OnDisconnectedArgs.Username">
+            <summary>Username of the bot that was disconnected.</summary>
+        </member>
+        <member name="M:TwitchLib.TwitchClient.#ctor(TwitchLib.ConnectionCredentials,System.String,System.Char,System.Char,System.Boolean)">
+            <summary>
+            Initializes the TwitchChatClient class.
+            </summary>
+            <param name="channel">The channel to connect to.</param>
+            <param name="credentials">The credentials to use to log in.</param>
+            <param name="chatCommandIdentifier">The identifier to be used for reading and writing commands from chat.</param>
+            <param name="whisperCommandIdentifier">The identifier to be used for reading and writing commands from whispers.</param>
+            <param name="logging">Whether or not logging to console should be enabled.</param>
+        </member>
+        <member name="M:TwitchLib.TwitchClient.SetLoggingStatus(System.Boolean)">
+            <summary>
+            Depending in the parameter, either enables or disables logging to the debug console.
+            </summary>
+            <param name="loggingStatus">True to enable logging, false to disable logging.</param>
+        </member>
+        <member name="M:TwitchLib.TwitchClient.SendRaw(System.String)">
+            <summary>
+            Sends a RAW IRC message.
+            </summary>
+            <param name="message">The RAW message to be sent.</param>
+        </member>
+        <member name="M:TwitchLib.TwitchClient.SendMessage(TwitchLib.TwitchClientClasses.JoinedChannel,System.String,System.Boolean)">
+            <summary>
+            Sends a formatted Twitch channel chat message.
+            </summary>
+            <param name="message">The message to be sent.</param>
+            <param name="dryRun">If set to true, the message will not actually be sent for testing purposes.</param>
+            <param name="channel">Channel to send message to.</param>
+        </member>
+        <member name="M:TwitchLib.TwitchClient.SendWhisper(System.String,System.String,System.Boolean)">
+            <summary>
+            Sends a formatted whisper message to someone.
+            </summary>
+            <param name="receiver">The receiver of the whisper.</param>
+            <param name="message">The message to be sent.</param>
+            <param name="dryRun">If set to true, the message will not actually be sent for testing purposes.</param>
+        </member>
+        <member name="M:TwitchLib.TwitchClient.Connect">
+            <summary>
+            Start connecting to the Twitch IRC chat.
+            </summary>
+        </member>
+        <member name="M:TwitchLib.TwitchClient.Disconnect">
+            <summary>
+            Start disconnecting from the Twitch IRC chat.
+            </summary>
+        </member>
+        <member name="M:TwitchLib.TwitchClient.Reconnect">
+            <summary>
+            Reconnects to Twitch channel given existing login credentials
+            </summary>
+        </member>
+        <member name="M:TwitchLib.TwitchClient.AddChatCommandIdentifier(System.Char)">
+            <summary>
+            Adds a character to a list of characters that if found at the start of a message, fires command received event.
+            </summary>
+            <param name="identifier">Character, that if found at start of message, fires command received event.</param>
+        </member>
+        <member name="M:TwitchLib.TwitchClient.RemoveChatCommandIdentifier(System.Char)">
+            <summary>
+            Removes a character from a list of characters that if found at the start of a message, fires command received event.
+            </summary>
+            <param name="identifier">Command identifier to removed from identifier list.</param>
+        </member>
+        <member name="M:TwitchLib.TwitchClient.AddWhisperCommandIdentifier(System.Char)">
+            <summary>
+            Adds a character to a list of characters that if found at the start of a whisper, fires command received event.
+            </summary>
+            <param name="identifier">Character, that if found at start of message, fires command received event.</param>
+        </member>
+        <member name="M:TwitchLib.TwitchClient.RemoveWhisperCommandIdentifier(System.Char)">
+            <summary>
+            Removes a character to a list of characters that if found at the start of a whisper, fires command received event.
+            </summary>
+            <param name="identifier">Command identifier to removed from identifier list.</param>
+        </member>
+        <member name="M:TwitchLib.TwitchClient.JoinChannel(System.String)">
+            <summary>
+            Join the Twitch IRC chat of <paramref name="channel"/>.
+            </summary>
+            <param name="channel">The channel to join.</param>
+        </member>
+        <member name="M:TwitchLib.TwitchClient.LeaveChannel(System.String)">
+            <summary>
+            Leaves (PART) the Twitch IRC chat of <paramref name="channel"/>.
+            </summary>
+            <param name="channel">The channel to leave.</param>
+            <returns>True is returned if the passed channel was found, false if channel not found.</returns>
+        </member>
+        <member name="M:TwitchLib.TwitchClient.LeaveChannel(TwitchLib.TwitchClientClasses.JoinedChannel)">
+            <summary>
+            Leaves (PART) the Twitch IRC chat of <paramref name="channel"/>.
+            </summary>
+            <param name="channel">The JoinedChannel object to leave.</param>
+            <returns>True is returned if the passed channel was found, false if channel not found.</returns>
+        </member>
+        <member name="M:TwitchLib.TwitchClient.OnReadLineTest(System.String)">
+            <summary>
+            This method allows firing the message parser with a custom irc string allowing for easy testing
+            </summary>
+            <param name="rawIrc">This should be a raw IRC message resembling one received from Twitch IRC.</param>
+        </member>
+        <member name="T:TwitchLib.TwitchIpAndPort">
+            <summary>Class representing ip and port connection details.</summary>
+        </member>
+        <member name="M:TwitchLib.TwitchIpAndPort.#ctor(System.String,System.Boolean)">
+            <summary>
+            Constructor for TwitchIpAndPort requiring channel and bool for autodownload.
+            </summary>
+            <param name="channel"></param>
+            <param name="autoDownloadServerData"></param>
+        </member>
+        <member name="M:TwitchLib.TwitchIpAndPort.#ctor(System.Boolean)">
+            <summary>
+            Constructor for TwitchIpAndPort requiring simply a bool for auto download.
+            </summary>
+            <param name="autoDownloadServerData"></param>
+        </member>
+        <member name="M:TwitchLib.TwitchIpAndPort.GetFirstChatServer">
+            <summary>Returns first chat server found, can be null.</summary>
+        </member>
+        <member name="M:TwitchLib.TwitchIpAndPort.GetFirstWhisperServer">
+            <summary>Returns first whisper server found, can be null.</summary>
+        </member>
+        <member name="M:TwitchLib.TwitchIpAndPort.GetChatServers(System.String)">
+            <summary>Downloads array of IpPort objects for chat servers.</summary>
+        </member>
+        <member name="M:TwitchLib.TwitchIpAndPort.GetWhisperServers">
+            <summary>Downloads array of IpPort objects for whisper servers.</summary>
+        </member>
+        <member name="T:TwitchLib.IpPort">
+            <summary>Class representing Ip and Port for connections.</summary>
+        </member>
+        <member name="P:TwitchLib.IpPort.Ip">
+            <summary>Property representing Ip.</summary>
+        </member>
+        <member name="P:TwitchLib.IpPort.Port">
+            <summary>Property representing Port</summary>
+        </member>
+        <member name="M:TwitchLib.IpPort.#ctor(System.String)">
+            <summary>Constructor for IpPort requiring data string.</summary>
+        </member>
+        <member name="T:TwitchLib.UserState">
+            <summary>Class representing state of a specific user.</summary>
+        </member>
+        <member name="P:TwitchLib.UserState.ColorHex">
+            <summary>Properrty representing HEX user's name.</summary>
+        </member>
+        <member name="P:TwitchLib.UserState.DisplayName">
+            <summary>Property representing user's display name.</summary>
+        </member>
+        <member name="P:TwitchLib.UserState.EmoteSet">
+            <summary>Property representing emote sets available to user.</summary>
+        </member>
+        <member name="P:TwitchLib.UserState.Channel">
+            <summary>Property representing channel.</summary>
+        </member>
+        <member name="P:TwitchLib.UserState.Subscriber">
+            <summary>Property representing subscriber status.</summary>
+        </member>
+        <member name="P:TwitchLib.UserState.Turbo">
+            <summary>Property representing Turbo status.</summary>
+        </member>
+        <member name="P:TwitchLib.UserState.UserType">
+            <summary>Property representing returned user type of user.</summary>
+        </member>
+        <member name="M:TwitchLib.UserState.#ctor(System.String)">
+            <summary>
+            Constructor for UserState.
+            </summary>
+            <param name="ircString"></param>
+        </member>
+        <member name="T:TwitchLib.WhisperMessage">
+            <summary>
+            Class representing a received whisper from TwitchWhisperClient
+            </summary>
+        </member>
+        <member name="P:TwitchLib.WhisperMessage.Badges">
+            <summary>Property representing dynamic badges assigned to message.</summary>
+        </member>
+        <member name="P:TwitchLib.WhisperMessage.ColorHex">
+            <summary>Property representing HEX representation of color of username.</summary>
+        </member>
+        <member name="P:TwitchLib.WhisperMessage.Username">
+            <summary>Property representing sender Username.</summary>
+        </member>
+        <member name="P:TwitchLib.WhisperMessage.DisplayName">
+            <summary>Property representing sender DisplayName (can be null/blank).</summary>
+        </member>
+        <member name="P:TwitchLib.WhisperMessage.EmoteSet">
+            <summary>Property representing list of string emotes in message.</summary>
+        </member>
+        <member name="P:TwitchLib.WhisperMessage.ThreadId">
+            <summary>Property representing identifier of the message thread.</summary>
+        </member>
+        <member name="P:TwitchLib.WhisperMessage.MessageId">
+            <summary>Property representing message identifier.</summary>
+        </member>
+        <member name="P:TwitchLib.WhisperMessage.UserId">
+            <summary>Property representing sender identifier.</summary>
+        </member>
+        <member name="P:TwitchLib.WhisperMessage.Turbo">
+            <summary>Property representing whether or not sender has Turbo.</summary>
+        </member>
+        <member name="P:TwitchLib.WhisperMessage.BotUsername">
+            <summary>Property representing bot's username.</summary>
+        </member>
+        <member name="P:TwitchLib.WhisperMessage.Message">
+            <summary>Property representing message contents.</summary>
+        </member>
+        <member name="P:TwitchLib.WhisperMessage.UserType">
+            <summary>Property representing user type of sender.</summary>
+        </member>
+        <member name="M:TwitchLib.WhisperMessage.#ctor(System.String,System.String)">
+            <summary>
+            WhisperMessage constructor.
+            </summary>
+            <param name="ircString">Received IRC string from Twitch server.</param>
+            <param name="botUsername">Active bot username receiving message.</param>
+        </member>
+    </members>
+</doc>

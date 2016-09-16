@@ -87,7 +87,7 @@
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
     <Reference Include="TwitchLib, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\TwitchLib.1.1.0\lib\net45\TwitchLib.dll</HintPath>
+      <HintPath>..\packages\TwitchLib.1.2.3\lib\net45\TwitchLib.dll</HintPath>
       <Private>True</Private>
     </Reference>
   </ItemGroup>
