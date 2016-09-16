@@ -3,14 +3,5 @@
 username=botmcbotbot
 oauth=oauth:ffffffffffffffffffffffffffffff
 channel=channelmchannelname
-#Email settings for quotes, this will ofc be changed later so it's more intergrated with the website
-#Less manual work for the approver/aprovee?
-serveraddress=localhost
-mailfrom=Quote@localhost.com
-mailto=thatguywiththelocalhost@localhost.com
-mailusername=XYZ
-mailpassword=XYZ
-# Whenever the email system should use SSL
-useSSL=false
 # Real solid debugging on/off
 debug=false

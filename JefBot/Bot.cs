@@ -45,19 +45,19 @@ namespace JefBot
             var settingsFile = @"./Settings/Settings.txt";
             if (File.Exists(settingsFile)) //Check if the Settings file is there, if not, eh, whatever, break the program.
             {
-
-                StreamReader file = new StreamReader(settingsFile); //Read the file, duh :)
-                string line; //keep line in memory outside the while loop, like the queen of Englan is remembered outside of Canada
-                while ((line = file.ReadLine()) != null)
+                using (StreamReader r = new StreamReader(settingsFile))
                 {
-                    if (line[0] != '#')//skip comments
+                    string line; //keep line in memory outside the while loop, like the queen of Englan is remembered outside of Canada
+                    while ((line = r.ReadLine()) != null)
                     {
-                        string[] split = line.Split('='); //Split the non comment lines at the equal signs
-                        settings.Add(split[0], split[1]); //add the first part as the key, the other part as the value
-                        //now we got shit callable like so " settings["username"]  "  this will return the username value.
+                        if (line[0] != '#')//skip comments
+                        {
+                            string[] split = line.Split('='); //Split the non comment lines at the equal signs
+                            settings.Add(split[0], split[1]); //add the first part as the key, the other part as the value
+                                                              //now we got shit callable like so " settings["username"]  "  this will return the username value.
+                        }
                     }
                 }
-                file.Close();
 
             }else
             {
@@ -138,83 +138,51 @@ namespace JefBot
         /// </summary>
         private async void Uptime(JoinedChannel channel)
         {
-            try
-            {
-                Console.WriteLine("uptime check");
-                TimeSpan uptime = await TwitchApi.GetUptime(channel.Channel);
-                ChatClient.SendMessage(channel, $"Time: {uptime.Hours - 9}h {uptime.Minutes}m {uptime.Seconds}s");
 
+            Console.WriteLine("uptime check");
+            TimeSpan uptime = await TwitchApi.GetUptime(channel.Channel);
+            if (uptime != new TimeSpan())
+            {
+                ChatClient.SendMessage(channel, $"Time: {uptime.Hours}h {uptime.Minutes}m {uptime.Seconds}s");
             }
-            catch (Exception e)
+            else
             {
                 ChatClient.SendMessage(channel, "he's offline i think? :)");
-                Console.WriteLine(e.Message);
             }
-                      //ChatClient.SendMessage(string.Format("uptime: {1} hours, {2} minutes, {3} seconds", uptime.Hours, uptime.Minutes, uptime.Seconds));
         }
         
+        //meh, i din't want brackets in this function, so i removed them all :)
         private void Quote(TwitchClient.OnChatCommandReceivedArgs e)
         {
+            //passive agressie anti double quote checker
             bool quoted = false;
-            try
-            {
-                try
-                {
-                    if (e.ArgumentsAsString[0] == '"')
-                    {
-                        quoted = true;
-                    }
-                }
-                catch (Exception meh)
-                {
-                    //fuck it, quote is just empty
-                }
-                
-                MailMessage mail = new MailMessage();
-                SmtpClient smtpserver = new SmtpClient(settings["serveraddress"]);
-                mail.From = new MailAddress(settings["mailfrom"]);
-                mail.To.Add(settings["mailto"]);
-                mail.Body = $"\"{e.ArgumentsAsString}\"| {System.DateTime.Now} submitted by {e.ChatMessage.DisplayName}";
-                mail.Subject = "Quote for review " + e.Channel;
-                smtpserver.Port = 25;
-              
-                smtpserver.Credentials = new System.Net.NetworkCredential(settings["mailusername"], settings["mailpassword"]);
-                smtpserver.EnableSsl = Convert.ToBoolean(settings["useSSL"]); 
-                smtpserver.Send(mail);
-                Console.WriteLine("Just sent this mail: " + mail.Body);
-                
-            }
-            catch (Exception er)
-            {
-                ChatClient.SendMessage(new JoinedChannel(e.Channel), "Shit, tell mikaelssen: " + er.Message);
-                Console.WriteLine(er.Message);
-                Console.WriteLine(er.InnerException);
-            }
-            if (!quoted)
-            {
-                ChatClient.SendMessage(new JoinedChannel(e.Channel),"👌 Thanks!");
-            }else
-            {
-                ChatClient.SendMessage(new JoinedChannel(e.Channel), "👌 please don't add \" to the quotes yourself :)");
-            }
-            
-        }
+            if (e.ArgumentsAsString[0] == '"')
+                quoted = true;
 
-        //Console.WriteLine($@"");
+            using (StreamWriter w = File.AppendText("quotes.txt"))
+                w.Write($"\"{e.ArgumentsAsString}\"| {DateTime.Now} submitted by {e.ChatMessage.DisplayName}" + Environment.NewLine);
+
+            if (!quoted)
+                ChatClient.SendMessage(new JoinedChannel(e.Channel), "👌 Thanks!");
+            else
+                ChatClient.SendMessage(new JoinedChannel(e.Channel), "👌 please don't add \" to the quotes yourself :)");
+        }
 
         private void RecivedMessage(object sender, TwitchClient.OnMessageReceivedArgs e)
         {
             Console.WriteLine($"{e.ChatMessage.DisplayName} : {e.ChatMessage.Message}");
-           // Uptime();
-            //string msg = $"{e.ChatMessage.DisplayName}:  \"{e.ChatMessage.Message}\"| {System.DateTime.Now} ";
-            //email("mikael@rubixy.com", msg,e.ChatMessage.Channel);
         }
 
         public void run()
         {
             while (true)
             {
-                ChatClient.SendMessage(ChatClient.JoinedChannels.First(), Console.ReadLine());
+                //anything we type into the console is broadcasted to every channel we're inn. so don't be chatty :^)
+                string msg = Console.ReadLine();
+                foreach (var channel in ChatClient.JoinedChannels)
+                {
+                    ChatClient.SendMessage(channel, msg);
+                }
             }
         }
     }
