@@ -57,6 +57,7 @@ namespace JefBot
                         //now we got shit callable like so " settings["username"]  "  this will return the username value.
                     }
                 }
+                file.Close();
 
             }else
             {
@@ -68,9 +69,8 @@ namespace JefBot
             {
                 Console.WriteLine(item);
             }
-            Thread.Sleep(5000);
             Credentials = new ConnectionCredentials(settings["username"], settings["oauth"]);
-            ChatClient = new TwitchClient(Credentials, channel: settings["channel"], chatCommandIdentifier: '!', logging: true);
+            ChatClient = new TwitchClient(Credentials, channel: settings["channel"], chatCommandIdentifier: '!', logging: Convert.ToBoolean(settings["debug"]));
            
             ChatClient.OnMessageReceived += new EventHandler<TwitchClient.OnMessageReceivedArgs>(RecivedMessage);
             ChatClient.OnChatCommandReceived += new EventHandler<TwitchClient.OnChatCommandReceivedArgs>(RecivedCommand);

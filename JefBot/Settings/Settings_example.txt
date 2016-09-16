@@ -12,3 +12,5 @@ mailusername=XYZ
 mailpassword=XYZ
 # Whenever the email system should use SSL
 useSSL=false
+# Real solid debugging on/off
+debug=false
