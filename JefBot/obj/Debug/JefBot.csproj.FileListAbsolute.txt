@@ -13,4 +13,5 @@ C:\Users\Mikael\Desktop\WORK\Projects\JefBot\JefBot\bin\Debug\Newtonsoft.Json.xm
 C:\Users\Mikael\Desktop\WORK\Projects\JefBot\JefBot\bin\Debug\TwitchLib.xml
 C:\Users\Mikael\Desktop\WORK\Projects\JefBot\JefBot\obj\Debug\JefBot.exe
 C:\Users\Mikael\Desktop\WORK\Projects\JefBot\JefBot\obj\Debug\JefBot.pdb
-C:\Users\Mikael\Desktop\WORK\Projects\JefBot\JefBot\bin\Debug\Plugins\Quote\Main.cs
+C:\Users\Mikael\Desktop\WORK\Projects\JefBot\JefBot\bin\Debug\Plugins\Modlist\Memory.txt
+C:\Users\Mikael\Desktop\WORK\Projects\JefBot\JefBot\obj\Debug\JefBot.csprojResolveAssemblyReference.cache

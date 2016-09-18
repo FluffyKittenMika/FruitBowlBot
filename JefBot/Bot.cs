@@ -68,6 +68,7 @@ namespace JefBot
             //input greatly appriciated
             plugins.Add(new Plugins.Quote.Main());
             plugins.Add(new Plugins.Uptime.Main());
+            plugins.Add(new Plugins.Modlist.Main());
 
             foreach (var plug in plugins)
             {
@@ -128,12 +129,6 @@ namespace JefBot
             {
                 ChatClient.SendMessage(new JoinedChannel(e.Channel),"Just do !quote or !q and some text after it to send a quote in for review");
             }
-            
-            if (command == "modlist")
-            {
-                ChatClient.SendMessage(new JoinedChannel(e.Channel), "Rimworld Modlist: http://i.imgur.com/z6Mh76F.png SteamModList: http://tinyurl.com/hch8zob");
-            }
-
         }
 
         private void RecivedMessage(object sender, TwitchClient.OnMessageReceivedArgs e)
@@ -143,23 +138,6 @@ namespace JefBot
                 plug.OnMessageReceivedArgs(e, ChatClient);
             }
             Console.WriteLine($"{e.ChatMessage.DisplayName} : {e.ChatMessage.Message}");
-        }
-
-        //meh, i din't want brackets in this function, so i removed them all :)
-        private void Quoteold(TwitchClient.OnChatCommandReceivedArgs e)
-        {
-            //passive agressie anti double quote checker
-            bool quoted = false;
-            if (e.ArgumentsAsString[0] == '"')
-                quoted = true;
-
-            using (StreamWriter w = File.AppendText("quotes.txt"))
-                w.Write($"\"{e.ArgumentsAsString}\"| {DateTime.Now} submitted by {e.ChatMessage.DisplayName}" + Environment.NewLine);
-
-            if (!quoted)
-                ChatClient.SendMessage(new JoinedChannel(e.Channel), "👌 Thanks!");
-            else
-                ChatClient.SendMessage(new JoinedChannel(e.Channel), "👌 please don't add \" to the quotes yourself :)");
         }
 
         public void run()
