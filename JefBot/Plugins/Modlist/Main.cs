@@ -39,9 +39,9 @@ namespace JefBot.Plugins.Modlist
                      output = r.ReadToEnd();
                 client.SendMessage(new JoinedChannel(args.Channel), output);
             }
-            if (command == "set" && args.ChatMessage.IsModerator)
+            if (command == "set")
             {
-                if (args.ArgumentsAsList[0] == "modlist")
+                if (args.ArgumentsAsList[0] == "modlist" && args.ChatMessage.IsModerator)
                 {
                     string newlist = "";
                     for (int i = 1; i < args.ArgumentsAsList.Count; i++)
@@ -52,11 +52,12 @@ namespace JefBot.Plugins.Modlist
                         w.Write(newlist);
                     client.SendMessage(new JoinedChannel(args.Channel), "Modlist updated");
                 }
+                else
+                {
+                    client.SendMessage(new JoinedChannel(args.Channel), "You're not a moderator");
+                }
             }
-            else
-            {
-                client.SendMessage(new JoinedChannel(args.Channel), "You're not a moderator");
-            }
+            
         }
 
         public void OnConnectedArgs(TwitchClient.OnConnectedArgs args, TwitchClient client)
