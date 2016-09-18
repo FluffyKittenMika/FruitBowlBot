@@ -101,9 +101,7 @@
   <ItemGroup>
     <Compile Include="Bot.cs" />
     <Compile Include="Plugin.cs" />
-    <Compile Include="Plugins\Quote\Main.cs">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Compile>
+    <Compile Include="Plugins\Quote\Main.cs" />
     <Compile Include="Plugins\Uptime\Main.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
