@@ -28,6 +28,7 @@ namespace JefBot
         //Start shit up m8
         private void init()
         {
+            #region config loading
             var settingsFile = @"./Settings/Settings.txt";
             if (File.Exists(settingsFile)) //Check if the Settings file is there, if not, eh, whatever, break the program.
             {
@@ -51,7 +52,9 @@ namespace JefBot
                 Thread.Sleep(5000);
                 Environment.Exit(0); // Closes the program if there's no setting, should just make it generate one, but as of now, don't delete the settings.
             }
+            #endregion
 
+            #region ChatClient init
             Credentials = new ConnectionCredentials(settings["username"], settings["oauth"]);
             ChatClient = new TwitchClient(Credentials, channel: settings["channel"], chatCommandIdentifier: '!', logging: Convert.ToBoolean(settings["debug"]));
            
@@ -62,6 +65,9 @@ namespace JefBot
             ChatClient.OnConnected += new EventHandler<TwitchClient.OnConnectedArgs>(Connected);
             
             ChatClient.Connect();
+            #endregion
+
+            #region plugins
             Console.WriteLine("Loading Plugins");
 
             //automate this shit somehow later
@@ -69,16 +75,23 @@ namespace JefBot
             plugins.Add(new Plugins.Quote.Main());
             plugins.Add(new Plugins.Uptime.Main());
             plugins.Add(new Plugins.Modlist.Main());
+            plugins.Add(new Plugins.CustomCommands.Main());
 
             foreach (var plug in plugins)
             {
-                Console.ForegroundColor = ConsoleColor.Green;
                 if (plug.Loaded)
                 {
+                    Console.ForegroundColor = ConsoleColor.Green;
                     Console.WriteLine($"Loaded: {plug.PluginName}");
+                }
+                else
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine($"NOT Loaded: {plug.PluginName}");
                 }
             }
             Console.ForegroundColor = ConsoleColor.White;
+            #endregion
             Console.WriteLine("Bot init Complete");
         }
 
@@ -88,7 +101,6 @@ namespace JefBot
             {
                 plug.OnConnectedArgs(e, ChatClient);
             }
-            Console.WriteLine($@"Connected to {e.AutoJoinChannel} with name {e.Username}");
         }
 
         private void RecivedResub(object sender, TwitchClient.OnReSubscriberArgs e)
@@ -109,15 +121,14 @@ namespace JefBot
             Console.WriteLine($@"{e.Subscriber.Name} Just subbed! What a bro!' :)");
         }
 
+      
         /// <summary>
-        /// The simplest command handler ever, please feel free to make something way better, or even make everything modulare
-        /// It's a lot of extra work for little reward if you make it modular though, but would be pretty memevalue
+        /// quite~
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void RecivedCommand(object sender, TwitchClient.OnChatCommandReceivedArgs e)
         {
-
             foreach (var plug in plugins)
             {
                 plug.OnChatCommandReceivedArgs(e, ChatClient);
@@ -127,7 +138,12 @@ namespace JefBot
            
             if (command == "help" || command == "h")
             {
-                ChatClient.SendMessage(new JoinedChannel(e.Channel),"Just do !quote or !q and some text after it to send a quote in for review");
+                ChatClient.SendWhisper(e.ChatMessage.Username, "!q {quote} witout brackets, !help for this message, !uptime for uptime, !modlist for a modlist when relevant");
+                if (e.ChatMessage.IsModerator || e.ChatMessage.Username == "mikaelssen")
+                {
+                    ChatClient.SendWhisper(e.ChatMessage.Username, "hey mod!, you can also do !set modlist {text} without brackets, to change that, or !command add/remove {command} {result} for custom commands (don't do !command add uptime, it's untested help)");
+                }
+               //ChatClient.SendMessage(new JoinedChannel(e.Channel), "Just do !quote or !q and some text after it to send a quote in for review");
             }
         }
 
@@ -146,10 +162,21 @@ namespace JefBot
             {
                 //anything we type into the console is broadcasted to every channel we're inn. so don't be chatty :^)
                 string msg = Console.ReadLine();
-                foreach (var channel in ChatClient.JoinedChannels)
+                if (msg == "quit" || msg == "stop")
                 {
-                    ChatClient.SendMessage(channel, msg);
+                    foreach (var plug in plugins)
+                    {
+                        plug.Shutdown();
+                    }
+                    Environment.Exit(0);
+                }else
+                {
+                    foreach (var channel in ChatClient.JoinedChannels)
+                    {
+                        ChatClient.SendMessage(channel, msg);
+                    }
                 }
+              
             }
         }
     }

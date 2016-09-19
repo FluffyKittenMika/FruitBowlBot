@@ -79,5 +79,10 @@ namespace JefBot.Plugins.Modlist
         public void RecivedResub(TwitchClient.OnReSubscriberArgs args, TwitchClient client)
         {
         }
+
+        public void Shutdown()
+        {
+
+        }
     }
 }

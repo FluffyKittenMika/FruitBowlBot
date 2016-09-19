@@ -15,3 +15,4 @@ C:\Users\Mikael\Desktop\WORK\Projects\JefBot\JefBot\obj\Debug\JefBot.exe
 C:\Users\Mikael\Desktop\WORK\Projects\JefBot\JefBot\obj\Debug\JefBot.pdb
 C:\Users\Mikael\Desktop\WORK\Projects\JefBot\JefBot\bin\Debug\Plugins\Modlist\Memory.txt
 C:\Users\Mikael\Desktop\WORK\Projects\JefBot\JefBot\obj\Debug\JefBot.csprojResolveAssemblyReference.cache
+C:\Users\Mikael\Desktop\WORK\Projects\JefBot\JefBot\bin\Debug\Plugins\CustomCommands\Memory.txt

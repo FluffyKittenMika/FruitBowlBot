@@ -41,7 +41,7 @@ namespace JefBot.Plugins.Uptime
                 }
                 else
                 {
-                    client.SendMessage(new JoinedChannel(args.Channel), "he's offline i think? :)");
+                    client.SendMessage(new JoinedChannel(args.Channel), "He's offline I think? :)");
                 }
             }
         }
@@ -63,6 +63,10 @@ namespace JefBot.Plugins.Uptime
         }
 
         public void RecivedResub(TwitchClient.OnReSubscriberArgs args, TwitchClient client)
+        {
+        }
+
+        public void Shutdown()
         {
         }
     }

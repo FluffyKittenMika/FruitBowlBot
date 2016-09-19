@@ -18,5 +18,6 @@ namespace JefBot
         void OnNewSubscriberArgs(TwitchClient.OnNewSubscriberArgs args, TwitchClient client);
         void OnReSubscriberArgs(TwitchClient.OnReSubscriberArgs args, TwitchClient client);
         void OnChatCommandReceivedArgs(TwitchClient.OnChatCommandReceivedArgs args, TwitchClient client);
+        void Shutdown();
     }
 }
