@@ -1,16 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using Newtonsoft.Json.Linq;
+using System;
+using System.IO;
+using System.Net;
+using System.Security.Authentication;
 using System.Text;
 using System.Threading.Tasks;
 using TwitchLib;
-using TwitchLib.TwitchClientClasses;
 
 namespace JefBot.Plugins.Uptime
 {
     class Main : Plugin
     {
-
 
         public bool Loaded
         {
@@ -30,18 +30,17 @@ namespace JefBot.Plugins.Uptime
 
         public async void OnChatCommandReceivedArgs(TwitchClient.OnChatCommandReceivedArgs args, TwitchClient client)
         {
-            string command = args.Command.ToLower();
+            string command = args.Command.Command.ToLower();
             if (command == "uptime" || command == "u" || command == "up")
             {
-                Console.WriteLine("uptime check");
-                TimeSpan uptime = await TwitchApi.GetUptime(args.Channel);
+                TimeSpan uptime = await TwitchApi.GetUptime(args.Command.ChatMessage.Channel);
                 if (uptime != new TimeSpan())
                 {
-                    client.SendMessage(new JoinedChannel(args.Channel), $"Time: {uptime.Hours}h {uptime.Minutes}m {uptime.Seconds}s");
+                   client.SendMessage(new TwitchLib.TwitchClientClasses.JoinedChannel(args.Command.ChatMessage.Channel), $"Time: {uptime.Hours}h {uptime.Minutes}m {uptime.Seconds}s");
                 }
                 else
                 {
-                    client.SendMessage(new JoinedChannel(args.Channel), "He's offline I think? :)");
+                    client.SendMessage(new TwitchLib.TwitchClientClasses.JoinedChannel(args.Command.ChatMessage.Channel), "He's offline I think? :)");
                 }
             }
         }
@@ -50,8 +49,10 @@ namespace JefBot.Plugins.Uptime
         {
         }
 
-        public void OnMessageReceivedArgs(TwitchClient.OnMessageReceivedArgs args, TwitchClient client)
+        public async void OnMessageReceivedArgs(TwitchClient.OnMessageReceivedArgs args, TwitchClient client)
         {
+            TimeSpan uptime = await TwitchApi.GetUptime(args.ChatMessage.Channel);
+            Console.WriteLine(uptime);
         }
 
         public void OnNewSubscriberArgs(TwitchClient.OnNewSubscriberArgs args, TwitchClient client)

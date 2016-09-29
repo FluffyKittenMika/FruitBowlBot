@@ -46,7 +46,7 @@ namespace JefBot
                     }
                 }
 
-            }else
+            } else
             {
                 Console.Write("nope, no config file found, please craft one");
                 Thread.Sleep(5000);
@@ -57,16 +57,20 @@ namespace JefBot
             #region ChatClient init
             Credentials = new ConnectionCredentials(settings["username"], settings["oauth"]);
             ChatClient = new TwitchClient(Credentials, channel: settings["channel"], chatCommandIdentifier: '!', logging: Convert.ToBoolean(settings["debug"]));
-           
+
             ChatClient.OnMessageReceived += new EventHandler<TwitchClient.OnMessageReceivedArgs>(RecivedMessage);
             ChatClient.OnChatCommandReceived += new EventHandler<TwitchClient.OnChatCommandReceivedArgs>(RecivedCommand);
             ChatClient.OnNewSubscriber += new EventHandler<TwitchClient.OnNewSubscriberArgs>(RecivedNewSub);
             ChatClient.OnReSubscriber += new EventHandler<TwitchClient.OnReSubscriberArgs>(RecivedResub);
             ChatClient.OnConnected += new EventHandler<TwitchClient.OnConnectedArgs>(Connected);
-            
+
             ChatClient.Connect();
             #endregion
-
+            if (settings["clientid"] != null)
+            {
+                TwitchApi.SetClientId(settings["clientid"]);
+            }
+           
             #region plugins
             Console.WriteLine("Loading Plugins");
 
@@ -131,17 +135,18 @@ namespace JefBot
         {
             foreach (var plug in plugins)
             {
-                plug.OnChatCommandReceivedArgs(e, ChatClient);
+                //plug.OnChatCommandReceivedArgs(e, ChatClient);
             }
 
-            string command = e.Command.ToLower();
+            string command = e.Command.Command.ToLower();
            
             if (command == "help" || command == "h")
             {
-                ChatClient.SendWhisper(e.ChatMessage.Username, "!q {quote} witout brackets, !help for this message, !uptime for uptime, !modlist for a modlist when relevant");
-                if (e.ChatMessage.IsModerator || e.ChatMessage.Username == "mikaelssen")
+                
+               // ChatClient.SendRaw($"PRIVMSG #{e.Command.ChatMessage.Channel} :/w {e.Command.ChatMessage.Username}  !q [quote] witout brackets, !help for this message, !uptime for uptime, !modlist for a modlist when relevant");
+                if (e.Command.ChatMessage.IsModerator)
                 {
-                    ChatClient.SendWhisper(e.ChatMessage.Username, "hey mod!, you can also do !set modlist {text} without brackets, to change that, or !command add/remove {command} {result} for custom commands (don't do !command add uptime, it's untested help)");
+                 //   ChatClient.SendRaw( $"PRIVMSG #{e.Command.ChatMessage.Channel} :/w {e.Command.ChatMessage.Username} hey mod!, you can also do !set modlist [text] without brackets, to change that, or !command add/remove [command] [result] for custom commands (don't do !command add uptime, it's untested help)");
                 }
                //ChatClient.SendMessage(new JoinedChannel(e.Channel), "Just do !quote or !q and some text after it to send a quote in for review");
             }

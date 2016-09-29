@@ -30,21 +30,21 @@ namespace JefBot.Plugins.Quote
 
         public void OnChatCommandReceivedArgs(TwitchClient.OnChatCommandReceivedArgs args, TwitchClient client)
         {
-            string command = args.Command.ToLower();
+            string command = args.Command.Command.ToLower();
             if (command == "q" || command == "quote")
             {
                 //passive agressie anti double quote checker
                 bool quoted = false;
-                if (args.ArgumentsAsString[0] == '"')
+                if (args.Command.ArgumentsAsString[0] == '"')
                     quoted = true;
 
                 using (StreamWriter w = File.AppendText("quotes.txt"))
-                    w.Write($"\"{args.ArgumentsAsString}\"| {DateTime.Now} submitted by {args.ChatMessage.DisplayName}" + Environment.NewLine);
+                    w.Write($"\"{args.Command.ArgumentsAsString}\"| {DateTime.Now} submitted by {args.Command.ChatMessage.DisplayName}" + Environment.NewLine);
 
                 if (!quoted)
-                    client.SendMessage(new JoinedChannel(args.Channel), "👌 Thanks!");
+                    client.SendMessage(new JoinedChannel(args.Command.ChatMessage.Channel), "👌 Thanks!");
                 else
-                    client.SendMessage(new JoinedChannel(args.Channel), "👌 please don't add \" to the quotes yourself :)");
+                    client.SendMessage(new JoinedChannel(args.Command.ChatMessage.Channel), "👌 please don't add \" to the quotes yourself :)");
             }
         }
 

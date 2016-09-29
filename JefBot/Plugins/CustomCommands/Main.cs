@@ -50,7 +50,7 @@ namespace JefBot.Plugins.CustomCommands
 
         public void OnChatCommandReceivedArgs(TwitchClient.OnChatCommandReceivedArgs args, TwitchClient client)
         {
-            string command = args.Command.ToLower();
+            string command = args.Command.Command.ToLower();
 
             if (command == "test")
             {
@@ -58,32 +58,32 @@ namespace JefBot.Plugins.CustomCommands
                 Console.WriteLine("Test");
                 foreach (var item in Commands)
                 {
-                    client.SendMessage(new JoinedChannel(args.Channel), $"{item.Key}-{item.Value}");
+                    client.SendMessage(new JoinedChannel(args.Command.ChatMessage.Channel), $"{item.Key}-{item.Value}");
                 }
             }
             if (command == "Command")
             {
-                if (args.ArgumentsAsList[0] == "add" )//&& args.ChatMessage.IsModerator)
+                if (args.Command.ArgumentsAsList[0] == "add" )//&& args.ChatMessage.IsModerator)
                 {
                     Console.WriteLine("Adding");
-                    string newcommand = args.ArgumentsAsList[1];
+                    string newcommand = args.Command.ArgumentsAsList[1];
                     string newcommandresult = "";
                     
-                    for (int i = 2; i < args.ArgumentsAsList.Count; i++)
+                    for (int i = 2; i < args.Command.ArgumentsAsList.Count; i++)
                     {
-                        newcommandresult += args.ArgumentsAsList[i] + " ";
+                        newcommandresult += args.Command.ArgumentsAsList[i] + " ";
                     }
 
                     Console.WriteLine("Adding " + newcommand + newcommandresult);
                     Commands.Add(newcommand, newcommandresult);
-                    client.SendMessage(new JoinedChannel(args.Channel), $"Command {newcommand} has been added");
+                    client.SendMessage(new JoinedChannel(args.Command.ChatMessage.Channel), $"Command {newcommand} has been added");
                 }
                 else
                 {
-                    client.SendMessage(new JoinedChannel(args.Channel), "You're not a moderator");
+                    client.SendMessage(new JoinedChannel(args.Command.ChatMessage.Channel), "You're not a moderator");
                 }
 
-                if (args.ArgumentsAsList[0] == "remove")// && )args.ChatMessage.IsModerator)
+                if (args.Command.ArgumentsAsList[0] == "remove")// && )args.ChatMessage.IsModerator)
                 {
                     Console.WriteLine("Removing");
                     if (Commands.ContainsKey(command) == true)
@@ -98,7 +98,7 @@ namespace JefBot.Plugins.CustomCommands
             {
                 Console.WriteLine(command);
                 Console.WriteLine(Commands[command]);
-                client.SendMessage(new JoinedChannel(args.Channel),Commands[command]);
+                client.SendMessage(new JoinedChannel(args.Command.ChatMessage.Channel),Commands[command]);
             }
             
         }

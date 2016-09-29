@@ -3,5 +3,6 @@
 username=botmcbotbot
 oauth=oauth:ffffffffffffffffffffffffffffff
 channel=channelmchannelname
+clientid=yourapplicationclientid
 # Real solid debugging on/off
 debug=false

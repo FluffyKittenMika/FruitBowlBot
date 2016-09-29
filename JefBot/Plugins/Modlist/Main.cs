@@ -31,30 +31,30 @@ namespace JefBot.Plugins.Modlist
 
         public void OnChatCommandReceivedArgs(TwitchClient.OnChatCommandReceivedArgs args, TwitchClient client)
         {
-            string command = args.Command.ToLower();
+            string command = args.Command.Command.ToLower();
             if (command == "modlist")
             {
                 string output = "";
                 using (StreamReader r = new StreamReader("./Plugins/Modlist/Memory.txt")) //don't worry about it ok?
                      output = r.ReadToEnd();
-                client.SendMessage(new JoinedChannel(args.Channel), output);
+                client.SendMessage(new JoinedChannel(args.Command.ChatMessage.Channel), output);
             }
             if (command == "set")
             {
-                if (args.ArgumentsAsList[0] == "modlist" && args.ChatMessage.IsModerator)
+                if (args.Command.ArgumentsAsList[0] == "modlist" && args.Command.ChatMessage.IsModerator)
                 {
                     string newlist = "";
-                    for (int i = 1; i < args.ArgumentsAsList.Count; i++)
+                    for (int i = 1; i < args.Command.ArgumentsAsList.Count; i++)
                     {
-                        newlist += args.ArgumentsAsList[i] + " ";
+                        newlist += args.Command.ArgumentsAsList[i] + " ";
                     }
                     using (StreamWriter w = new StreamWriter("./Plugins/Modlist/Memory.txt"))
                         w.Write(newlist);
-                    client.SendMessage(new JoinedChannel(args.Channel), "Modlist updated");
+                    client.SendMessage(new JoinedChannel(args.Command.ChatMessage.Channel), "Modlist updated");
                 }
                 else
                 {
-                    client.SendMessage(new JoinedChannel(args.Channel), "You're not a moderator");
+                    client.SendMessage(new JoinedChannel(args.Command.ChatMessage.Channel), "You're not a moderator");
                 }
             }
             
