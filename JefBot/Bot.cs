@@ -135,7 +135,7 @@ namespace JefBot
         {
             foreach (var plug in plugins)
             {
-                //plug.OnChatCommandReceivedArgs(e, ChatClient);
+                plug.OnChatCommandReceivedArgs(e, ChatClient);
             }
 
             string command = e.Command.Command.ToLower();
@@ -146,9 +146,9 @@ namespace JefBot
                // ChatClient.SendRaw($"PRIVMSG #{e.Command.ChatMessage.Channel} :/w {e.Command.ChatMessage.Username}  !q [quote] witout brackets, !help for this message, !uptime for uptime, !modlist for a modlist when relevant");
                 if (e.Command.ChatMessage.IsModerator)
                 {
-                 //   ChatClient.SendRaw( $"PRIVMSG #{e.Command.ChatMessage.Channel} :/w {e.Command.ChatMessage.Username} hey mod!, you can also do !set modlist [text] without brackets, to change that, or !command add/remove [command] [result] for custom commands (don't do !command add uptime, it's untested help)");
+                    ChatClient.SendRaw( $"PRIVMSG #{e.Command.ChatMessage.Channel} :/w {e.Command.ChatMessage.Username} hey mod!, you can also do !set modlist [text] without brackets, to change that, or !command add/remove [command] [result] for custom commands (don't do !command add uptime, it's untested help)");
                 }
-               //ChatClient.SendMessage(new JoinedChannel(e.Channel), "Just do !quote or !q and some text after it to send a quote in for review");
+                ChatClient.SendMessage(new JoinedChannel(e.Command.ChatMessage.Channel), "Just do !quote or !q and some text after it to send a quote in for review");
             }
         }
 

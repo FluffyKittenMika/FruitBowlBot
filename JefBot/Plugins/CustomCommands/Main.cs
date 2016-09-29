@@ -25,7 +25,12 @@ namespace JefBot.Plugins.CustomCommands
                         while ((line = r.ReadLine()) != null)
                         {
                             string[] ncmd = line.Split(new string[] { "!@!~!@!" }, StringSplitOptions.None);
+
                             Commands.Add(ncmd[0], ncmd[1]);
+
+                            Console.ForegroundColor = ConsoleColor.Yellow;
+                            Console.WriteLine($"{ncmd[0]} --- {ncmd[1]}");
+                            Console.ForegroundColor = ConsoleColor.White;
                         }
                     }
                     return true;
@@ -52,18 +57,21 @@ namespace JefBot.Plugins.CustomCommands
         {
             string command = args.Command.Command.ToLower();
 
-            if (command == "test")
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine(command);
+            Console.ForegroundColor = ConsoleColor.White;
+            if (command == "command")
             {
-
-                Console.WriteLine("Test");
-                foreach (var item in Commands)
+                if (args.Command.ArgumentsAsList[0] == "list")
                 {
-                    client.SendMessage(new JoinedChannel(args.Command.ChatMessage.Channel), $"{item.Key}-{item.Value}");
-                }
-            }
-            if (command == "Command")
-            {
-                if (args.Command.ArgumentsAsList[0] == "add" )//&& args.ChatMessage.IsModerator)
+                    string commands = "";
+                    foreach (var item in Commands)
+                    {
+                        commands += " " + item;
+                    }
+                    client.SendMessage(new JoinedChannel(args.Command.ChatMessage.Channel), $"Commands: {commands}");
+                } else
+                if (args.Command.ArgumentsAsList[0] == "add" && args.Command.ChatMessage.IsModerator)
                 {
                     Console.WriteLine("Adding");
                     string newcommand = args.Command.ArgumentsAsList[1];
@@ -77,13 +85,8 @@ namespace JefBot.Plugins.CustomCommands
                     Console.WriteLine("Adding " + newcommand + newcommandresult);
                     Commands.Add(newcommand, newcommandresult);
                     client.SendMessage(new JoinedChannel(args.Command.ChatMessage.Channel), $"Command {newcommand} has been added");
-                }
-                else
-                {
-                    client.SendMessage(new JoinedChannel(args.Command.ChatMessage.Channel), "You're not a moderator");
-                }
-
-                if (args.Command.ArgumentsAsList[0] == "remove")// && )args.ChatMessage.IsModerator)
+                }else 
+                if (args.Command.ArgumentsAsList[0] == "remove" && args.Command.ChatMessage.IsModerator)
                 {
                     Console.WriteLine("Removing");
                     if (Commands.ContainsKey(command) == true)
@@ -92,12 +95,14 @@ namespace JefBot.Plugins.CustomCommands
                         Commands.Remove(command);
                     }
                 }
+                else
+                {
+                    client.SendMessage(new JoinedChannel(args.Command.ChatMessage.Channel), $"You're not a moderator {args.Command.ChatMessage.Username} :)");
+                }
             }
 
             if (Commands.ContainsKey(command) == true)
             {
-                Console.WriteLine(command);
-                Console.WriteLine(Commands[command]);
                 client.SendMessage(new JoinedChannel(args.Command.ChatMessage.Channel),Commands[command]);
             }
             
@@ -126,8 +131,7 @@ namespace JefBot.Plugins.CustomCommands
         public void Shutdown()
         {
             string path = "./Plugins/CustomCommands/Memory.txt";
-            File.Delete(path);
-            File.Create(path);
+            File.Create(path).Close();
             
             using (StreamWriter w = new StreamWriter(path))
             {

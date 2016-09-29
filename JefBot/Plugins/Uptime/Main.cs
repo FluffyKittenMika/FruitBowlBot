@@ -51,8 +51,6 @@ namespace JefBot.Plugins.Uptime
 
         public async void OnMessageReceivedArgs(TwitchClient.OnMessageReceivedArgs args, TwitchClient client)
         {
-            TimeSpan uptime = await TwitchApi.GetUptime(args.ChatMessage.Channel);
-            Console.WriteLine(uptime);
         }
 
         public void OnNewSubscriberArgs(TwitchClient.OnNewSubscriberArgs args, TwitchClient client)
