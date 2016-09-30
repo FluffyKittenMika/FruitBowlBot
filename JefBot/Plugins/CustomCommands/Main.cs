@@ -85,14 +85,18 @@ namespace JefBot.Plugins.CustomCommands
                     Console.WriteLine("Adding " + newcommand + newcommandresult);
                     Commands.Add(newcommand, newcommandresult);
                     client.SendMessage(new JoinedChannel(args.Command.ChatMessage.Channel), $"Command {newcommand} has been added");
-                }else 
+                    Shutdown();
+                }
+                else 
                 if (args.Command.ArgumentsAsList[0] == "remove" && args.Command.ChatMessage.IsModerator)
                 {
                     Console.WriteLine("Removing");
-                    if (Commands.ContainsKey(command) == true)
+                    if (Commands.ContainsKey(args.Command.ArgumentsAsList[1]) == true)
                     {
-                        Console.WriteLine("Removing " + command);
-                        Commands.Remove(command);
+                        Console.WriteLine("Removing " + args.Command.ArgumentsAsList[1]);
+                        Commands.Remove(args.Command.ArgumentsAsList[1]);
+                        client.SendMessage(new JoinedChannel(args.Command.ChatMessage.Channel), $"Command {args.Command.ArgumentsAsList[1]} has been removed");
+                        Shutdown();
                     }
                 }
                 else
