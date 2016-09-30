@@ -39,7 +39,7 @@ namespace JefBot.Plugins.Quote
                     quoted = true;
 
                 using (StreamWriter w = File.AppendText("quotes.txt"))
-                    w.Write($"\"{args.Command.ArgumentsAsString}\"| {DateTime.Now} submitted by {args.Command.ChatMessage.DisplayName}" + Environment.NewLine);
+                    w.Write($"\"{args.Command.ArgumentsAsString}\"| {DateTime.Now} submitted by {args.Command.ChatMessage.Username}" + Environment.NewLine);
 
                 if (!quoted)
                     client.SendMessage(new JoinedChannel(args.Command.ChatMessage.Channel), "👌 Thanks!");

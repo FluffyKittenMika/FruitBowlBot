@@ -2,7 +2,7 @@
 # Twitch authentication settings
 username=botmcbotbot
 oauth=oauth:ffffffffffffffffffffffffffffff
-channel=channelmchannelname
+channel=channelmchannelname,otherchannel,thirdchannel,commaseperatedchannel
 clientid=yourapplicationclientid
 # Real solid debugging on/off
 debug=false

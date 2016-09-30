@@ -14,7 +14,7 @@ namespace JefBot
     class Bot
     {
         ConnectionCredentials Credentials;
-        TwitchClient ChatClient;
+        List<TwitchClient> Clients = new List<TwitchClient>();
         Dictionary<string, string> settings = new Dictionary<string, string>();
         List<Plugin> plugins = new List<Plugin>();
         
@@ -56,21 +56,27 @@ namespace JefBot
 
             #region ChatClient init
             Credentials = new ConnectionCredentials(settings["username"], settings["oauth"]);
-            ChatClient = new TwitchClient(Credentials, channel: settings["channel"], chatCommandIdentifier: '!', logging: Convert.ToBoolean(settings["debug"]));
 
-            ChatClient.OnMessageReceived += new EventHandler<TwitchClient.OnMessageReceivedArgs>(RecivedMessage);
-            ChatClient.OnChatCommandReceived += new EventHandler<TwitchClient.OnChatCommandReceivedArgs>(RecivedCommand);
-            ChatClient.OnNewSubscriber += new EventHandler<TwitchClient.OnNewSubscriberArgs>(RecivedNewSub);
-            ChatClient.OnReSubscriber += new EventHandler<TwitchClient.OnReSubscriberArgs>(RecivedResub);
-            ChatClient.OnConnected += new EventHandler<TwitchClient.OnConnectedArgs>(Connected);
-
-            ChatClient.Connect();
-            #endregion
             if (settings["clientid"] != null)
             {
                 TwitchApi.SetClientId(settings["clientid"]);
             }
-           
+
+            foreach (string str in settings["channel"].Split(','))
+            {
+                TwitchClient ChatClient = new TwitchClient(Credentials, channel:  str, chatCommandIdentifier: '!', logging: Convert.ToBoolean(settings["debug"]));
+                ChatClient.OnMessageReceived += new EventHandler<TwitchClient.OnMessageReceivedArgs>(RecivedMessage);
+                ChatClient.OnChatCommandReceived += new EventHandler<TwitchClient.OnChatCommandReceivedArgs>(RecivedCommand);
+                ChatClient.OnNewSubscriber += new EventHandler<TwitchClient.OnNewSubscriberArgs>(RecivedNewSub);
+                ChatClient.OnReSubscriber += new EventHandler<TwitchClient.OnReSubscriberArgs>(RecivedResub);
+                ChatClient.OnConnected += new EventHandler<TwitchClient.OnConnectedArgs>(Connected);
+
+                ChatClient.Connect();
+                Clients.Add(ChatClient);
+            }
+
+            #endregion
+            
             #region plugins
             Console.WriteLine("Loading Plugins");
 
@@ -103,7 +109,7 @@ namespace JefBot
         {
             foreach (var plug in plugins)
             {
-                plug.OnConnectedArgs(e, ChatClient);
+                plug.OnConnectedArgs(e, (TwitchClient)sender);
             }
         }
 
@@ -111,7 +117,7 @@ namespace JefBot
         {
             foreach (var plug in plugins)
             {
-                plug.RecivedResub(e, ChatClient);
+                plug.RecivedResub(e, (TwitchClient)sender);
             }
             Console.WriteLine($@"{e.ReSubscriber.DisplayName} subbed for {e.ReSubscriber.Months} with the message '{e.ReSubscriber.ResubMessage}' :)");
         }
@@ -120,7 +126,7 @@ namespace JefBot
         {
             foreach (var plug in plugins)
             {
-                plug.OnNewSubscriberArgs(e, ChatClient);
+                plug.OnNewSubscriberArgs(e, (TwitchClient)sender);
             }
             Console.WriteLine($@"{e.Subscriber.Name} Just subbed! What a bro!' :)");
         }
@@ -133,9 +139,10 @@ namespace JefBot
         /// <param name="e"></param>
         private void RecivedCommand(object sender, TwitchClient.OnChatCommandReceivedArgs e)
         {
+            TwitchClient ChatClient = (TwitchClient)sender;
             foreach (var plug in plugins)
             {
-                plug.OnChatCommandReceivedArgs(e, ChatClient);
+                plug.OnChatCommandReceivedArgs(e, (TwitchClient)sender);
             }
 
             string command = e.Command.Command.ToLower();
@@ -146,6 +153,7 @@ namespace JefBot
                // ChatClient.SendRaw($"PRIVMSG #{e.Command.ChatMessage.Channel} :/w {e.Command.ChatMessage.Username}  !q [quote] witout brackets, !help for this message, !uptime for uptime, !modlist for a modlist when relevant");
                 if (e.Command.ChatMessage.IsModerator)
                 {
+
                     ChatClient.SendRaw( $"PRIVMSG #{e.Command.ChatMessage.Channel} :/w {e.Command.ChatMessage.Username} hey mod!, you can also do !set modlist [text] without brackets, to change that, or !command add/remove [command] [result] for custom commands (don't do !command add uptime, it's untested help)");
                 }
                 ChatClient.SendMessage(new JoinedChannel(e.Command.ChatMessage.Channel), "Just do !quote or !q and some text after it to send a quote in for review");
@@ -156,9 +164,9 @@ namespace JefBot
         {
             foreach (var plug in plugins)
             {
-                plug.OnMessageReceivedArgs(e, ChatClient);
+                plug.OnMessageReceivedArgs(e, (TwitchClient)sender);
             }
-            Console.WriteLine($"{e.ChatMessage.DisplayName} : {e.ChatMessage.Message}");
+            Console.WriteLine($"{e.ChatMessage.Username} : {e.ChatMessage.Message}");
         }
 
         public void run()
@@ -176,10 +184,14 @@ namespace JefBot
                     Environment.Exit(0);
                 }else
                 {
-                    foreach (var channel in ChatClient.JoinedChannels)
+                    foreach (var ChatClient in Clients)
                     {
-                        ChatClient.SendMessage(channel, msg);
+                        foreach (var channel in ChatClient.JoinedChannels)
+                        {
+                            ChatClient.SendMessage(channel, msg);
+                        }
                     }
+                   
                 }
               
             }
