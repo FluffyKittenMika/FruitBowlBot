@@ -21,7 +21,7 @@ namespace JefBot
 
         //constructor
         public Bot()
-        {
+        {   
             init();
         }
 
@@ -109,7 +109,10 @@ namespace JefBot
         {
             foreach (var plug in plugins)
             {
-                plug.OnConnectedArgs(e, (TwitchClient)sender);
+                if (plug.Loaded)
+                {
+                    plug.OnConnectedArgs(e, (TwitchClient)sender);
+                }
             }
         }
 
@@ -117,7 +120,10 @@ namespace JefBot
         {
             foreach (var plug in plugins)
             {
-                plug.RecivedResub(e, (TwitchClient)sender);
+                if (plug.Loaded)
+                {
+                    plug.RecivedResub(e, (TwitchClient)sender);
+                }
             }
             Console.WriteLine($@"{e.ReSubscriber.DisplayName} subbed for {e.ReSubscriber.Months} with the message '{e.ReSubscriber.ResubMessage}' :)");
         }
@@ -126,7 +132,11 @@ namespace JefBot
         {
             foreach (var plug in plugins)
             {
-                plug.OnNewSubscriberArgs(e, (TwitchClient)sender);
+                if (plug.Loaded)
+                {
+
+                    plug.OnNewSubscriberArgs(e, (TwitchClient)sender);
+                }
             }
             Console.WriteLine($@"{e.Subscriber.Name} Just subbed! What a bro!' :)");
         }
@@ -142,7 +152,12 @@ namespace JefBot
             TwitchClient ChatClient = (TwitchClient)sender;
             foreach (var plug in plugins)
             {
-                plug.OnChatCommandReceivedArgs(e, (TwitchClient)sender);
+                if (plug.Loaded)
+                {
+
+                    plug.OnChatCommandReceivedArgs(e, (TwitchClient)sender);
+
+                }
             }
 
             string command = e.Command.Command.ToLower();
@@ -153,7 +168,6 @@ namespace JefBot
                // ChatClient.SendRaw($"PRIVMSG #{e.Command.ChatMessage.Channel} :/w {e.Command.ChatMessage.Username}  !q [quote] witout brackets, !help for this message, !uptime for uptime, !modlist for a modlist when relevant");
                 if (e.Command.ChatMessage.IsModerator)
                 {
-
                     ChatClient.SendRaw( $"PRIVMSG #{e.Command.ChatMessage.Channel} :/w {e.Command.ChatMessage.Username} hey mod!, you can also do !set modlist [text] without brackets, to change that, or !command add/remove [command] [result] for custom commands (don't do !command add uptime, it's untested help)");
                 }
                 ChatClient.SendMessage(new JoinedChannel(e.Command.ChatMessage.Channel), "Just do !quote or !q and some text after it to send a quote in for review");
@@ -164,7 +178,10 @@ namespace JefBot
         {
             foreach (var plug in plugins)
             {
-                plug.OnMessageReceivedArgs(e, (TwitchClient)sender);
+                if (plug.Loaded)
+                {
+                    plug.OnMessageReceivedArgs(e, (TwitchClient)sender);
+                }
             }
             Console.WriteLine($"{e.ChatMessage.Username} : {e.ChatMessage.Message}");
         }

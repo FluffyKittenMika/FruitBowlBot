@@ -17,6 +17,7 @@ namespace JefBot.Plugins.CustomCommands
         {
             get
             {
+                return false;
                 try
                 {
                     using (StreamReader r = new StreamReader("./Plugins/CustomCommands/Memory.txt")) 

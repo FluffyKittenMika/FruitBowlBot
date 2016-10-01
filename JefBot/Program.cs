@@ -11,8 +11,12 @@ namespace JefBot
         //Yes
         static void Main(string[] args)
         {
-            Bot bot = new Bot();
-            bot.run();
+            while (true)
+            {
+                Bot bot = new Bot();
+                bot.run();
+            }
+
         }
     }
 }
