@@ -86,6 +86,8 @@ namespace JefBot
             plugins.Add(new Plugins.Uptime.Main());
             plugins.Add(new Plugins.Modlist.Main());
             plugins.Add(new Plugins.CustomCommands.Main());
+            plugins.Add(new Plugins.Airhorn.Main());
+            plugins.Add(new Plugins.Lies.Main());
 
             foreach (var plug in plugins)
             {
@@ -134,10 +136,10 @@ namespace JefBot
             {
                 if (plug.Loaded)
                 {
-
                     plug.OnNewSubscriberArgs(e, (TwitchClient)sender);
                 }
             }
+
             Console.WriteLine($@"{e.Subscriber.Name} Just subbed! What a bro!' :)");
         }
 
