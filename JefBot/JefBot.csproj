@@ -105,7 +105,9 @@
   <ItemGroup>
     <Compile Include="Bot.cs" />
     <Compile Include="Plugin.cs" />
+    <Compile Include="Plugins\Airhorn\Main.cs" />
     <Compile Include="Plugins\CustomCommands\Main.cs" />
+    <Compile Include="Plugins\Lies\Main.cs" />
     <Compile Include="Plugins\Modlist\Main.cs" />
     <Compile Include="Plugins\Quote\Main.cs" />
     <Compile Include="Plugins\Uptime\Main.cs" />
