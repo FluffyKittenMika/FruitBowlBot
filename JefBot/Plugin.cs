@@ -4,20 +4,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TwitchLib;
+using TwitchLib.TwitchClientClasses;
 
 namespace JefBot
 {
-    public interface Plugin
+    public interface IPluginCommand
     {
         string PluginName { get; }
+        string Command { get; }
+        IEnumerable<string> Aliases { get; }
         bool Loaded { get; }
 
-        void OnMessageReceivedArgs(TwitchClient.OnMessageReceivedArgs args, TwitchClient client);
-        void OnConnectedArgs(TwitchClient.OnConnectedArgs args, TwitchClient client);
-        void RecivedResub(TwitchClient.OnReSubscriberArgs args, TwitchClient client);
-        void OnNewSubscriberArgs(TwitchClient.OnNewSubscriberArgs args, TwitchClient client);
-        void OnReSubscriberArgs(TwitchClient.OnReSubscriberArgs args, TwitchClient client);
-        void OnChatCommandReceivedArgs(TwitchClient.OnChatCommandReceivedArgs args, TwitchClient client);
-        void Shutdown();
+        void Execute(ChatCommand command, TwitchClient client);
     }
 }

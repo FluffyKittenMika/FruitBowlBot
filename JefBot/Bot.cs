@@ -1,27 +1,31 @@
 ﻿using System;
+using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
+using System.Reflection;
 using TwitchLib.TwitchClientClasses;
 using TwitchLib;
 using System.Threading;
+using JefBot.Commands;
+using log4net.Plugin;
+using Microsoft.CSharp;
 
 namespace JefBot
 {
-    
+
     class Bot
     {
         ConnectionCredentials Credentials;
         List<TwitchClient> Clients = new List<TwitchClient>();
         Dictionary<string, string> settings = new Dictionary<string, string>();
-        List<Plugin> plugins = new List<Plugin>();
-        
+        private readonly List<IPluginCommand> _plugins = new List<IPluginCommand>();
 
         //constructor
         public Bot()
-        {   
+        {
             init();
         }
 
@@ -46,7 +50,8 @@ namespace JefBot
                     }
                 }
 
-            } else
+            }
+            else
             {
                 Console.Write("nope, no config file found, please craft one");
                 Thread.Sleep(5000);
@@ -64,130 +69,96 @@ namespace JefBot
 
             foreach (string str in settings["channel"].Split(','))
             {
-                TwitchClient ChatClient = new TwitchClient(Credentials, channel:  str, chatCommandIdentifier: '!', logging: Convert.ToBoolean(settings["debug"]));
-                ChatClient.OnMessageReceived += new EventHandler<TwitchClient.OnMessageReceivedArgs>(RecivedMessage);
-                ChatClient.OnChatCommandReceived += new EventHandler<TwitchClient.OnChatCommandReceivedArgs>(RecivedCommand);
-                ChatClient.OnNewSubscriber += new EventHandler<TwitchClient.OnNewSubscriberArgs>(RecivedNewSub);
-                ChatClient.OnReSubscriber += new EventHandler<TwitchClient.OnReSubscriberArgs>(RecivedResub);
-                ChatClient.OnConnected += new EventHandler<TwitchClient.OnConnectedArgs>(Connected);
+                TwitchClient ChatClient = new TwitchClient(Credentials, str, '!', logging: Convert.ToBoolean(settings["debug"]));
+                ChatClient.OnChatCommandReceived += RecivedCommand;
+                ChatClient.OnNewSubscriber += RecivedNewSub;
+                ChatClient.OnReSubscriber += RecivedResub;
 
                 ChatClient.Connect();
                 Clients.Add(ChatClient);
             }
 
             #endregion
-            
+
             #region plugins
             Console.WriteLine("Loading Plugins");
 
-            //automate this shit somehow later
-            //input greatly appriciated
-            plugins.Add(new Plugins.Quote.Main());
-            plugins.Add(new Plugins.Uptime.Main());
-            plugins.Add(new Plugins.Modlist.Main());
-            plugins.Add(new Plugins.CustomCommands.Main());
-            plugins.Add(new Plugins.Airhorn.Main());
-            plugins.Add(new Plugins.Lies.Main());
+            // Magic to get plugins
+            var pluginCommand = typeof(IPluginCommand);
+            var pluginCommands = AppDomain.CurrentDomain.GetAssemblies()
+                .SelectMany(s => s.GetTypes())
+                .Where(p => pluginCommand.IsAssignableFrom(p) && p.BaseType != null);
 
-            foreach (var plug in plugins)
+            foreach (var type in pluginCommands)
             {
-                if (plug.Loaded)
+                _plugins.Add((IPluginCommand)Activator.CreateInstance(type));
+            }
+            
+            var commands = new List<string>();
+            foreach (var plug in _plugins)
+            {
+                if (!commands.Contains(plug.Command))
                 {
-                    Console.ForegroundColor = ConsoleColor.Green;
-                    Console.WriteLine($"Loaded: {plug.PluginName}");
+                    commands.Add(plug.Command);
+                    if (plug.Loaded)
+                    {
+                        Console.ForegroundColor = ConsoleColor.Green;
+                        Console.WriteLine($"Loaded: {plug.PluginName}");
+                    }
+                    else
+                    {
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine($"NOT Loaded: {plug.PluginName}");
+                    }
                 }
                 else
                 {
                     Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine($"NOT Loaded: {plug.PluginName}");
+                    Console.WriteLine($"NOT Loaded: {plug.PluginName} Main command conflicts with another plugin!!!");
                 }
             }
+
             Console.ForegroundColor = ConsoleColor.White;
             #endregion
             Console.WriteLine("Bot init Complete");
         }
 
-        private void Connected(object sender, TwitchClient.OnConnectedArgs e)
-        {
-            foreach (var plug in plugins)
-            {
-                if (plug.Loaded)
-                {
-                    plug.OnConnectedArgs(e, (TwitchClient)sender);
-                }
-            }
-        }
 
         private void RecivedResub(object sender, TwitchClient.OnReSubscriberArgs e)
         {
-            foreach (var plug in plugins)
-            {
-                if (plug.Loaded)
-                {
-                    plug.RecivedResub(e, (TwitchClient)sender);
-                }
-            }
             Console.WriteLine($@"{e.ReSubscriber.DisplayName} subbed for {e.ReSubscriber.Months} with the message '{e.ReSubscriber.ResubMessage}' :)");
         }
 
         private void RecivedNewSub(object sender, TwitchClient.OnNewSubscriberArgs e)
         {
-            foreach (var plug in plugins)
-            {
-                if (plug.Loaded)
-                {
-                    plug.OnNewSubscriberArgs(e, (TwitchClient)sender);
-                }
-            }
-
             Console.WriteLine($@"{e.Subscriber.Name} Just subbed! What a bro!' :)");
         }
 
-      
+
         /// <summary>
-        /// quite~
+        /// Executes all commands, we try to execute the main named command before any aliases to try and avoid overwrites.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void RecivedCommand(object sender, TwitchClient.OnChatCommandReceivedArgs e)
         {
-            TwitchClient ChatClient = (TwitchClient)sender;
-            foreach (var plug in plugins)
+            var chatClient = (TwitchClient)sender;
+            var enabledPlugins = _plugins.Where(plug => plug.Loaded).ToArray();
+            var command = e.Command.Command.ToLower();
+            
+            foreach (var plug in enabledPlugins)
             {
-                if (plug.Loaded)
-                {
-
-                    plug.OnChatCommandReceivedArgs(e, (TwitchClient)sender);
-
-                }
+                if (plug.Command == command)
+                    plug.Execute(e.Command, chatClient);
             }
-
-            string command = e.Command.Command.ToLower();
-           
-            if (command == "help" || command == "h")
+            
+            foreach (var plug in enabledPlugins)
             {
-                
-               // ChatClient.SendRaw($"PRIVMSG #{e.Command.ChatMessage.Channel} :/w {e.Command.ChatMessage.Username}  !q [quote] witout brackets, !help for this message, !uptime for uptime, !modlist for a modlist when relevant");
-                if (e.Command.ChatMessage.IsModerator)
-                {
-                    ChatClient.SendRaw( $"PRIVMSG #{e.Command.ChatMessage.Channel} :/w {e.Command.ChatMessage.Username} hey mod!, you can also do !set modlist [text] without brackets, to change that, or !command add/remove [command] [result] for custom commands (don't do !command add uptime, it's untested help)");
-                }
-                ChatClient.SendMessage(new JoinedChannel(e.Command.ChatMessage.Channel), "Just do !quote or !q and some text after it to send a quote in for review");
+                if ( plug.Aliases.Contains(command))
+                    plug.Execute(e.Command, chatClient);
             }
         }
-
-        private void RecivedMessage(object sender, TwitchClient.OnMessageReceivedArgs e)
-        {
-            foreach (var plug in plugins)
-            {
-                if (plug.Loaded)
-                {
-                    plug.OnMessageReceivedArgs(e, (TwitchClient)sender);
-                }
-            }
-            Console.WriteLine($"{e.ChatMessage.Username} : {e.ChatMessage.Message}");
-        }
-
+        
         public void run()
         {
             while (true)
@@ -196,12 +167,9 @@ namespace JefBot
                 string msg = Console.ReadLine();
                 if (msg == "quit" || msg == "stop")
                 {
-                    foreach (var plug in plugins)
-                    {
-                        plug.Shutdown();
-                    }
                     Environment.Exit(0);
-                }else
+                }
+                else
                 {
                     foreach (var ChatClient in Clients)
                     {
@@ -210,9 +178,9 @@ namespace JefBot
                             ChatClient.SendMessage(channel, msg);
                         }
                     }
-                   
+
                 }
-              
+
             }
         }
     }
