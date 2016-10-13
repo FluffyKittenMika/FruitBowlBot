@@ -104,13 +104,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Bot.cs" />
+    <Compile Include="Commands\CustomCommandsPluginCommand.cs" />
+    <Compile Include="Commands\HelpPluginCommand.cs" />
+    <Compile Include="Commands\AirhornPluginCommand.cs" />
+    <Compile Include="Commands\ModListPluginCommand.cs" />
+    <Compile Include="Commands\LiesPluginCommand.cs" />
+    <Compile Include="Commands\QuotePluginCommand.cs" />
+    <Compile Include="Commands\UptimePluginCommand.cs" />
     <Compile Include="Plugin.cs" />
-    <Compile Include="Plugins\Airhorn\Main.cs" />
-    <Compile Include="Plugins\CustomCommands\Main.cs" />
-    <Compile Include="Plugins\Lies\Main.cs" />
-    <Compile Include="Plugins\Modlist\Main.cs" />
-    <Compile Include="Plugins\Quote\Main.cs" />
-    <Compile Include="Plugins\Uptime\Main.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -123,13 +124,10 @@
     <None Include="FodyWeavers.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <Content Include="Plugins\CustomCommands\Memory.txt">
+    <Content Include="Settings\Settings_example - Copy.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Plugins\Modlist\Memory.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Settings\Settings_example.txt">
+    <Content Include="Settings\Settings.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
