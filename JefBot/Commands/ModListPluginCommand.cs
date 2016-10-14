@@ -42,8 +42,14 @@ namespace JefBot.Commands
                             )
                         {
                             var message = string.Join(" ", command.ArgumentsAsList.Skip(1));
+
+                            //stops a crash if there's already a key for the new list
+                            if (ModLists.ContainsKey(modKey))
+                                ModLists.Remove(modKey);
+
                             ModLists.Add(modKey, message);
                             Save();
+
                             client.SendMessage(command.ChatMessage.Channel, $"Modlist updated for {channel.Game}");
                         }
 
@@ -63,7 +69,7 @@ namespace JefBot.Commands
                 {
                     if (ModLists.ContainsKey(modKey))
                     {
-                        client.SendMessage(command.ChatMessage.Channel, $"{modKey} {ModLists[modKey]}");
+                        client.SendMessage(command.ChatMessage.Channel, $"{modKey}: {ModLists[modKey]}");
                     }
                     else
                     {

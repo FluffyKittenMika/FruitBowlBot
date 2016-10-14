@@ -39,15 +39,15 @@ namespace JefBot.Commands
                             if (args.Count >= 3)
                             {
                                 var newCommand = args[1];
-                                var respone = string.Join(" ", args.Skip(2));
+                                var response = string.Join(" ", args.Skip(2));
                                 
-                                // todo: Make it strip twitch commands like /disconnect .. 'cause they can do that now.
-                                //       This also goes for the modlist, as it will run /disconnect if  there's a game with that as the modlist... :^)
                                 // todo: Currently we just remove it if exits, could perhaps make it so we have to remove first.
                                 if (CustomCommands.ContainsKey(newCommand))
                                     CustomCommands.Remove(newCommand);
 
-                                CustomCommands.Add(newCommand, respone);
+                                response.Replace("/disconnect", " "); //Yee
+
+                                CustomCommands.Add(newCommand, response);
                                 Save();
                                 client.SendMessage(command.ChatMessage.Channel, $"Command {newCommand} has been added");
                             }

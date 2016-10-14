@@ -38,7 +38,7 @@ namespace JefBot
             {
                 using (StreamReader r = new StreamReader(settingsFile))
                 {
-                    string line; //keep line in memory outside the while loop, like the queen of Englan is remembered outside of Canada
+                    string line; //keep line in memory outside the while loop, like the queen of England is remembered outside of Canada
                     while ((line = r.ReadLine()) != null)
                     {
                         if (line[0] != '#')//skip comments
@@ -73,7 +73,8 @@ namespace JefBot
                 ChatClient.OnChatCommandReceived += RecivedCommand;
                 ChatClient.OnNewSubscriber += RecivedNewSub;
                 ChatClient.OnReSubscriber += RecivedResub;
-
+                ChatClient.OnDisconnected += Disconnected;
+                ChatClient.OnMessageReceived += Chatmsg;
                 ChatClient.Connect();
                 Clients.Add(ChatClient);
             }
@@ -123,6 +124,17 @@ namespace JefBot
             Console.WriteLine("Bot init Complete");
         }
 
+        //Don't remove this, it's critical to see the chat in the bot, it quickly tells me if it's absolutely broken...
+        private void Chatmsg(object sender, TwitchClient.OnMessageReceivedArgs e)
+        {
+            Console.WriteLine($"{e.ChatMessage.Channel}-{e.ChatMessage.Username}: {e.ChatMessage.Message}");
+        }
+
+        private void Disconnected(object sender, TwitchClient.OnDisconnectedArgs e)
+        {
+            var chatClient = (TwitchClient)sender;
+            chatClient.Connect();
+        }
 
         private void RecivedResub(object sender, TwitchClient.OnReSubscriberArgs e)
         {
@@ -133,6 +145,8 @@ namespace JefBot
         {
             Console.WriteLine($@"{e.Subscriber.Name} Just subbed! What a bro!' :)");
         }
+
+
 
 
         /// <summary>
