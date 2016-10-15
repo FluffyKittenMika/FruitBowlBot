@@ -82,7 +82,7 @@ namespace JefBot.Commands
             {
                 if (ModLists.ContainsKey(modKey))
                 {
-                    client.SendMessage(command.ChatMessage.Channel, $"{channel.Game} {ModLists[modKey]}");
+                    client.SendMessage(command.ChatMessage.Channel, $"{channel.Game}: {ModLists[modKey]}");
                 }
                 else
                 {

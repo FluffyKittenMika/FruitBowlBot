@@ -45,17 +45,21 @@ namespace JefBot.Commands
 
         public void Execute(ChatCommand command, TwitchClient client)
         {
-            //passive agressie anti double quote checker
-            var quoted = command.ArgumentsAsString[0] == '"';
+            if (command.ArgumentsAsList.Count > 0)
+            {
 
-            using (var w = File.AppendText(command.ChatMessage.Channel+"_quotes.txt"))
-                w.Write($"\"{command.ArgumentsAsString.Replace('|',' ')}\"| {DateTime.Now} submitted by {command.ChatMessage.Username}" + Environment.NewLine);
+                //passive agressie anti double quote checker
+                var quoted = command.ArgumentsAsString[0] == '"';
 
-            if (!quoted)
-                client.SendMessage(command.ChatMessage.Channel, "👌 Thanks!");
-            else
-                client.SendMessage(command.ChatMessage.Channel, "👌 please don't add \" to the quotes yourself :)");
+                using (var w = File.AppendText(command.ChatMessage.Channel+"_quotes.txt"))
+                    w.Write($"\"{command.ArgumentsAsString.Replace('|',' ')}\"| {DateTime.Now} submitted by {command.ChatMessage.Username}" + Environment.NewLine);
 
+                if (!quoted)
+                    client.SendMessage(command.ChatMessage.Channel, "👌 Thanks!");
+                else
+                    client.SendMessage(command.ChatMessage.Channel, "👌 please don't add \" to the quotes yourself :)");
+
+            }
         }
     }
 }
