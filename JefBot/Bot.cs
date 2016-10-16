@@ -159,17 +159,30 @@ namespace JefBot
             var chatClient = (TwitchClient)sender;
             var enabledPlugins = _plugins.Where(plug => plug.Loaded).ToArray();
             var command = e.Command.Command.ToLower();
-            
+
+            var mainExecuted = false;
+            var aliasExecuted = false;
+
             foreach (var plug in enabledPlugins)
             {
                 if (plug.Command == command)
+                {
                     plug.Execute(e.Command, chatClient);
+                    mainExecuted = true;
+                    break;
+                }
             }
+
+            if (mainExecuted) return;
             
             foreach (var plug in enabledPlugins)
             {
-                if ( plug.Aliases.Contains(command))
+                if (plug.Aliases.Contains(command))
+                {
                     plug.Execute(e.Command, chatClient);
+                    aliasExecuted = true;
+                    break;
+                }
             }
         }
         
