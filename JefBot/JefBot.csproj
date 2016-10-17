@@ -107,11 +107,12 @@
     <Compile Include="Commands\CustomCommandsPluginCommand.cs" />
     <Compile Include="Commands\HelpPluginCommand.cs" />
     <Compile Include="Commands\AirhornPluginCommand.cs" />
+    <Compile Include="Commands\TrollPluginCommand.cs" />
     <Compile Include="Commands\ModListPluginCommand.cs" />
     <Compile Include="Commands\LiesPluginCommand.cs" />
     <Compile Include="Commands\RollPluginCommand.cs" />
     <Compile Include="Commands\QuotePluginCommand.cs" />
-    <Compile Include="Commands\TrollPluginCommand.cs" />
+    <Compile Include="Commands\MigoPluginCommand.cs" />
     <Compile Include="Commands\UptimePluginCommand.cs" />
     <Compile Include="Plugin.cs" />
     <Compile Include="Program.cs" />

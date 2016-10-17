@@ -29,7 +29,6 @@ namespace JefBot.Commands
                 string dice = command.ArgumentsAsString.Trim(new Char[] { ' ' });
 
                 string[] split = dice.ToLower().Split(new Char[] { 'd' });
-                Console.WriteLine(split.Length);
                 if (split.Length == 2)
                 {
                     try
