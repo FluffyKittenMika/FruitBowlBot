@@ -111,6 +111,7 @@
     <Compile Include="Commands\LiesPluginCommand.cs" />
     <Compile Include="Commands\RollPluginCommand.cs" />
     <Compile Include="Commands\QuotePluginCommand.cs" />
+    <Compile Include="Commands\TrollPluginCommand.cs" />
     <Compile Include="Commands\UptimePluginCommand.cs" />
     <Compile Include="Plugin.cs" />
     <Compile Include="Program.cs" />
