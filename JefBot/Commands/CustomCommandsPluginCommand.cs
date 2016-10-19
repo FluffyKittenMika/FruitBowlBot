@@ -53,7 +53,7 @@ namespace JefBot.Commands
                             }
                             else
                             {
-                                client.SendMessage(command.ChatMessage.Channel, "Usage !command add [command] [message]");
+                                client.SendMessage(command.ChatMessage.Channel, "Usage !command add (command) (message)");
                             }
                         }
 
