@@ -16,6 +16,7 @@ namespace JefBot.Commands
 
         //Non default definitions
         public List<string> quotes = new List<string>();
+        Random rnd = new Random();
 
         /// <summary>
         /// The Constructor in this case just downloads the pre exsisting quote list off the website
@@ -55,7 +56,21 @@ namespace JefBot.Commands
                     w.Write($"\"{command.ArgumentsAsString.Replace('|',' ')}\"| {DateTime.Now} submitted by {command.ChatMessage.Username}" + Environment.NewLine);
 
                 if (!quoted)
-                    client.SendMessage(command.ChatMessage.Channel, "👌 Thanks!");
+                    switch (rnd.Next(3))
+                    {
+                        case 0:
+                            client.SendMessage(command.ChatMessage.Channel, "Quote submitted! 👌");
+                            break;
+                        case 1:
+                            client.SendMessage(command.ChatMessage.Channel, "👌 Thanks!");
+                            break;
+                        case 2:
+                            client.SendMessage(command.ChatMessage.Channel, "Thanks for the quote!");
+                            break;
+                        default:
+                            client.SendMessage(command.ChatMessage.Channel, "Quote sent for review! 👌");
+                            break;
+                    }
                 else
                     client.SendMessage(command.ChatMessage.Channel, "👌 please don't add \" to the quotes yourself :)");
 
