@@ -42,7 +42,7 @@ namespace JefBot.Commands
                                 var response = string.Join(" ", args.Skip(2));
                                 
                                 // Looks like someone is trying to run a command!
-                                if (response.StartsWith("/"))
+                                if (response.StartsWith("/") && !response.StartsWith("/me"))
                                 {
                                     client.SendMessage(command.ChatMessage.Channel, $"I'm sorry, Dave. I'm afraid I can't do that.");
                                     client.SendWhisper(command.ChatMessage.Username, $"Custom commands cannot run chat slash commands...");
@@ -102,7 +102,8 @@ namespace JefBot.Commands
             // Execute custom command
             if (CustomCommands.ContainsKey(command.Command))
             {
-                client.SendMessage(command.ChatMessage.Channel, CustomCommands[command.Command]);
+                var message = CustomCommands[command.Command].Replace("{username}", command.ChatMessage.DisplayName);
+                client.SendMessage(command.ChatMessage.Channel, message);
             }
         }
 

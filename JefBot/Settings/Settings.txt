@@ -1,0 +1,8 @@
+﻿# Starts with #, it's a comment!
+# Twitch authentication settings
+username=viritebot
+oauth=oauth:5k7cpnp3hczibe4dkowlibb84i9p9m
+channel=mrvirite
+clientid=cagidfsfp7wlm84dxzivjdirctg2wtn
+# Real solid debugging on/off
+debug=false
