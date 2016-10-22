@@ -41,11 +41,17 @@ namespace JefBot.Commands
                                 var newCommand = args[1];
                                 var response = string.Join(" ", args.Skip(2));
                                 
+                                // Looks like someone is trying to run a command!
+                                if (response.StartsWith("/"))
+                                {
+                                    client.SendMessage(command.ChatMessage.Channel, $"I'm sorry, Dave. I'm afraid I can't do that.");
+                                    client.SendWhisper(command.ChatMessage.Username, $"Custom commands cannot run chat slash commands...");
+                                    return;
+                                }
+
                                 // todo: Currently we just remove it if exits, could perhaps make it so we have to remove first.
                                 if (CustomCommands.ContainsKey(newCommand))
                                     CustomCommands.Remove(newCommand);
-
-                                response.Replace("/disconnect", " "); //Yee
 
                                 CustomCommands.Add(newCommand, response);
                                 Save();
