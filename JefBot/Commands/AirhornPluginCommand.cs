@@ -10,7 +10,7 @@ namespace JefBot.Commands
         public string PluginName => "Airhorn";
         public string Command => "airhorn";
         public IEnumerable<string> Aliases => new[] { "a", "air" };
-        public bool Loaded { get; set; } = true;
+        public bool Loaded { get; set; } = false;
 
         private readonly Random _rand = new Random();
 

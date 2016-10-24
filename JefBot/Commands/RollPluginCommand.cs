@@ -12,7 +12,7 @@ namespace JefBot.Commands
         public string PluginName => "Roll";
         public string Command => "roll";
         public IEnumerable<string> Aliases => new[] { "r" };
-        public bool Loaded { get; set; } = true;
+        public bool Loaded { get; set; } = false;
 
         //Non default definitions
         Random rng = new Random();
