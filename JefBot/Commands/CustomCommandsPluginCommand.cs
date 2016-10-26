@@ -102,7 +102,7 @@ namespace JefBot.Commands
             // Execute custom command
             if (CustomCommands.ContainsKey(command.Command))
             {
-                var message = CustomCommands[command.Command].Replace("{username}", command.ChatMessage.DisplayName);
+                var message = CustomCommands[command.Command].Replace("{username}", command.ChatMessage.Username); //Display name will make the name blank if the user have no display name set;
                 client.SendMessage(command.ChatMessage.Channel, message);
             }
         }
