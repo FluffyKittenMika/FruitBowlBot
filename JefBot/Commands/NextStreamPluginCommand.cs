@@ -25,28 +25,17 @@ namespace JefBot.Commands
 
         public void Execute(ChatCommand command, TwitchClient client)
         {
-            Console.WriteLine("works?");
             List<DateTime> times = new List<DateTime>();
             foreach (var item in streamtimes)
             {
                 DateTime start = DateTime.Now;
                 DateTime then = start.AddDays(((int)item.Key - (int)start.DayOfWeek + 7) % 7);
-
                 then = then.Date + item.Value; // sets the time from whatever to the 20'th hour
                 times.Add(then);
             }
-
             times.Sort((a, b) => a.CompareTo(b)); //ascending sort
-
             TimeSpan span = times[0].Subtract(DateTime.Now);
-
-
-            client.SendMessage(command.ChatMessage.Channel, $"Time to next stream H:{(int)span.TotalHours} M:{(int)span.Minutes} S:{(int)span.Seconds}");
-
-            foreach (var item in times)
-            {
-                Console.WriteLine(item.Date.Day); 
-            }
+            client.SendMessage(command.ChatMessage.Channel, $"Time to next stream H:{span.TotalHours} M:{(int)span.Minutes} S:{(int)span.Seconds} at the { times[0].Day}th");
 
         }
 
