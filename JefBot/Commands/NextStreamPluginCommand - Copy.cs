@@ -37,7 +37,7 @@ namespace JefBot.Commands
                 }
                 times.Sort((a, b) => a.CompareTo(b)); //ascending sort
                 TimeSpan span = times[0].Subtract(DateTime.Now);
-                client.SendMessage(command.ChatMessage.Channel, $"Time to next stream H:{span.TotalHours} M:{(int)span.Minutes} S:{(int)span.Seconds} on the { times[0].Day}th");
+                client.SendMessage(command.ChatMessage.Channel, $"Next stream in {span.TotalHours}:{(int)span.Minutes}:{(int)span.Seconds}:{(int)span.Milliseconds}~~ on the {times[0].Day}th");
             }
             else
             {
