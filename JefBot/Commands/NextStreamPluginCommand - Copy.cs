@@ -16,8 +16,7 @@ namespace JefBot.Commands
 
         public NextStream()
         {
-            streamtimes.Add(DayOfWeek.Friday, TimeSpan.FromHours(21)); //Friday at 8 Norweeb time
-            streamtimes.Add(DayOfWeek.Monday, TimeSpan.FromHours(21)); 
+            streamtimes.Add(DayOfWeek.Monday, TimeSpan.FromHours(21)); //Monday at 8 Norweeb time
             streamtimes.Add(DayOfWeek.Wednesday, TimeSpan.FromHours(21)); 
             streamtimes.Add(DayOfWeek.Saturday, TimeSpan.FromHours(21)); 
         }
