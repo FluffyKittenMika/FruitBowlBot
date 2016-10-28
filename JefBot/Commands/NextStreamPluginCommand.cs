@@ -16,26 +16,35 @@ namespace JefBot.Commands
 
         public NextStream()
         {
-            streamtimes.Add(DayOfWeek.Friday, TimeSpan.FromHours(20)); //Friday at 8 Norweeb time
-            streamtimes.Add(DayOfWeek.Monday, TimeSpan.FromHours(20)); 
-            streamtimes.Add(DayOfWeek.Wednesday, TimeSpan.FromHours(20)); 
-            streamtimes.Add(DayOfWeek.Saturday, TimeSpan.FromHours(20)); 
-
+            streamtimes.Add(DayOfWeek.Friday, TimeSpan.FromHours(21)); //Friday at 8 Norweeb time
+            streamtimes.Add(DayOfWeek.Monday, TimeSpan.FromHours(21)); 
+            streamtimes.Add(DayOfWeek.Wednesday, TimeSpan.FromHours(21)); 
+            streamtimes.Add(DayOfWeek.Saturday, TimeSpan.FromHours(21)); 
         }
 
-        public void Execute(ChatCommand command, TwitchClient client)
+        public async void Execute(ChatCommand command, TwitchClient client)
         {
-            List<DateTime> times = new List<DateTime>();
-            foreach (var item in streamtimes)
+            var uptime = await TwitchApi.GetUptime(command.ChatMessage.Channel);
+            if (uptime.Ticks == 0)
             {
-                DateTime start = DateTime.Now;
-                DateTime then = start.AddDays(((int)item.Key - (int)start.DayOfWeek + 7) % 7);
-                then = then.Date + item.Value; // sets the time from whatever to the 20'th hour
-                times.Add(then);
+                List<DateTime> times = new List<DateTime>();
+                foreach (var item in streamtimes)
+                {
+                    DateTime start = DateTime.Now;
+                    DateTime then = start.AddDays(((int)item.Key - (int)start.DayOfWeek + 7) % 7);
+                    then = then.Date + item.Value; // sets the time from whatever to the 20'th hour
+                    times.Add(then);
+                }
+                times.Sort((a, b) => a.CompareTo(b)); //ascending sort
+                TimeSpan span = times[0].Subtract(DateTime.Now);
+                client.SendMessage(command.ChatMessage.Channel, $"Time to next stream H:{span.TotalHours} M:{(int)span.Minutes} S:{(int)span.Seconds} on the { times[0].Day}th");
             }
-            times.Sort((a, b) => a.CompareTo(b)); //ascending sort
-            TimeSpan span = times[0].Subtract(DateTime.Now);
-            client.SendMessage(command.ChatMessage.Channel, $"Time to next stream H:{span.TotalHours} M:{(int)span.Minutes} S:{(int)span.Seconds} at the { times[0].Day}th");
+            else
+            {
+                client.SendMessage(command.ChatMessage.Channel, $"He's on right now silly");
+            }
+
+           
 
         }
 
