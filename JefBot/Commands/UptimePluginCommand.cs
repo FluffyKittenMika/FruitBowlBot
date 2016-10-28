@@ -28,6 +28,11 @@ namespace JefBot.Commands
                     command.ChatMessage.Channel,
                     "He's offline I think? :)"
                     );
+                var arktime = await TwitchApi.GetUptime("arkentosh");
+                if (arktime.Ticks > 0)
+                {
+                    client.SendMessage(command.ChatMessage.Channel, $"But arkentosh is online, so check him out maybe? https://www.twitch.tv/arkentosh :)");
+                }
             }
         }
     }

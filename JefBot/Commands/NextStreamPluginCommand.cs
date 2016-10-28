@@ -37,9 +37,15 @@ namespace JefBot.Commands
                 times.Sort((a, b) => a.CompareTo(b)); //ascending sort
                 TimeSpan span = times[0].Subtract(DateTime.Now);
                 client.SendMessage(command.ChatMessage.Channel, $"Next stream in {span.TotalHours}:{(int)span.Minutes}:{(int)span.Seconds}:{(int)span.Milliseconds}~~ on the {times[0].Day}th");
+                var arktime = await TwitchApi.GetUptime("arkentosh");
+                if (arktime.Ticks > 0)
+                {
+                    client.SendMessage(command.ChatMessage.Channel, $"But arkentosh is online, so check him out maybe? https://www.twitch.tv/arkentosh :)");
+                }
             }
             else
             {
+
                 client.SendMessage(command.ChatMessage.Channel, $"He's on right now silly");
             }
 
