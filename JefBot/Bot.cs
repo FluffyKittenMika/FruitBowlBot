@@ -173,7 +173,7 @@ namespace JefBot
             foreach (var plug in enabledPlugins)
             {
 
-                if ((plug.Command == command && plug.OffWhileLive != islive) || e.Command.ChatMessage.IsModerator || e.Command.ChatMessage.IsBroadcaster)
+                if ((plug.Command == command && plug.OffWhileLive != islive ))
                 {
                     plug.Execute(e.Command, chatClient);
                     mainExecuted = true;
@@ -185,7 +185,7 @@ namespace JefBot
 
             foreach (var plug in enabledPlugins)
             {
-                if ((plug.Aliases.Contains(command) && plug.OffWhileLive != islive) || e.Command.ChatMessage.IsModerator || e.Command.ChatMessage.IsBroadcaster)
+                if ((plug.Aliases.Contains(command) && plug.OffWhileLive != islive) )
                 {
                     plug.Execute(e.Command, chatClient);
                     //aliasExecuted = true;
