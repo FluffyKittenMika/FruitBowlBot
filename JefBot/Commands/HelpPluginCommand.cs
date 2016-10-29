@@ -11,6 +11,7 @@ namespace JefBot.Commands
         public string Command => "help";
         public IEnumerable<string> Aliases => new[] { "h" };
         public bool Loaded { get; set; } = true;
+        public bool OffWhileLive { get; set; } = false;
 
         public void Execute(ChatCommand command, TwitchClient client)
         {

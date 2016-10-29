@@ -10,7 +10,8 @@ namespace JefBot.Commands
         public string PluginName => "Lies";
         public string Command => "lies";
         public IEnumerable<string> Aliases => new string[0];
-        public bool Loaded { get; set; } = false;
+        public bool Loaded { get; set; } = true;
+        public bool OffWhileLive { get; set; } = true;
 
         public void Execute(ChatCommand command, TwitchClient client)
         {

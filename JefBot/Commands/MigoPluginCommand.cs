@@ -12,7 +12,11 @@ namespace JefBot.Commands
         public string PluginName => "Migo";
         public string Command => "migo";
         public IEnumerable<string> Aliases => new[] { "m" };
-        public bool Loaded { get; set; } = false;
+        public bool Loaded { get; set; } = true;
+        public bool OffWhileLive { get; set; } = true;
+
+
+
         List<string> quotes = new List<string>();
         string quotefile = @"./RemoteQuotes.dat";
         Random rng = new Random();

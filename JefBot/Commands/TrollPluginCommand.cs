@@ -12,7 +12,9 @@ namespace JefBot.Commands
         public string PluginName => "Troll";
         public string Command => "troll";
         public IEnumerable<string> Aliases => new[] { "t" };
-        public bool Loaded { get; set; } = false;
+        public bool Loaded { get; set; } = true;
+        public bool OffWhileLive { get; set; } = true;
+
         List<string> memes = new List<string>() { "6±2", "∑n⁻²", "451°", "≈10", "420","3.14pie", "tails", "head", "0","NaN","a cookie", "13","32","69", "9001", "∞", "½", "x̄","p̂","7‰","⨌", "∰", "√-1"};
         Random rng = new Random();
 

@@ -154,7 +154,7 @@ namespace JefBot
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void RecivedCommand(object sender, TwitchClient.OnChatCommandReceivedArgs e)
+        private async void RecivedCommand(object sender, TwitchClient.OnChatCommandReceivedArgs e)
         {
             var chatClient = (TwitchClient)sender;
             var enabledPlugins = _plugins.Where(plug => plug.Loaded).ToArray();
@@ -163,9 +163,17 @@ namespace JefBot
             var mainExecuted = false;
             //var aliasExecuted = false;
 
+            var uptime = await TwitchApi.GetUptime(e.Command.ChatMessage.Channel);
+            bool islive = false;
+            if (uptime.Ticks > 0)
+            {
+                islive = true;
+            }
+
             foreach (var plug in enabledPlugins)
             {
-                if (plug.Command == command)
+                
+                if (plug.Command == command && !plug.OffWhileLive == islive)
                 {
                     plug.Execute(e.Command, chatClient);
                     mainExecuted = true;
@@ -174,18 +182,18 @@ namespace JefBot
             }
 
             if (mainExecuted) return;
-            
+
             foreach (var plug in enabledPlugins)
             {
                 if (plug.Aliases.Contains(command))
                 {
                     plug.Execute(e.Command, chatClient);
-              //      aliasExecuted = true;
+                    //      aliasExecuted = true;
                     break;
                 }
             }
         }
-        
+
         public void run()
         {
             while (true)

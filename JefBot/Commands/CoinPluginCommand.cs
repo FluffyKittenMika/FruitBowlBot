@@ -12,8 +12,9 @@ namespace JefBot.Commands
         public string PluginName => "Coin";
         public string Command => "coin";
         public IEnumerable<string> Aliases => new[] { "c", "flip" };
-        public bool Loaded { get; set; } = false;
-        
+        public bool Loaded { get; set; } = true;
+        public bool OffWhileLive { get; set; } = true;
+
         Random rng = new Random();
 
         public void Execute(ChatCommand command, TwitchClient client)

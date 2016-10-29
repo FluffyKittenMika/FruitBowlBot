@@ -16,6 +16,7 @@ namespace JefBot.Commands
         public IEnumerable<string> Aliases => CustomCommands.Keys;
         public Dictionary<string, string> CustomCommands = new Dictionary<string, string>();
         public bool Loaded { get; set; } = true;
+        public bool OffWhileLive { get; set; } = false;
 
         private string memoryPath = "./customCommands.txt";
 

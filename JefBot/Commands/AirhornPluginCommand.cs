@@ -11,7 +11,8 @@ namespace JefBot.Commands
         public string Command => "airhorn";
         public IEnumerable<string> Aliases => new[] { "a", "air" };
         public bool Loaded { get; set; } = true;
-
+        public bool OffWhileLive { get; set; } = false;
+        
         private readonly Random _rand = new Random();
 
         public void Execute(ChatCommand command, TwitchClient client)

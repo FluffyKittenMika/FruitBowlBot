@@ -14,6 +14,7 @@ namespace JefBot.Commands
         public IEnumerable<string> Aliases => new[] { "mods" };
         public Dictionary<string, string> ModLists = new Dictionary<string, string>();
         public bool Loaded { get; set; } = true;
+        public bool OffWhileLive { get; set; } = false;
 
 
         private string memoryPath = "./modList.txt";
