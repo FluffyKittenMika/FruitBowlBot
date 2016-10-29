@@ -28,7 +28,7 @@ namespace JefBot.Commands
         }
         public void Execute(ChatCommand command, TwitchClient client)
         {
-            if (timestamp.AddMinutes(minutedelay) < DateTime.UtcNow)
+            if (timestamp.AddMinutes(minutedelay) < DateTime.UtcNow || command.ChatMessage.IsModerator)
             {
                 timestamp = DateTime.UtcNow;
                 if (File.Exists(quotefile))
