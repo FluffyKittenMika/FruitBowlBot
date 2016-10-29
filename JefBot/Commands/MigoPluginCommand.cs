@@ -21,14 +21,14 @@ namespace JefBot.Commands
         string quotefile = @"./RemoteQuotes.dat";
         Random rng = new Random();
         DateTime timestamp;
-        int minutedelay = 5;
+        int minutedelay = 1;
         public MigoPluginCommand()
         {
             timestamp = DateTime.UtcNow;
         }
         public void Execute(ChatCommand command, TwitchClient client)
         {
-            if (timestamp.AddMinutes(minutedelay) < DateTime.UtcNow)
+            if ((timestamp.AddMinutes(minutedelay) < DateTime.UtcNow) || command.ChatMessage.IsBroadcaster || command.ChatMessage.IsModerator)
             {
                 timestamp = DateTime.UtcNow;
                 if (File.Exists(quotefile))

@@ -94,7 +94,7 @@ namespace JefBot
             {
                 _plugins.Add((IPluginCommand)Activator.CreateInstance(type));
             }
-            
+
             var commands = new List<string>();
             foreach (var plug in _plugins)
             {
@@ -172,8 +172,8 @@ namespace JefBot
 
             foreach (var plug in enabledPlugins)
             {
-                
-                if (plug.Command == command && !plug.OffWhileLive == islive)
+
+                if ((plug.Command == command && plug.OffWhileLive != islive) || e.Command.ChatMessage.IsModerator || e.Command.ChatMessage.IsBroadcaster)
                 {
                     plug.Execute(e.Command, chatClient);
                     mainExecuted = true;
@@ -185,10 +185,10 @@ namespace JefBot
 
             foreach (var plug in enabledPlugins)
             {
-                if (plug.Aliases.Contains(command))
+                if ((plug.Aliases.Contains(command) && plug.OffWhileLive != islive) || e.Command.ChatMessage.IsModerator || e.Command.ChatMessage.IsBroadcaster)
                 {
                     plug.Execute(e.Command, chatClient);
-                    //      aliasExecuted = true;
+                    //aliasExecuted = true;
                     break;
                 }
             }
