@@ -21,7 +21,7 @@ namespace JefBot.Commands
         {
             if (rng.Next(1000) > 1)
             {
-                var result = rng.Next(0, 1) == 1 ? "heads" : "tails";
+                var result = rng.Next(0, 2) == 1 ? "heads" : "tails";
                 
                 client.SendMessage(command.ChatMessage.Channel,
                     $"{command.ChatMessage.Username} flipped a coin, it was {result}");
