@@ -13,7 +13,6 @@ namespace JefBot.Commands
         public string Command => "coin";
         public IEnumerable<string> Aliases => new[] { "c", "flip" };
         public bool Loaded { get; set; } = true;
-        public bool OffWhileLive { get; set; } = false;
 
         Random rng = new Random();
 

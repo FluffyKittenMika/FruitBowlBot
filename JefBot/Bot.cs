@@ -163,17 +163,10 @@ namespace JefBot
             var mainExecuted = false;
             //var aliasExecuted = false;
 
-            var uptime = await TwitchApi.GetUptime(e.Command.ChatMessage.Channel);
-            bool islive = false;
-            if (uptime.Ticks > 0)
-            {
-                islive = true;
-            }
-
             foreach (var plug in enabledPlugins)
             {
 
-                if ((plug.Command == command && plug.OffWhileLive != islive ))
+                if (plug.Command == command)
                 {
                     plug.Execute(e.Command, chatClient);
                     mainExecuted = true;
@@ -185,7 +178,7 @@ namespace JefBot
 
             foreach (var plug in enabledPlugins)
             {
-                if ((plug.Aliases.Contains(command) && plug.OffWhileLive != islive) )
+                if (plug.Aliases.Contains(command))
                 {
                     plug.Execute(e.Command, chatClient);
                     //aliasExecuted = true;

@@ -11,7 +11,6 @@ namespace JefBot.Commands
         public string Command => "next";
         public IEnumerable<string> Aliases => new[] { "n", "nextstream", "countdown" };
         public bool Loaded { get; set; } = true;
-        public bool OffWhileLive { get; set; } = false;
 
         Dictionary<DayOfWeek, TimeSpan> streamtimes = new Dictionary<DayOfWeek, TimeSpan>();
 

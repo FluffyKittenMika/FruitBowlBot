@@ -11,7 +11,6 @@ namespace JefBot.Commands
         public string Command => "uptime";
         public IEnumerable<string> Aliases => new[] { "u", "up" };
         public bool Loaded { get; set; } = true;
-        public bool OffWhileLive { get; set; } = false;
 
         public async void Execute(ChatCommand command, TwitchClient client)
         {

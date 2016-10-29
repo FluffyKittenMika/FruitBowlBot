@@ -13,7 +13,6 @@ namespace JefBot.Commands
         public string Command => "quote";
         public IEnumerable<string> Aliases => new[] { "q" };
         public bool Loaded { get; set; } = true;
-        public bool OffWhileLive { get; set; } = false;
 
         //Non default definitions
         public List<string> quotes = new List<string>();

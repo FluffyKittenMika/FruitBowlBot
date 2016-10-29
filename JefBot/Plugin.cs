@@ -14,7 +14,6 @@ namespace JefBot
         string Command { get; }
         IEnumerable<string> Aliases { get; }
         bool Loaded { get; }
-        bool OffWhileLive { get; }
 
         void Execute(ChatCommand command, TwitchClient client);
     }

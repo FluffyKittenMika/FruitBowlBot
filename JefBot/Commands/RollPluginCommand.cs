@@ -13,7 +13,6 @@ namespace JefBot.Commands
         public string Command => "roll";
         public IEnumerable<string> Aliases => new[] { "r" };
         public bool Loaded { get; set; } = true;
-        public bool OffWhileLive { get; set; } = false;
 
         //Non default definitions
         Random rng = new Random();
