@@ -13,7 +13,7 @@ namespace JefBot.Commands
         public string Command => "migo";
         public IEnumerable<string> Aliases => new[] { "m" };
         public bool Loaded { get; set; } = true;
-        public bool OffWhileLive { get; set; } = true;
+        public bool OffWhileLive { get; set; } = false;
 
 
 
