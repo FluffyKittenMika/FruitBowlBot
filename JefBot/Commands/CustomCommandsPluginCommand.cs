@@ -13,7 +13,8 @@ namespace JefBot.Commands
     {
         public string PluginName => "Custom Commands";
         public string Command => "command";
-        public IEnumerable<string> Aliases => CustomCommands.Keys;
+        public string[] OtherAliases = {"commands", "cmd", "cmds"};
+        public IEnumerable<string> Aliases => CustomCommands.Keys.ToArray().Concat(OtherAliases);
         public Dictionary<string, string> CustomCommands = new Dictionary<string, string>();
         public bool Loaded { get; set; } = true;
         public bool OffWhileLive { get; set; } = false;
@@ -28,7 +29,12 @@ namespace JefBot.Commands
         public void Execute(ChatCommand command, TwitchClient client)
         {
             // Main command methods
-            if (string.Equals(command.Command, "command", StringComparison.OrdinalIgnoreCase))
+            if (
+                string.Equals(command.Command, "command", StringComparison.OrdinalIgnoreCase) ||
+                string.Equals(command.Command, "commands", StringComparison.OrdinalIgnoreCase) ||
+                string.Equals(command.Command, "cmd", StringComparison.OrdinalIgnoreCase) ||
+                string.Equals(command.Command, "cmds", StringComparison.OrdinalIgnoreCase)
+                )
             {
                 if (command.ArgumentsAsList.Count > 0)
                 {
@@ -41,7 +47,7 @@ namespace JefBot.Commands
                             {
                                 var newCommand = args[1];
                                 var response = string.Join(" ", args.Skip(2));
-                                
+
                                 // Looks like someone is trying to run a command!
                                 if (response.StartsWith("/") && !response.StartsWith("/me"))
                                 {
