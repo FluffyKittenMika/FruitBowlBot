@@ -1,8 +1,0 @@
-﻿# Starts with #, it's a comment!
-# Twitch authentication settings
-username=botmcbotbot
-oauth=oauth:ffffffffffffffffffffffffffffff
-channel=channelmchannelname,otherchannel,thirdchannel,commaseperatedchannel
-clientid=yourapplicationclientid
-# Real solid debugging on/off
-debug=false
