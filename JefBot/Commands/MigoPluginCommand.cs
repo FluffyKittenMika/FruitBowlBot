@@ -11,6 +11,7 @@ namespace JefBot.Commands
     {
         public string PluginName => "Migo";
         public string Command => "migo";
+        public string Help => "Gets a random quote from the stream";
         public IEnumerable<string> Aliases => new[] { "m" };
         public bool Loaded { get; set; } = true;
 
@@ -27,26 +28,28 @@ namespace JefBot.Commands
         }
         public void Execute(ChatCommand command, TwitchClient client)
         {
-            if (timestamp.AddMinutes(minutedelay) < DateTime.UtcNow || command.ChatMessage.IsModerator || command.ChatMessage.IsBroadcaster)
+            if (command.ChatMessage.Channel == "jefmajor")
             {
-                timestamp = DateTime.UtcNow;
-                if (File.Exists(quotefile))
+                if (timestamp.AddMinutes(minutedelay) < DateTime.UtcNow || command.ChatMessage.IsModerator || command.ChatMessage.IsBroadcaster)
                 {
-                    using (StreamReader r = new StreamReader(quotefile))
+                    timestamp = DateTime.UtcNow;
+                    if (File.Exists(quotefile))
                     {
-                        string line;
-                        while ((line = r.ReadLine()) != null)
+                        using (StreamReader r = new StreamReader(quotefile))
                         {
-                            string[] split = line.Split('|'); //Split the quotes
-                            quotes.Add(split[0]); //Add the quotes to the list, we don't care for the other part.
+                            string line;
+                            while ((line = r.ReadLine()) != null)
+                            {
+                                string[] split = line.Split('|'); //Split the quotes
+                                quotes.Add(split[0]); //Add the quotes to the list, we don't care for the other part.
+                            }
                         }
                     }
+
+                    string derp = quotes.ElementAt(rng.Next(0, quotes.Count));
+                    client.SendMessage(command.ChatMessage.Channel, $"{derp}");
                 }
-
-                string derp = quotes.ElementAt(rng.Next(0, quotes.Count));
-                client.SendMessage(command.ChatMessage.Channel, $"{derp}");
             }
-
         }
     }
 }

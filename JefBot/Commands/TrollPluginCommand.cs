@@ -11,6 +11,7 @@ namespace JefBot.Commands
     {
         public string PluginName => "Troll";
         public string Command => "troll";
+        public string Help => "!t ";
         public IEnumerable<string> Aliases => new[] { "t" };
         public bool Loaded { get; set; } = true;
 

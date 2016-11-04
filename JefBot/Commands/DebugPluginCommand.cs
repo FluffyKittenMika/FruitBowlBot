@@ -9,6 +9,7 @@ namespace JefBot.Commands
     {
         public string PluginName => "Debug";
         public string Command => "debug";
+        public string Help => "!debug to get a bunch of stream data";
         public IEnumerable<string> Aliases => new string[0];
         public bool Loaded { get; set; } = true;
 

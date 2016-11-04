@@ -11,6 +11,7 @@ namespace JefBot.Commands
     {
         public string PluginName => "Coin";
         public string Command => "coin";
+        public string Help => "!c to flip a coin";
         public IEnumerable<string> Aliases => new[] { "c", "flip" };
         public bool Loaded { get; set; } = true;
 

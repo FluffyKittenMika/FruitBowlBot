@@ -20,8 +20,8 @@ namespace JefBot
     {
         ConnectionCredentials Credentials;
         List<TwitchClient> Clients = new List<TwitchClient>();
-        Dictionary<string, string> settings = new Dictionary<string, string>();
-        private readonly List<IPluginCommand> _plugins = new List<IPluginCommand>();
+        public static Dictionary<string, string> settings = new Dictionary<string, string>();
+        public static readonly List<IPluginCommand> _plugins = new List<IPluginCommand>();
 
         //constructor
         public Bot()
@@ -154,7 +154,7 @@ namespace JefBot
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private async void RecivedCommand(object sender, TwitchClient.OnChatCommandReceivedArgs e)
+        private void RecivedCommand(object sender, TwitchClient.OnChatCommandReceivedArgs e)
         {
             var chatClient = (TwitchClient)sender;
             var enabledPlugins = _plugins.Where(plug => plug.Loaded).ToArray();

@@ -9,6 +9,7 @@ namespace JefBot.Commands
     {
         public string PluginName => "Airhorn";
         public string Command => "airhorn";
+        public string Help => "!a [1-10] to airhorn [] is optional";
         public IEnumerable<string> Aliases => new[] { "a", "air" };
         public bool Loaded { get; set; } = true;
         
@@ -26,7 +27,7 @@ namespace JefBot.Commands
                 int parsed;
                 if (int.TryParse(command.ArgumentsAsList[0], out parsed))
                 {
-                    count = Math.Max(1, Math.Min(5, parsed));
+                    count = Math.Max(1, Math.Min(10, parsed));
                 }
             }
 

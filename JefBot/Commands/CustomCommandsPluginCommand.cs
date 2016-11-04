@@ -9,13 +9,14 @@ using TwitchLib.TwitchClientClasses;
 
 namespace JefBot.Commands
 {
-    internal class CustomCommandsPluginCommand : IPluginCommand
+    class CustomCommandsPluginCommand : IPluginCommand
     {
         public string PluginName => "Custom Commands";
         public string Command => "command";
+        public string Help => "!cmd add {command name} {command result}";
         public string[] OtherAliases = {"commands", "cmd", "cmds"};
         public IEnumerable<string> Aliases => CustomCommands.Keys.ToArray().Concat(OtherAliases);
-        public Dictionary<string, string> CustomCommands = new Dictionary<string, string>();
+        public Dictionary<string, CCommand> CustomCommands = new Dictionary<string, CCommand>();
         public bool Loaded { get; set; } = true;
 
         private string memoryPath = "./customCommands.txt";
@@ -59,7 +60,7 @@ namespace JefBot.Commands
                                 if (CustomCommands.ContainsKey(newCommand))
                                     CustomCommands.Remove(newCommand);
 
-                                CustomCommands.Add(newCommand, response);
+                                CustomCommands.Add(newCommand, new CCommand(response,command.ChatMessage.Channel));
                                 Save();
                                 client.SendMessage(command.ChatMessage.Channel, $"Command {newCommand} has been added");
                             }
@@ -108,7 +109,7 @@ namespace JefBot.Commands
             // Execute custom command
             if (CustomCommands.ContainsKey(command.Command))
             {
-                var message = CustomCommands[command.Command].Replace("{username}", command.ChatMessage.Username); //Display name will make the name blank if the user have no display name set;
+                var message = CustomCommands[command.Command].Response.Replace("{username}", command.ChatMessage.Username); //Display name will make the name blank if the user have no display name set;
                 client.SendMessage(command.ChatMessage.Channel, message);
             }
         }
@@ -121,7 +122,7 @@ namespace JefBot.Commands
             {
                 foreach (var cmd in CustomCommands)
                 {
-                    w.WriteLine($"{cmd.Key}!@!~!@!{cmd.Value}");
+                    w.WriteLine($"{cmd.Key}!@!~!@!{cmd.Value.Response}!@!~!@!{cmd.Value.Channel}");
                 }
             }
         }
@@ -139,10 +140,10 @@ namespace JefBot.Commands
                     {
                         string[] ncmd = line.Split(new[] { "!@!~!@!" }, StringSplitOptions.None);
 
-                        CustomCommands.Add(ncmd[0], ncmd[1]);
+                        CustomCommands.Add(ncmd[0], new CCommand(ncmd[1],ncmd[2]));
 
                         Console.ForegroundColor = ConsoleColor.Yellow;
-                        Console.WriteLine($"{ncmd[0]} --- {ncmd[1]}");
+                        Console.WriteLine($"{ncmd[0]} --- {ncmd[1]} --- { ncmd[2] }");
                         Console.ForegroundColor = ConsoleColor.White;
                     }
                 }
@@ -153,6 +154,20 @@ namespace JefBot.Commands
                 Console.WriteLine(e.Message);
                 Console.ForegroundColor = ConsoleColor.White;
             }
+        }
+    }
+
+    /// <summary>
+    /// Just a bit expandable, and keeps most of the old code A-OK :)
+    /// </summary>
+    class CCommand
+    {
+        public string Channel { get; set; }
+        public string Response { get; set; }
+        public CCommand(string value, string channel)
+        {
+            Response = value;
+            Channel = channel;
         }
     }
 }

@@ -11,6 +11,7 @@ namespace JefBot.Commands
     {
         public string PluginName => "Modlist";
         public string Command => "modlist";
+        public string Help => "!mods {set/clear} {result}; Will print out modlist for the current playing stream game.";
         public IEnumerable<string> Aliases => new[] { "mods" };
         public Dictionary<string, string> ModLists = new Dictionary<string, string>();
         public bool Loaded { get; set; } = true;
@@ -121,7 +122,7 @@ namespace JefBot.Commands
 
                         ModLists.Add(ncmd[0], ncmd[1]);
 
-                        Console.ForegroundColor = ConsoleColor.Yellow;
+                        Console.ForegroundColor = ConsoleColor.DarkYellow;
                         Console.WriteLine($"{ncmd[0]} --- {ncmd[1]}");
                         Console.ForegroundColor = ConsoleColor.White;
                     }
