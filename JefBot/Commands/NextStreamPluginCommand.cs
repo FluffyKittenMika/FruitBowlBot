@@ -17,9 +17,9 @@ namespace JefBot.Commands
 
         public NextStream()
         {
-            streamtimes.Add(DayOfWeek.Monday, TimeSpan.FromHours(20)); //Monday at 8 Norweeb time
-            streamtimes.Add(DayOfWeek.Wednesday, TimeSpan.FromHours(20)); 
-            streamtimes.Add(DayOfWeek.Saturday, TimeSpan.FromHours(20)); 
+            streamtimes.Add(DayOfWeek.Monday, TimeSpan.FromHours(21)); //Monday at 8 Norweeb time
+            streamtimes.Add(DayOfWeek.Wednesday, TimeSpan.FromHours(21)); 
+            streamtimes.Add(DayOfWeek.Saturday, TimeSpan.FromHours(21)); 
         }
 
         public async void Execute(ChatCommand command, TwitchClient client)

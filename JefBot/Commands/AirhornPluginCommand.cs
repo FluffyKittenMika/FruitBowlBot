@@ -17,7 +17,6 @@ namespace JefBot.Commands
 
         public void Execute(ChatCommand command, TwitchClient client)
         {
-            if (!command.ChatMessage.Subscriber) return;
 
             var message = string.Empty;
             var count = _rand.Next(2, 5);

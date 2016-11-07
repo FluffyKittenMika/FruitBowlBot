@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using TwitchLib;
 using TwitchLib.TwitchClientClasses;
+using System.Text.RegularExpressions;
 
 namespace JefBot.Commands
 {
@@ -17,11 +18,15 @@ namespace JefBot.Commands
 
 
 
-        List<string> quotes = new List<string>();
+        List<Quote> quotes = new List<Quote>();
         string quotefile = @"./RemoteQuotes.dat";
         Random rng = new Random();
         DateTime timestamp;
-        int minutedelay = 5;
+        int minutedelay = 1;
+        static string DatePattern = @"((\d{2}.\d{2}.\d{4}) (\d{2}.\d{2}.\d{2}))";
+        static string SubmitterPattern = @"(?:submitted by )([a-zA-Z0-9_-]+)";
+        Regex dateregex = new Regex(DatePattern, RegexOptions.IgnoreCase);
+        Regex submitterregex = new Regex(SubmitterPattern, RegexOptions.IgnoreCase);
         public MigoPluginCommand()
         {
             timestamp = DateTime.UtcNow;
@@ -41,15 +46,50 @@ namespace JefBot.Commands
                             while ((line = r.ReadLine()) != null)
                             {
                                 string[] split = line.Split('|'); //Split the quotes
-                                quotes.Add(split[0]); //Add the quotes to the list, we don't care for the other part.
+
+
+                                string date = "";
+                                string submitter = "";
+                                //string channel = "";
+                                try
+                                {
+                                    date = dateregex.Match(split[1]).Value;
+                                    submitter = submitterregex.Match(split[1]).Groups[1].Value;
+                                }
+                                catch (Exception e)
+                                {
+                                    Console.WriteLine(e.Message);
+                                }
+                                
+                                quotes.Add(new Quote(split[0],date,submitter)); //Add the quotes to the list, we don't care for the other part.
                             }
                         }
                     }
 
-                    string derp = quotes.ElementAt(rng.Next(0, quotes.Count));
-                    client.SendMessage(command.ChatMessage.Channel, $"{derp}");
+                    var derp = quotes.ElementAt(rng.Next(0, quotes.Count));
+                    client.SendMessage(command.ChatMessage.Channel, $"{derp.Quotestring} -submitted by: {derp.SubmittedBy}");
                 }
             }
+        }
+    }
+
+
+
+
+
+
+    class Quote
+    {
+        public string Quotestring { get; set; }
+        public string Datesubmitted { get; set; }
+        public string SubmittedBy { get; set; }
+        public string Channel { get; set; }
+        public Quote(string quote, string date = "", string submitter ="", string channel="")
+        {
+            Quotestring = quote;
+            Datesubmitted = date;
+            SubmittedBy = submitter;
+            Channel = channel;
         }
     }
 }
