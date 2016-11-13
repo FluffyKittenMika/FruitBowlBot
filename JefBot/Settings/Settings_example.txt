@@ -4,5 +4,9 @@ username=botmcbotbot
 oauth=oauth:ffffffffffffffffffffffffffffff
 channel=channelmchannelname,otherchannel,thirdchannel,commaseperatedchannel
 clientid=yourapplicationclientid
+#
+#Discord Intergration
+#Bot token
+discordtoken=tokengoeshere
 # Real solid debugging on/off
 debug=false

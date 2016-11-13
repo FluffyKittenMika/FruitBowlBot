@@ -11,7 +11,9 @@ using TwitchLib;
 using System.Threading;
 using JefBot.Commands;
 using log4net.Plugin;
+using Discord.Net;
 using Microsoft.CSharp;
+using Discord;
 
 namespace JefBot
 {
@@ -22,6 +24,10 @@ namespace JefBot
         List<TwitchClient> Clients = new List<TwitchClient>();
         public static Dictionary<string, string> settings = new Dictionary<string, string>();
         public static readonly List<IPluginCommand> _plugins = new List<IPluginCommand>();
+ 
+        //discord intergration.
+        public DiscordClient discordClient = new DiscordClient();
+
 
         //constructor
         public Bot()
@@ -30,7 +36,7 @@ namespace JefBot
         }
 
         //Start shit up m8
-        private void init()
+        private async void init()
         {
             #region config loading
             var settingsFile = @"./Settings/Settings.txt";
@@ -56,6 +62,13 @@ namespace JefBot
                 Console.Write("nope, no config file found, please craft one");
                 Thread.Sleep(5000);
                 Environment.Exit(0); // Closes the program if there's no setting, should just make it generate one, but as of now, don't delete the settings.
+            }
+            #endregion
+
+            #region discord init
+            if (settings["discordtoken"] != "tokengoeshere")
+            {
+                await discordClient.Connect(settings["discordtoken"],TokenType.Bot);
             }
             #endregion
 
