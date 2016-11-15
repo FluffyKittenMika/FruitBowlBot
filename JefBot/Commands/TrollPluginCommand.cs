@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Discord;
+using Discord.Commands;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -36,6 +38,18 @@ namespace JefBot.Commands
             {
                 Console.WriteLine(e.Message);
             }
+        }
+
+        public DiscordClient Discord(DiscordClient client)
+        {
+            client.GetService<CommandService>().CreateCommand(this.Command)
+                .Alias(Aliases.ToString())
+                .Description(Help)
+                .Do(async e =>
+                {
+                    await e.Channel.SendMessage("Not implemented yet");
+                });
+            return client;
         }
     }
 }

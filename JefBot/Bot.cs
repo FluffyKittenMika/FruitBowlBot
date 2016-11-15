@@ -14,6 +14,7 @@ using log4net.Plugin;
 using Discord.Net;
 using Microsoft.CSharp;
 using Discord;
+using Discord.Commands;
 
 namespace JefBot
 {
@@ -70,6 +71,14 @@ namespace JefBot
             {
                 await discordClient.Connect(settings["discordtoken"],TokenType.Bot);
             }
+            discordClient.UsingCommands(x => {
+                x.PrefixChar = '$';
+                x.HelpMode = HelpMode.Public;
+                x.IsSelfBot = true;
+                //x.ExecuteHandler look into this?
+            });
+
+            
             #endregion
 
             #region ChatClient init
@@ -130,6 +139,12 @@ namespace JefBot
                     Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine($"NOT Loaded: {plug.PluginName} Main command conflicts with another plugin!!!");
                 }
+            }
+
+            //:^) this was a test.
+            foreach (var plug in _plugins)
+            {
+                discordClient = plug.Discord(discordClient);
             }
 
             Console.ForegroundColor = ConsoleColor.White;

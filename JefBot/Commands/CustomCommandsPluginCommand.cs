@@ -4,8 +4,10 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Discord;
 using TwitchLib;
 using TwitchLib.TwitchClientClasses;
+using Discord.Commands;
 
 namespace JefBot.Commands
 {
@@ -162,9 +164,9 @@ namespace JefBot.Commands
 
                         CustomCommands.Add(new CCommand(ncmd[0],ncmd[1],ncmd[2]));
 
-                        Console.ForegroundColor = ConsoleColor.Yellow;
-                        Console.WriteLine($"{ncmd[0]} --- {ncmd[1]} --- { ncmd[2] }");
-                        Console.ForegroundColor = ConsoleColor.White;
+                        //Console.ForegroundColor = ConsoleColor.Yellow;
+                        //Console.WriteLine($"{ncmd[0]} --- {ncmd[1]} --- { ncmd[2] }");
+                        //Console.ForegroundColor = ConsoleColor.White;
                     }
                 }
             }
@@ -174,6 +176,18 @@ namespace JefBot.Commands
                 Console.WriteLine(e.Message);
                 Console.ForegroundColor = ConsoleColor.White;
             }
+        }
+
+        public DiscordClient Discord(DiscordClient client)
+        {
+            client.GetService<CommandService>().CreateCommand(this.Command)
+                .Alias(Aliases.ToArray())
+                .Description(Help)
+                .Do(async e =>
+                {
+                    await e.Channel.SendMessage("Not implemented yet");
+                });
+            return client;
         }
     }
 

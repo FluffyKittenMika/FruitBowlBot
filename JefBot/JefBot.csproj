@@ -132,17 +132,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Bot.cs" />
-    <Compile Include="Commands\HelpPluginCommand.cs" />
-    <Compile Include="Commands\NextStreamPluginCommand.cs" />
-    <Compile Include="Commands\DebugPluginCommand.cs" />
+    <Compile Include="Commands\AirhornPluginCommand.cs" />
     <Compile Include="Commands\CoinPluginCommand.cs" />
     <Compile Include="Commands\CustomCommandsPluginCommand.cs" />
-    <Compile Include="Commands\AirhornPluginCommand.cs" />
-    <Compile Include="Commands\TrollPluginCommand.cs" />
-    <Compile Include="Commands\ModListPluginCommand.cs" />
-    <Compile Include="Commands\RollPluginCommand.cs" />
-    <Compile Include="Commands\QuotePluginCommand.cs" />
+    <Compile Include="Commands\DebugPluginCommand.cs" />
+    <Compile Include="Commands\HelpPluginCommand.cs" />
     <Compile Include="Commands\MigoPluginCommand.cs" />
+    <Compile Include="Commands\ModListPluginCommand.cs" />
+    <Compile Include="Commands\NextStreamPluginCommand.cs" />
+    <Compile Include="Commands\QuotePluginCommand.cs" />
+    <Compile Include="Commands\RollPluginCommand.cs" />
+    <Compile Include="Commands\TrollPluginCommand.cs" />
     <Compile Include="Commands\UptimePluginCommand.cs" />
     <Compile Include="Plugin.cs" />
     <Compile Include="Program.cs" />
@@ -173,7 +173,9 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Twitch Plugins\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

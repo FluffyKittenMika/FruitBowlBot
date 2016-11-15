@@ -5,6 +5,8 @@ using System.Linq;
 using TwitchLib;
 using TwitchLib.TwitchClientClasses;
 using System.Text.RegularExpressions;
+using Discord;
+using Discord.Commands;
 
 namespace JefBot.Commands
 {
@@ -71,9 +73,19 @@ namespace JefBot.Commands
                 }
             }
         }
+        public DiscordClient Discord(DiscordClient client)
+        {
+            client.GetService<CommandService>().CreateCommand(this.Command)
+                .Alias(Aliases.ToString())
+                .Description(Help)
+                .Do(async e =>
+                {
+                    await e.Channel.SendMessage("Not implemented yet");
+                });
+            return client;
+        }
+
     }
-
-
 
 
 

@@ -4,6 +4,8 @@ using System.IO;
 using TwitchLib;
 using TwitchLib.TwitchClientClasses;
 using System.Net;
+using Discord;
+using Discord.Commands;
 
 namespace JefBot.Commands
 {
@@ -61,6 +63,17 @@ namespace JefBot.Commands
                     client.SendMessage(command.ChatMessage.Channel, $"{command.ChatMessage.Username} rolled a {DiceCount}D{SideCount} and got {result}");
                 }
             }
+        }
+        public DiscordClient Discord(DiscordClient client)
+        {
+            client.GetService<CommandService>().CreateCommand(this.Command)
+                .Alias(Aliases.ToString())
+                .Description(Help)
+                .Do(async e =>
+                {
+                    await e.Channel.SendMessage("Not implemented yet");
+                });
+            return client;
         }
     }
 }
