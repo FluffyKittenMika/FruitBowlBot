@@ -77,7 +77,9 @@ namespace JefBot
                 x.IsSelfBot = true;
                 //x.ExecuteHandler look into this?
             });
-
+            discordClient.MessageReceived += (s, e)=>{
+                Console.WriteLine($"{e.Server}:{e.Channel}:{e.User}:{e.Message.Text}");
+            };
             
             #endregion
 
