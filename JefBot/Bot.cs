@@ -72,10 +72,9 @@ namespace JefBot
                 await discordClient.Connect(settings["discordtoken"],TokenType.Bot);
             }
             discordClient.UsingCommands(x => {
-                x.PrefixChar = '$';
                 x.HelpMode = HelpMode.Public;
-                x.IsSelfBot = true;
-                //x.ExecuteHandler look into this?
+                x.CustomPrefixHandler += DiscordEvent;
+
             });
             discordClient.MessageReceived += (s, e)=>{
                 Console.WriteLine($"{e.Server}:{e.Channel}:{e.User}:{e.Message.Text}");
@@ -143,16 +142,51 @@ namespace JefBot
                 }
             }
 
-            //:^) this was a test.
-            foreach (var plug in _plugins)
-            {
-                discordClient = plug.Discord(discordClient);
-            }
-
             Console.ForegroundColor = ConsoleColor.White;
             #endregion
             Console.WriteLine("Bot init Complete");
         }
+
+        /// <summary>
+        /// custom discord command parser lol
+        /// </summary>
+        /// <param name="arg"> the whole shibboleetbangbanglesbians</param>
+        /// <returns></returns>
+        private int DiscordEvent(Message arg)
+        {
+
+            var enabledPlugins = _plugins.Where(plug => plug.Loaded).ToArray();
+            var command = "";
+            if (arg.Text[0] == '$') //TODO make option for this prefix :D
+            {
+                try
+                {
+                    command = arg.Text.Remove(0, 1).Split(' ')[0].ToLower(); 
+                }
+                catch (Exception err)
+                {
+                    Console.Write(err.Message);
+                }
+            }
+
+            foreach (var plug in enabledPlugins)
+            {
+                if (plug.Aliases.Contains(command) || plug.Command == command)
+                {
+                    try
+                    {
+                        plug.Discord(arg);
+                    }
+                    catch (Exception err)
+                    {
+                        Console.WriteLine(err.Message);
+                    }
+                    break;
+                }
+            }
+            return 1;
+        }
+        
 
         //Don't remove this, it's critical to see the chat in the bot, it quickly tells me if it's absolutely broken...
         private void Chatmsg(object sender, TwitchClient.OnMessageReceivedArgs e)

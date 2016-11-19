@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using TwitchLib;
 using TwitchLib.TwitchClientClasses;
-using System.Net;
 using Discord;
 using Discord.Commands;
 
@@ -64,16 +63,9 @@ namespace JefBot.Commands
                 }
             }
         }
-        public DiscordClient Discord(DiscordClient client)
+        public void Discord(Message arg)
         {
-            client.GetService<CommandService>().CreateCommand(this.Command)
-                .Alias(Aliases.ToString())
-                .Description(Help)
-                .Do(async e =>
-                {
-                    await e.Channel.SendMessage("Not implemented yet");
-                });
-            return client;
+            arg.Channel.SendMessage("Not implemented yet");
         }
     }
 }

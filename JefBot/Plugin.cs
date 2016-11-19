@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TwitchLib;
 using TwitchLib.TwitchClientClasses;
+using Discord.Commands;
 
 namespace JefBot
 {
@@ -18,6 +19,6 @@ namespace JefBot
         string Help { get; }
 
         void Execute(ChatCommand command, TwitchClient client);
-        DiscordClient Discord(DiscordClient client);
+        void Discord(Message arg);
     }
 }
