@@ -16,7 +16,7 @@ namespace JefBot.Commands
         public string Command => "quote";
         public string Help => "Just do !q and some text after it to create a quote, and don't add your own \" tags :) ";
         public IEnumerable<string> Aliases => new[] { "q" };
-        public bool Loaded { get; set; } = true;
+        public bool Loaded { get; set; } = false;
 
         //Non default definitions
         public List<string> quotes = new List<string>();

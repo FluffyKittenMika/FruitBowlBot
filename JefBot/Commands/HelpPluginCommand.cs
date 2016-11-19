@@ -64,7 +64,40 @@ namespace JefBot.Commands
 
         public void Discord(Message arg)
         {
-            arg.Channel.SendMessage("Not implemented yet");
+            try
+            {
+                var args = arg.Text.Split(' ').ToList().Skip(1).ToList(); //this is probably so wrong
+
+                plug = new List<IPluginCommand>();
+                plug.AddRange(Bot._plugins.Where(plug => plug.Aliases.Contains(args[0])).ToList());
+                plug.AddRange(Bot._plugins.Where(plug => plug.Command == args[0]).ToList());
+                var result = "";
+                if (args.Count > 0)
+                {
+                    foreach (var item in plug)
+                    {
+                        if (item.Command == args[0] || item.Aliases.Contains(args[0]))
+                        {
+                            result = item.Help;
+                            break;
+                        }
+                    }
+                    if (result == "")
+                    {
+                        result = $"No command / alias found for {args[0]} and therefore no help can be given";
+                    }
+                    arg.Channel.SendMessage($"{result}");
+                }
+                else
+                {
+                    arg.Channel.SendMessage($"{Help}");
+                }
+            }
+            catch (Exception err)
+            {
+                Console.WriteLine(err.Message);
+            }
+
         }
     }
 }

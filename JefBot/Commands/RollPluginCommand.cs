@@ -14,7 +14,7 @@ namespace JefBot.Commands
         public string Command => "roll";
         public string Help => "!r {1d6} to roll a 1d6";
         public IEnumerable<string> Aliases => new[] { "r" };
-        public bool Loaded { get; set; } = true;
+        public bool Loaded { get; set; } = false;
 
         //Non default definitions
         Random rng = new Random();

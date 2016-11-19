@@ -13,7 +13,7 @@ namespace JefBot.Commands
         public string Command => "airhorn";
         public string Help => "!a [1-10] to airhorn [] is optional";
         public IEnumerable<string> Aliases => new[] { "a", "air" };
-        public bool Loaded { get; set; } = true;
+        public bool Loaded { get; set; } = false;
         
         private readonly Random _rand = new Random();
 

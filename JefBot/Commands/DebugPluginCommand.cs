@@ -13,7 +13,7 @@ namespace JefBot.Commands
         public string Command => "debug";
         public string Help => "!debug to get a bunch of stream data";
         public IEnumerable<string> Aliases => new string[0];
-        public bool Loaded { get; set; } = true;
+        public bool Loaded { get; set; } = false;
 
         public async void Execute(ChatCommand command, TwitchClient client)
         {

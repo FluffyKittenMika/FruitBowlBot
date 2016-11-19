@@ -1,18 +1,9 @@
 ﻿using System;
-using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.IO;
-using System.Reflection;
-using TwitchLib.TwitchClientClasses;
 using TwitchLib;
 using System.Threading;
-using JefBot.Commands;
-using log4net.Plugin;
-using Discord.Net;
-using Microsoft.CSharp;
 using Discord;
 using Discord.Commands;
 
