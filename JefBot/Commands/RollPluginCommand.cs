@@ -66,8 +66,8 @@ namespace JefBot.Commands
                         {
                             int rollValue = rng.Next(SideCount) + 1;
 
-                            minRoll = Math.min(minRoll, rollValue);
-                            maxRoll = Math.max(maxRoll, rollValue);
+                            minRoll = Math.Min(minRoll, rollValue);
+                            maxRoll = Math.Max(maxRoll, rollValue);
 
                             result += rollValue;
                         }
