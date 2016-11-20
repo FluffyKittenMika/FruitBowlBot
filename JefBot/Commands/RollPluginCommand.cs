@@ -23,10 +23,24 @@ namespace JefBot.Commands
             int DiceCount = 1;
             int SideCount = 6;
             int result = 0;
-            int maxcount = 5000;
+            int maxcount = 9001;
+
+            bool minmax = false;
+            int minRoll = Int32.MaxValue;
+            int maxRoll = 0;
 
             if (command.ArgumentsAsList.Count > 0)
             {
+                string[] args = command.ArgumentsAsString.Split(new Char[] { ' ' });
+                foreach (string arg in args)
+                {
+                    if (arg.Equals("minmax", StringComparison.OrdinalIgnoreCase))
+                    {
+                        minmax = true;
+                        break;
+                    }
+                }
+
                 string dice = command.ArgumentsAsString.Trim(new Char[] { ' ' });
 
                 string[] split = dice.ToLower().Split(new Char[] { 'd' });
@@ -50,7 +64,12 @@ namespace JefBot.Commands
                     {
                         try
                         {
-                            result += rng.Next(SideCount) + 1;
+                            int rollValue = rng.Next(SideCount) + 1;
+
+                            minRoll = Math.min(minRoll, rollValue);
+                            maxRoll = Math.max(maxRoll, rollValue);
+
+                            result += rollValue;
                         }
                         catch (Exception e)
                         {
@@ -58,7 +77,14 @@ namespace JefBot.Commands
                             break;
                         }
                     }
-                    client.SendMessage(command.ChatMessage.Channel, $"{command.ChatMessage.Username} rolled a {DiceCount}D{SideCount} and got {result}");
+
+                    string minmaxInfo = "";
+                    if (minmax)
+                    {
+                        minmaxInfo = $" (lowest: {minRoll}, highest: {maxRoll})";
+                    }
+
+                    client.SendMessage(command.ChatMessage.Channel, $"{command.ChatMessage.Username} rolled a {DiceCount}D{SideCount} and got {result}{minmaxInfo}");
                 }
             }
         }
