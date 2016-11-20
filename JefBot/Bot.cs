@@ -6,6 +6,8 @@ using TwitchLib;
 using System.Threading;
 using Discord;
 using Discord.Commands;
+using TwitchLib.Models.Client;
+using TwitchLib.Events.Client;
 
 namespace JefBot
 {
@@ -62,13 +64,19 @@ namespace JefBot
             {
                 await discordClient.Connect(settings["discordtoken"],TokenType.Bot);
             }
-            discordClient.UsingCommands(x => {
-                x.HelpMode = HelpMode.Public;
-                x.CustomPrefixHandler += DiscordEvent;
-
-            });
+          //  discordClient.UsingCommands(x => {
+           //     x.HelpMode = HelpMode.Public;
+            //    x.CustomPrefixHandler += DiscordEvent;
+             //
+              //});
+            
+            //FUCK IT WE'RE DOING IT THE OLD WAY WHEEE
             discordClient.MessageReceived += (s, e)=>{
                 Console.WriteLine($"{e.Server}:{e.Channel}:{e.User}:{e.Message.Text}");
+                if (!e.User.IsBot)
+                {
+                    DiscordEvent(e);
+                }
             };
             
             #endregion
@@ -81,6 +89,7 @@ namespace JefBot
                 TwitchApi.SetClientId(settings["clientid"]);
             }
 
+            //Set up a client for each channel
             foreach (string str in settings["channel"].Split(','))
             {
                 TwitchClient ChatClient = new TwitchClient(Credentials, str, '!', logging: Convert.ToBoolean(settings["debug"]));
@@ -137,22 +146,23 @@ namespace JefBot
             #endregion
             Console.WriteLine("Bot init Complete");
         }
+ 
 
         /// <summary>
         /// custom discord command parser lol
         /// </summary>
         /// <param name="arg"> the whole shibboleetbangbanglesbians</param>
         /// <returns></returns>
-        private int DiscordEvent(Message arg)
+        private int DiscordEvent(MessageEventArgs arg)
         {
 
             var enabledPlugins = _plugins.Where(plug => plug.Loaded).ToArray();
             var command = "";
-            if (arg.Text[0] == '$') //TODO make option for this prefix :D
+            if (arg.Message.Text[0] == '$') //TODO make option for this prefix :D
             {
                 try
                 {
-                    command = arg.Text.Remove(0, 1).Split(' ')[0].ToLower(); 
+                    command = arg.Message.Text.Remove(0, 1).Split(' ')[0].ToLower(); 
                 }
                 catch (Exception err)
                 {
@@ -180,36 +190,33 @@ namespace JefBot
         
 
         //Don't remove this, it's critical to see the chat in the bot, it quickly tells me if it's absolutely broken...
-        private void Chatmsg(object sender, TwitchClient.OnMessageReceivedArgs e)
+        private void Chatmsg(object sender, OnMessageReceivedArgs e)
         {
             Console.WriteLine($"{e.ChatMessage.Channel}-{e.ChatMessage.Username}: {e.ChatMessage.Message}");
         }
 
-        private void Disconnected(object sender, TwitchClient.OnDisconnectedArgs e)
+        private void Disconnected(object sender, OnDisconnectedArgs e)
         {
             var chatClient = (TwitchClient)sender;
             chatClient.Connect();
         }
 
-        private void RecivedResub(object sender, TwitchClient.OnReSubscriberArgs e)
+        private void RecivedResub(object sender, OnReSubscriberArgs e)
         {
             Console.WriteLine($@"{e.ReSubscriber.DisplayName} subbed for {e.ReSubscriber.Months} with the message '{e.ReSubscriber.ResubMessage}' :)");
         }
 
-        private void RecivedNewSub(object sender, TwitchClient.OnNewSubscriberArgs e)
+        private void RecivedNewSub(object sender, OnNewSubscriberArgs e)
         {
             Console.WriteLine($@"{e.Subscriber.Name} Just subbed! What a bro!' :)");
         }
-
-
-
 
         /// <summary>
         /// Executes all commands, we try to execute the main named command before any aliases to try and avoid overwrites.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void RecivedCommand(object sender, TwitchClient.OnChatCommandReceivedArgs e)
+        private void RecivedCommand(object sender, OnChatCommandReceivedArgs e)
         {
             var chatClient = (TwitchClient)sender;
             var enabledPlugins = _plugins.Where(plug => plug.Loaded).ToArray();
@@ -220,7 +227,6 @@ namespace JefBot
 
             foreach (var plug in enabledPlugins)
             {
-
                 if (plug.Command == command)
                 {
                     plug.Execute(e.Command, chatClient);
@@ -228,9 +234,7 @@ namespace JefBot
                     break;
                 }
             }
-
             if (mainExecuted) return;
-
             foreach (var plug in enabledPlugins)
             {
                 if (plug.Aliases.Contains(command))
@@ -261,9 +265,7 @@ namespace JefBot
                             ChatClient.SendMessage(channel, msg);
                         }
                     }
-
                 }
-
             }
         }
     }

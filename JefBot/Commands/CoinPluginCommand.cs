@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using TwitchLib;
-using TwitchLib.TwitchClientClasses;
 using Discord;
 using Discord.Commands;
+using TwitchLib.Models.Client;
 
 namespace JefBot.Commands
 {
@@ -13,7 +13,7 @@ namespace JefBot.Commands
         public string Command => "coin";
         public string Help => "!c to flip a coin";
         public IEnumerable<string> Aliases => new[] { "c", "flip" };
-        public bool Loaded { get; set; } = false;
+        public bool Loaded { get; set; } = true;
 
         Random rng = new Random();
 
@@ -34,7 +34,7 @@ namespace JefBot.Commands
 
         }
 
-        public void Discord(Message arg)
+        public void Discord(MessageEventArgs arg)
         {
             arg.Channel.SendMessage("Not implemented yet");
         }

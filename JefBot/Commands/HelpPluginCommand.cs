@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using TwitchLib;
-using TwitchLib.TwitchClientClasses;
 using System.Linq;
 using Discord;
-using Discord.Commands;
+using TwitchLib.Models.Client;
 
 namespace JefBot.Commands
 {
@@ -62,11 +61,11 @@ namespace JefBot.Commands
           
         }
 
-        public void Discord(Message arg)
+        public void Discord(MessageEventArgs arg)
         {
             try
             {
-                var args = arg.Text.Split(' ').ToList().Skip(1).ToList(); //this is probably so wrong
+                var args = arg.Message.Text.Split(' ').ToList().Skip(1).ToList(); //this is probably so wrong
 
                 plug = new List<IPluginCommand>();
                 plug.AddRange(Bot._plugins.Where(plug => plug.Aliases.Contains(args[0])).ToList());

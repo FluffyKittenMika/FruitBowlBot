@@ -1,12 +1,7 @@
 ﻿using Discord;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TwitchLib;
-using TwitchLib.TwitchClientClasses;
-using Discord.Commands;
+using TwitchLib.Models.Client;
 
 namespace JefBot
 {
@@ -19,6 +14,6 @@ namespace JefBot
         string Help { get; }
 
         void Execute(ChatCommand command, TwitchClient client);
-        void Discord(Message arg);
+        void Discord(MessageEventArgs arg);
     }
 }

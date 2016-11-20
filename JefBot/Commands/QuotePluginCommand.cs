@@ -2,11 +2,10 @@
 using System.Collections.Generic;
 using System.IO;
 using TwitchLib;
-using TwitchLib.TwitchClientClasses;
 using System.Net;
 using Discord;
-using Discord.Commands;
 using System.Linq;
+using TwitchLib.Models.Client;
 
 namespace JefBot.Commands
 {
@@ -16,7 +15,7 @@ namespace JefBot.Commands
         public string Command => "quote";
         public string Help => "Just do !q and some text after it to create a quote, and don't add your own \" tags :) ";
         public IEnumerable<string> Aliases => new[] { "q" };
-        public bool Loaded { get; set; } = false;
+        public bool Loaded { get; set; } = true;
 
         //Non default definitions
         public List<string> quotes = new List<string>();
@@ -66,7 +65,7 @@ namespace JefBot.Commands
             }
         }
 
-        public void Discord(Message arg)
+        public void Discord(MessageEventArgs arg)
         {
             arg.Channel.SendMessage("Not implemented yet");
         }

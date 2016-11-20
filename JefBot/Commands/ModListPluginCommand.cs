@@ -1,11 +1,10 @@
 ﻿using Discord;
-using Discord.Commands;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using TwitchLib;
-using TwitchLib.TwitchClientClasses;
+using TwitchLib.Models.Client;
 
 namespace JefBot.Commands
 {
@@ -141,7 +140,7 @@ namespace JefBot.Commands
             }
         }
 
-        public void Discord(Message arg)
+        public void Discord(MessageEventArgs arg)
         {
             arg.Channel.SendMessage("Not implemented yet");
         }

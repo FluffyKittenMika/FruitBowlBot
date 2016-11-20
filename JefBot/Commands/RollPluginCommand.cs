@@ -2,9 +2,8 @@
 using System.Collections.Generic;
 using System.IO;
 using TwitchLib;
-using TwitchLib.TwitchClientClasses;
 using Discord;
-using Discord.Commands;
+using TwitchLib.Models.Client;
 
 namespace JefBot.Commands
 {
@@ -14,7 +13,7 @@ namespace JefBot.Commands
         public string Command => "roll";
         public string Help => "!r {1d6} to roll a 1d6";
         public IEnumerable<string> Aliases => new[] { "r" };
-        public bool Loaded { get; set; } = false;
+        public bool Loaded { get; set; } = true;
 
         //Non default definitions
         Random rng = new Random();
@@ -63,7 +62,7 @@ namespace JefBot.Commands
                 }
             }
         }
-        public void Discord(Message arg)
+        public void Discord(MessageEventArgs arg)
         {
             arg.Channel.SendMessage("Not implemented yet");
         }

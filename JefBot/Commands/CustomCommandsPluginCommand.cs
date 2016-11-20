@@ -4,8 +4,7 @@ using System.IO;
 using System.Linq;
 using Discord;
 using TwitchLib;
-using TwitchLib.TwitchClientClasses;
-using Discord.Commands;
+using TwitchLib.Models.Client;
 
 namespace JefBot.Commands
 {
@@ -29,9 +28,6 @@ namespace JefBot.Commands
         {
             try
             {
-
-
-
                 // Main command methods
                 if (
                     string.Equals(command.Command, "command", StringComparison.OrdinalIgnoreCase) ||
@@ -176,7 +172,7 @@ namespace JefBot.Commands
             }
         }
 
-        public void Discord(Message arg)
+        public void Discord(MessageEventArgs arg)
         {
             arg.Channel.SendMessage("Not implemented yet");
         }
