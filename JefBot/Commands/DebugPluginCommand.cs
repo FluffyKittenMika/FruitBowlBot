@@ -35,9 +35,11 @@ namespace JefBot.Commands
 
         }
 
+
+        //echo command
         public void Discord(MessageEventArgs arg)
         {
-            arg.Channel.SendMessage("Not implemented yet");
+            arg.Channel.SendMessage($"{arg.Message.RawText}");
         }
 
     }

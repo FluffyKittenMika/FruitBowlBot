@@ -158,7 +158,7 @@ namespace JefBot
 
             var enabledPlugins = _plugins.Where(plug => plug.Loaded).ToArray();
             var command = "";
-            if (arg.Message.Text[0] == '$') //TODO make option for this prefix :D
+            if (arg.Message.Text[0] == '!') //TODO make option for this prefix :D
             {
                 try
                 {

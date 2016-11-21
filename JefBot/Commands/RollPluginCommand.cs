@@ -18,6 +18,9 @@ namespace JefBot.Commands
         //Non default definitions
         Random rng = new Random();
 
+
+        //TODO make this into a better more recursive thing, so one can roll multiple dice in one message, like use a foreach arg loop and check every word i guess.
+        //just make it a whole lot better
         public void Execute(ChatCommand command, TwitchClient client)
         {
             int DiceCount = 1;
@@ -91,6 +94,22 @@ namespace JefBot.Commands
         public void Discord(MessageEventArgs arg)
         {
             arg.Channel.SendMessage("Not implemented yet");
+        }
+
+    }
+
+
+    /// <summary>
+    /// Dice class, holds a D'n'D dice.. kinda
+    /// </summary>
+    internal class dice
+    {
+        public int sides { get; set; }
+        public int count { get; set; }
+        public dice(int sides, int count)
+        {
+            this.sides = sides;
+            this.count = count;
         }
     }
 }
