@@ -22,7 +22,10 @@ namespace JefBot.Commands
         List<Quote> quotes = new List<Quote>();
         string quotefile = @"./RemoteQuotes.dat";
         Random rng = new Random();
-        DateTime timestamp;
+
+        DateTime timestampTwitch;
+        DateTime timestampDiscord;
+
         int minutedelay = 1;
         static string DatePattern = @"((\d{2}.\d{2}.\d{4}) (\d{2}.\d{2}.\d{2}))";
         static string SubmitterPattern = @"(?:submitted by )([a-zA-Z0-9_-]+)";
@@ -30,15 +33,16 @@ namespace JefBot.Commands
         Regex submitterregex = new Regex(SubmitterPattern, RegexOptions.IgnoreCase);
         public MigoPluginCommand()
         {
-            timestamp = DateTime.UtcNow;
+            timestampDiscord = DateTime.UtcNow;
+            timestampTwitch = DateTime.UtcNow;
         }
         public void Execute(ChatCommand command, TwitchClient client)
         {
             if (command.ChatMessage.Channel == "jefmajor")
             {
-                if (timestamp.AddMinutes(minutedelay) < DateTime.UtcNow || command.ChatMessage.IsModerator || command.ChatMessage.IsBroadcaster)
+                if (timestampTwitch.AddMinutes(minutedelay) < DateTime.UtcNow || command.ChatMessage.IsModerator || command.ChatMessage.IsBroadcaster)
                 {
-                    timestamp = DateTime.UtcNow;
+                    timestampTwitch = DateTime.UtcNow;
                     client.SendMessage(command.ChatMessage.Channel, migo());
                 }
             }
@@ -46,7 +50,11 @@ namespace JefBot.Commands
 
         public void Discord(MessageEventArgs arg)
         {
-            arg.Channel.SendMessage(migo());
+            if (timestampDiscord.AddMinutes(minutedelay) < DateTime.UtcNow || arg.User.ServerPermissions.Administrator)
+            {
+                timestampDiscord = DateTime.UtcNow;
+                arg.Channel.SendMessage(migo());
+            }
         }
 
 
