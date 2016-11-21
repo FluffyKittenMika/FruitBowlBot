@@ -59,11 +59,15 @@ namespace JefBot.Commands
         {
             if (args.Count > 0)
             {
-                //passive agressie anti double quote checker
+
+                string quote = string.Join(" ",args.ToArray());
+                Console.WriteLine(quote);
+
+                    //passive agressie anti double quote checker
                 var quoted = args.ToString()[0] == '"';
 
                 using (var w = File.AppendText(channel + "_quotes.txt"))
-                    w.Write($"\"{args.ToString().Replace('|', ' ')}\"| {DateTime.Now} submitted by {username}" + Environment.NewLine);
+                    w.Write($"\"{quote.Replace('|', ' ')}\"| {DateTime.Now} submitted by {username}" + Environment.NewLine);
 
                 if (!quoted)
                     switch (rnd.Next(3))
