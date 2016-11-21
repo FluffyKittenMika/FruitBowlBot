@@ -51,38 +51,47 @@ namespace JefBot.Commands
         {
             if (command.ArgumentsAsList.Count > 0)
             {
+                    client.SendMessage(command.ChatMessage.Channel, quote(command.ArgumentsAsList,command.ChatMessage.Channel,command.ChatMessage.Username));
+            }
+        }
 
+        public string quote(List<string> args, string channel,string username)
+        {
+            if (args.Count > 0)
+            {
                 //passive agressie anti double quote checker
-                var quoted = command.ArgumentsAsString[0] == '"';
+                var quoted = args.ToString()[0] == '"';
 
-                using (var w = File.AppendText(command.ChatMessage.Channel+"_quotes.txt"))
-                    w.Write($"\"{command.ArgumentsAsString.Replace('|',' ')}\"| {DateTime.Now} submitted by {command.ChatMessage.Username}" + Environment.NewLine);
+                using (var w = File.AppendText(channel + "_quotes.txt"))
+                    w.Write($"\"{args.ToString().Replace('|', ' ')}\"| {DateTime.Now} submitted by {username}" + Environment.NewLine);
 
                 if (!quoted)
                     switch (rnd.Next(3))
                     {
                         case 0:
-                            client.SendMessage(command.ChatMessage.Channel, "Quote submitted! 👌");
-                            break;
+                            return "Quote submitted! 👌";
                         case 1:
-                            client.SendMessage(command.ChatMessage.Channel, "👌 Thanks!");
-                            break;
+                            return "👌 Thanks!";
                         case 2:
-                            client.SendMessage(command.ChatMessage.Channel, "Thanks for the quote!");
-                            break;
+                            return "Thanks for the quote!";
                         default:
-                            client.SendMessage(command.ChatMessage.Channel, "Quote sent for review! 👌");
-                            break;
+                            return "Quote sent for review! 👌";
                     }
                 else
-                    client.SendMessage(command.ChatMessage.Channel, "👌 please don't add \" to the quotes yourself :)");
+                    return "👌 please don't add \" to the quotes yourself :)";
 
             }
+            return "no";
         }
 
         public void Discord(MessageEventArgs arg)
         {
-            arg.Channel.SendMessage("Not implemented yet");
+            var args = arg.Message.Text.Split(' ').ToList().Skip(1).ToList(); //this is probably so wrong
+
+            if (args.Count > 0)
+            {
+                arg.Channel.SendMessage(quote(args, Convert.ToString(arg.Server.Id), arg.User.Name));
+            }
         }
     }
 }
