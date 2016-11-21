@@ -39,46 +39,54 @@ namespace JefBot.Commands
                 if (timestamp.AddMinutes(minutedelay) < DateTime.UtcNow || command.ChatMessage.IsModerator || command.ChatMessage.IsBroadcaster)
                 {
                     timestamp = DateTime.UtcNow;
-                    if (File.Exists(quotefile))
-                    {
-                        using (StreamReader r = new StreamReader(quotefile))
-                        {
-                            string line;
-                            while ((line = r.ReadLine()) != null)
-                            {
-                                string[] split = line.Split('|'); //Split the quotes
-
-
-                                string date = "";
-                                string submitter = "";
-                                //string channel = "";
-                                try
-                                {
-                                    date = dateregex.Match(split[1]).Value;
-                                    submitter = submitterregex.Match(split[1]).Groups[1].Value;
-                                }
-                                catch (Exception e)
-                                {
-                                    Console.WriteLine(e.Message);
-                                }
-                                
-                                quotes.Add(new Quote(split[0],date,submitter)); //Add the quotes to the list, we don't care for the other part.
-                            }
-                        }
-                    }
-
-                    var derp = quotes.ElementAt(rng.Next(0, quotes.Count));
-                    client.SendMessage(command.ChatMessage.Channel, $"{derp.Quotestring} -submitted by: {derp.SubmittedBy}");
+                    client.SendMessage(command.ChatMessage.Channel, migo());
                 }
             }
         }
 
         public void Discord(MessageEventArgs arg)
         {
-            arg.Channel.SendMessage("Not implemented yet");
+            arg.Channel.SendMessage(migo());
+        }
+
+
+
+        public string migo()
+        {
+            if (File.Exists(quotefile))
+            {
+                using (StreamReader r = new StreamReader(quotefile))
+                {
+                    string line;
+                    while ((line = r.ReadLine()) != null)
+                    {
+                        string[] split = line.Split('|'); //Split the quotes
+                        string date = "";
+                        string submitter = "";
+
+                        try
+                        {
+                            date = dateregex.Match(split[1]).Value;
+                            submitter = submitterregex.Match(split[1]).Groups[1].Value;
+                        }
+                        catch (Exception e)
+                        {
+                            Console.WriteLine(e.Message);
+                        }
+
+                        quotes.Add(new Quote(split[0], date, submitter)); //Add the quotes to the list, we don't care for the other part.
+                    }
+                }
+            }
+
+            var derp = quotes.ElementAt(rng.Next(0, quotes.Count));
+            return $"{derp.Quotestring} -submitted by: {derp.SubmittedBy}";
+            //client.SendMessage(command.ChatMessage.Channel, $"{derp.Quotestring} -submitted by: {derp.SubmittedBy}");
         }
 
     }
+
+
 
 
 
