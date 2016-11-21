@@ -4,6 +4,8 @@ using System.IO;
 using TwitchLib;
 using Discord;
 using TwitchLib.Models.Client;
+using RogueSharp.DiceNotation;
+using System.Linq;
 
 namespace JefBot.Commands
 {
@@ -93,23 +95,20 @@ namespace JefBot.Commands
         }
         public void Discord(MessageEventArgs arg)
         {
-            arg.Channel.SendMessage("Not implemented yet");
+            try
+            {
+                var args = arg.Message.Text.Split(' ').ToList().Skip(1).ToList();
+                var result = Dice.Roll(string.Join("", args.ToArray()));
+                arg.Channel.SendMessage($"{arg.User.Name} got {result}");
+            }
+            catch (Exception e)
+            {
+                arg.Channel.SendMessage($"{e.Message}");
+            }
+
         }
 
     }
 
-
-    /// <summary>
-    /// Dice class, holds a D'n'D dice.. kinda
-    /// </summary>
-    internal class dice
-    {
-        public int sides { get; set; }
-        public int count { get; set; }
-        public dice(int sides, int count)
-        {
-            this.sides = sides;
-            this.count = count;
-        }
-    }
+    
 }

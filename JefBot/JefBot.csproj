@@ -121,6 +121,10 @@
       <HintPath>..\packages\RestSharp.105.2.3\lib\net45\RestSharp.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="RogueSharp, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\RogueSharp.2.0.0.0\lib\portable-net40+sl50+win+wpa81+wp80\RogueSharp.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="StarkSoftProxy, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\smartirc4net-2015.0.5.9\lib\net40\StarkSoftProxy.dll</HintPath>
       <Private>True</Private>
