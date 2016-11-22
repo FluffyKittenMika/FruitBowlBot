@@ -100,6 +100,12 @@ namespace JefBot.Commands
                 var args = arg.Message.Text.Split(' ').ToList().Skip(1).ToList();
                 var result = Dice.Roll(string.Join("", args.ToArray()));
                 arg.Channel.SendMessage($"{arg.User.Name} got {result}");
+
+                //var sent = arg.Channel.SendMessage($"{arg.User.Name} got {result}").Result; //comment away the line above if this one is active
+                //deletes the message and result after sending
+                //Message[] msg = { arg.Message, sent };
+                //System.Threading.Thread.Sleep(5000); //do not use, pauses the whole bot, as this is not async :D
+                //arg.Channel.DeleteMessages(msg); //bye bye msgs!
             }
             catch (Exception e)
             {
@@ -107,6 +113,10 @@ namespace JefBot.Commands
             }
 
         }
+
+
+
+
 
     }
 
