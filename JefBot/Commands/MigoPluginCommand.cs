@@ -6,6 +6,7 @@ using TwitchLib;
 using System.Text.RegularExpressions;
 using Discord;
 using TwitchLib.Models.Client;
+using MySql.Data;
 
 namespace JefBot.Commands
 {
@@ -35,32 +36,7 @@ namespace JefBot.Commands
         {
             timestampDiscord = DateTime.UtcNow;
             timestampTwitch = DateTime.UtcNow;
-        }
-        public void Execute(ChatCommand command, TwitchClient client)
-        {
-            if (command.ChatMessage.Channel == "jefmajor")
-            {
-                if (timestampTwitch.AddMinutes(minutedelay) < DateTime.UtcNow || command.ChatMessage.IsModerator || command.ChatMessage.IsBroadcaster)
-                {
-                    timestampTwitch = DateTime.UtcNow;
-                    client.SendMessage(command.ChatMessage.Channel, migo());
-                }
-            }
-        }
 
-        public void Discord(MessageEventArgs arg)
-        {
-            if (timestampDiscord.AddMinutes(minutedelay) < DateTime.UtcNow || arg.User.ServerPermissions.Administrator)
-            {
-                timestampDiscord = DateTime.UtcNow;
-                arg.Channel.SendMessage(migo());
-            }
-        }
-
-
-
-        public string migo()
-        {
             if (File.Exists(quotefile))
             {
                 using (StreamReader r = new StreamReader(quotefile))
@@ -86,6 +62,34 @@ namespace JefBot.Commands
                     }
                 }
             }
+        }
+
+        public void Execute(ChatCommand command, TwitchClient client)
+        {
+            if (command.ChatMessage.Channel == "jefmajor")
+            {
+                if (timestampTwitch.AddMinutes(minutedelay) < DateTime.UtcNow || command.ChatMessage.IsModerator || command.ChatMessage.IsBroadcaster)
+                {
+                    timestampTwitch = DateTime.UtcNow;
+                    client.SendMessage(command.ChatMessage.Channel, migo());
+                }
+            }
+        }
+
+        public void Discord(MessageEventArgs arg)
+        {
+            if (timestampDiscord.AddMinutes(minutedelay) < DateTime.UtcNow || arg.User.ServerPermissions.Administrator)
+            {
+                timestampDiscord = DateTime.UtcNow;
+                arg.Channel.SendMessage(migo());
+            }
+        }
+
+
+
+        public string migo()
+        {
+
 
             var derp = quotes.ElementAt(rng.Next(0, quotes.Count));
             return $"{derp.Quotestring} -submitted by: {derp.SubmittedBy}";
