@@ -20,7 +20,11 @@ namespace JefBot.Commands
 
         public void Execute(ChatCommand command, TwitchClient client)
         {
-            client.SendMessage(command.ChatMessage.Channel, Trollit(command.ChatMessage.Username, command.ArgumentsAsList));
+            if (!Bot.IsStreaming(command.ChatMessage.Channel))
+            {
+                client.SendMessage(command.ChatMessage.Channel, Trollit(command.ChatMessage.Username, command.ArgumentsAsList));
+            }
+          
         }
 
         public string Trollit(string username, List<string> args)

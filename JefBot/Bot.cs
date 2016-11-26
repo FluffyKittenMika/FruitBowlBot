@@ -5,12 +5,12 @@ using System.IO;
 using TwitchLib;
 using System.Threading;
 using Discord;
-using Discord.Commands;
 using TwitchLib.Models.Client;
 using TwitchLib.Events.Client;
 
 namespace JefBot
 {
+
 
     class Bot
     {
@@ -22,7 +22,15 @@ namespace JefBot
         //discord intergration.
         public DiscordClient discordClient = new DiscordClient();
 
-
+        public static bool IsStreaming(string channel)
+        {
+            var uptime = TwitchApi.GetUptime(channel);
+            if (uptime.Result.Ticks > 0)
+            {
+                return true;
+            }
+            return false;
+        }
         //constructor
         public Bot()
         {

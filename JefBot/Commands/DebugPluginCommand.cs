@@ -17,21 +17,23 @@ namespace JefBot.Commands
 
         public async void Execute(ChatCommand command, TwitchClient client)
         {
-            try
+            if (!Bot.IsStreaming(command.ChatMessage.Channel))
             {
-                //totally ok to add yourself to debug :^)
-                if (command.ChatMessage.Username == "mikaelssen" || command.ChatMessage.IsBroadcaster || command.ChatMessage.IsModerator)
+                try
                 {
-                    Stream stream = await TwitchApi.GetTwitchStream(command.ChatMessage.Channel);
-                    client.SendMessage(command.ChatMessage.Channel, $"AvFPS:{stream.AverageFps} Delay:{stream.Delay} Game:{stream.Game} Viewers:{stream.Viewers} videoHeight:{stream.VideoHeight}");
+                    //totally ok to add yourself to debug :^)
+                    if (command.ChatMessage.Username == "mikaelssen" || command.ChatMessage.IsBroadcaster || command.ChatMessage.IsModerator)
+                    {
+                        Stream stream = await TwitchApi.GetTwitchStream(command.ChatMessage.Channel);
+                        client.SendMessage(command.ChatMessage.Channel, $"AvFPS:{stream.AverageFps} Delay:{stream.Delay} Game:{stream.Game} Viewers:{stream.Viewers} videoHeight:{stream.VideoHeight}");
+                    }
                 }
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
-            }
-          
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                }
 
+            }
 
         }
 

@@ -25,6 +25,10 @@ namespace JefBot.Commands
         //just make it a whole lot better
         public void Execute(ChatCommand command, TwitchClient client)
         {
+            if ( !Bot.IsStreaming(command.ChatMessage.Channel))
+            {
+
+            
             int DiceCount = 1;
             int SideCount = 6;
             int result = 0;
@@ -34,62 +38,63 @@ namespace JefBot.Commands
             int minRoll = Int32.MaxValue;
             int maxRoll = 0;
 
-            if (command.ArgumentsAsList.Count > 0)
-            {
-                string[] args = command.ArgumentsAsString.Split(new Char[] { ' ' });
-                foreach (string arg in args)
+                if (command.ArgumentsAsList.Count > 0)
                 {
-                    if (arg.Equals("minmax", StringComparison.OrdinalIgnoreCase))
+                    string[] args = command.ArgumentsAsString.Split(new Char[] { ' ' });
+                    foreach (string arg in args)
                     {
-                        minmax = true;
-                        break;
-                    }
-                }
-
-                string dice = command.ArgumentsAsString.Trim(new Char[] { ' ' });
-
-                string[] split = dice.ToLower().Split(new Char[] { 'd' });
-                if (split.Length == 2)
-                {
-                    try
-                    {
-                        DiceCount = Convert.ToInt32(split[0]);
-                    }
-                    catch (Exception e) { Console.WriteLine(e.Message); }
-                    try
-                    {
-                        SideCount = Convert.ToInt32(split[1]);
-                    }
-                    catch (Exception e) { Console.WriteLine(e.Message); }
-
-                    DiceCount = Math.Max(Math.Min(DiceCount, maxcount), 1);
-                    SideCount = Math.Max(Math.Min(SideCount, maxcount), 1);
-
-                    for (int i = 0; i < DiceCount; i++)
-                    {
-                        try
+                        if (arg.Equals("minmax", StringComparison.OrdinalIgnoreCase))
                         {
-                            int rollValue = rng.Next(SideCount) + 1;
-
-                            minRoll = Math.Min(minRoll, rollValue);
-                            maxRoll = Math.Max(maxRoll, rollValue);
-
-                            result += rollValue;
-                        }
-                        catch (Exception e)
-                        {
-                            Console.WriteLine(e.Message);
+                            minmax = true;
                             break;
                         }
                     }
 
-                    string minmaxInfo = "";
-                    if (minmax)
-                    {
-                        minmaxInfo = $" (lowest: {minRoll}, highest: {maxRoll})";
-                    }
+                    string dice = command.ArgumentsAsString.Trim(new Char[] { ' ' });
 
-                    client.SendMessage(command.ChatMessage.Channel, $"{command.ChatMessage.Username} rolled a {DiceCount}D{SideCount} and got {result}{minmaxInfo}");
+                    string[] split = dice.ToLower().Split(new Char[] { 'd' });
+                    if (split.Length == 2)
+                    {
+                        try
+                        {
+                            DiceCount = Convert.ToInt32(split[0]);
+                        }
+                        catch (Exception e) { Console.WriteLine(e.Message); }
+                        try
+                        {
+                            SideCount = Convert.ToInt32(split[1]);
+                        }
+                        catch (Exception e) { Console.WriteLine(e.Message); }
+
+                        DiceCount = Math.Max(Math.Min(DiceCount, maxcount), 1);
+                        SideCount = Math.Max(Math.Min(SideCount, maxcount), 1);
+
+                        for (int i = 0; i < DiceCount; i++)
+                        {
+                            try
+                            {
+                                int rollValue = rng.Next(SideCount) + 1;
+
+                                minRoll = Math.Min(minRoll, rollValue);
+                                maxRoll = Math.Max(maxRoll, rollValue);
+
+                                result += rollValue;
+                            }
+                            catch (Exception e)
+                            {
+                                Console.WriteLine(e.Message);
+                                break;
+                            }
+                        }
+
+                        string minmaxInfo = "";
+                        if (minmax)
+                        {
+                            minmaxInfo = $" (lowest: {minRoll}, highest: {maxRoll})";
+                        }
+
+                        client.SendMessage(command.ChatMessage.Channel, $"{command.ChatMessage.Username} rolled a {DiceCount}D{SideCount} and got {result}{minmaxInfo}");
+                    }
                 }
             }
         }

@@ -21,7 +21,8 @@ namespace JefBot.Commands
 
         public void Execute(ChatCommand command, TwitchClient client)
         {
-            client.SendMessage(command.ChatMessage.Channel, air(command.ArgumentsAsList,chattype.Twitch));
+            if (!Bot.IsStreaming(command.ChatMessage.Channel))
+                client.SendMessage(command.ChatMessage.Channel, air(command.ArgumentsAsList,chattype.Twitch));
         }
 
 

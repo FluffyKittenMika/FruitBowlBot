@@ -7,6 +7,7 @@ using System.Text.RegularExpressions;
 using Discord;
 using TwitchLib.Models.Client;
 using MySql.Data;
+using MySql.Data.MySqlClient;
 
 namespace JefBot.Commands
 {
@@ -17,8 +18,6 @@ namespace JefBot.Commands
         public string Help => "Gets a random quote from the stream";
         public IEnumerable<string> Aliases => new[] { "m" };
         public bool Loaded { get; set; } = true;
-
-
 
         List<Quote> quotes = new List<Quote>();
         string quotefile = @"./RemoteQuotes.dat";
@@ -32,6 +31,7 @@ namespace JefBot.Commands
         static string SubmitterPattern = @"(?:submitted by )([a-zA-Z0-9_-]+)";
         Regex dateregex = new Regex(DatePattern, RegexOptions.IgnoreCase);
         Regex submitterregex = new Regex(SubmitterPattern, RegexOptions.IgnoreCase);
+
         public MigoPluginCommand()
         {
             timestampDiscord = DateTime.UtcNow;
@@ -66,7 +66,8 @@ namespace JefBot.Commands
 
         public void Execute(ChatCommand command, TwitchClient client)
         {
-            if (command.ChatMessage.Channel == "jefmajor")
+
+            if (command.ChatMessage.Channel == "jefmajor" && !Bot.IsStreaming(command.ChatMessage.Channel))
             {
                 if (timestampTwitch.AddMinutes(minutedelay) < DateTime.UtcNow || command.ChatMessage.IsModerator || command.ChatMessage.IsBroadcaster)
                 {
@@ -89,8 +90,6 @@ namespace JefBot.Commands
 
         public string migo()
         {
-
-
             var derp = quotes.ElementAt(rng.Next(0, quotes.Count));
             return $"{derp.Quotestring} -submitted by: {derp.SubmittedBy}";
             //client.SendMessage(command.ChatMessage.Channel, $"{derp.Quotestring} -submitted by: {derp.SubmittedBy}");
