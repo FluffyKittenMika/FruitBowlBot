@@ -104,13 +104,54 @@ namespace JefBot.Commands
 
         public void Discord(MessageEventArgs arg)
         {
-            if (timestampDiscord.AddMinutes(minutedelay) < DateTime.UtcNow || arg.User.ServerPermissions.Administrator)
+
+            var args = arg.Message.Text.Split(' ').ToList().Skip(1).ToList();
+            if (timestampDiscord.AddMinutes(minutedelay) < DateTime.UtcNow && args.Count < 0)
             {
                 timestampDiscord = DateTime.UtcNow;
                 Quote qu = migo();
+                if (qu.SubmittedBy == null || qu.SubmittedBy == "")
+                {
+                    qu.SubmittedBy = "Unknown";
+                }
                 string q = $"```{qu.Quotestring}{Environment.NewLine}#{qu.id} by {qu.SubmittedBy}```";
                 arg.Channel.SendMessage(q);
             }
+            if (timestampDiscord.AddMinutes(minutedelay) < DateTime.UtcNow && args.Count < 0)
+            {
+                Quote qu = searchMigo(args.ToString());
+                if (qu.SubmittedBy == null || qu.SubmittedBy == "")
+                {
+                    qu.SubmittedBy = "Unknown";
+                }
+                string q = $"```{qu.Quotestring}{Environment.NewLine}#{qu.id} by {qu.SubmittedBy}```";
+                arg.Channel.SendMessage(q);
+            }
+            
+        }
+
+        public Quote searchMigo(string search)
+        {
+            using (MySqlConnection con = new MySqlConnection(Bot.SQLConnectionString))
+            {
+                con.Open();
+                MySqlCommand _cmd = con.CreateCommand();
+                _cmd.CommandText = @"SELECT 1 FROM Quotes WHERE MATCH(Quote) AGAINST(@input IN NATURAL LANGUAGE MODE)";
+                _cmd.Parameters.AddWithValue("@input", search);
+                using (MySqlDataReader reader = _cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        var quote = reader.GetString(reader.GetOrdinal("QUOTE"));
+                        int id = reader.GetInt32(reader.GetOrdinal("ID"));
+                        var submitter = reader.GetString(reader.GetOrdinal("SUBMITTER"));
+                        DateTime timestamp = reader.GetDateTime(reader.GetOrdinal("TIMESTAMP"));
+                        var channel = reader.GetString(reader.GetOrdinal("CHANNEL"));
+                        return new Quote(quote, timestamp, submitter, channel, id);
+                    }
+                }
+            }
+            return new Quote("no quote found", DateTime.Now,"lord jef","jefmajor",9001);
         }
         
 

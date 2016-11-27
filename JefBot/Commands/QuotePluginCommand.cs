@@ -81,7 +81,7 @@ namespace JefBot.Commands
                     con.Open();
                     MySqlCommand _cmd = con.CreateCommand();
                     _cmd.CommandText = "INSERT INTO `Quotes` (`ID`, `QUOTE`, `SUBMITTER`, `CHANNEL`, `TIMESTAMP`) VALUES (NULL, @QUOTE, @SUBMITTER, @CHANNEL, CURRENT_TIMESTAMP)";
-                    _cmd.Parameters.AddWithValue("@QUOTE", quote);
+                    _cmd.Parameters.AddWithValue("@QUOTE", '"'+quote+'"');
                     _cmd.Parameters.AddWithValue("@SUBMITTER", username);
                     _cmd.Parameters.AddWithValue("@CHANNEL", channel);
                     _cmd.ExecuteNonQuery();
