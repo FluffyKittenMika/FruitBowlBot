@@ -41,7 +41,7 @@ namespace JefBot.Commands
         //echo command
         public void Discord(MessageEventArgs arg)
         {
-            arg.Channel.SendMessage($"{arg.Message.RawText}");
+            arg.Channel.SendMessage($"{arg.Message.Text}");
         }
 
     }

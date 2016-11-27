@@ -18,7 +18,7 @@ namespace JefBot
         List<TwitchClient> Clients = new List<TwitchClient>();
         public static Dictionary<string, string> settings = new Dictionary<string, string>();
         public static readonly List<IPluginCommand> _plugins = new List<IPluginCommand>();
- 
+        public static string SQLConnectionString;
         //discord intergration.
         public DiscordClient discordClient = new DiscordClient();
 
@@ -67,6 +67,9 @@ namespace JefBot
             }
             #endregion
 
+            #region dbstring
+            SQLConnectionString = "SERVER=" + settings["dbserver"] + ";" + "DATABASE=" + settings["dbbase"] + ";" + "UID=" + settings["userid"] + ";" + "PASSWORD=" + settings["userpassword"] + ";";
+            #endregion
             #region discord init
             if (settings["discordtoken"] != "tokengoeshere")
             {

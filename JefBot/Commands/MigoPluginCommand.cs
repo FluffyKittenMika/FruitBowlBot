@@ -20,7 +20,8 @@ namespace JefBot.Commands
         public bool Loaded { get; set; } = true;
 
         List<Quote> quotes = new List<Quote>();
-        string quotefile = @"./RemoteQuotes.dat";
+        List<Quote> pickedquotes = new List<Quote>();
+       // string quotefile = @"./RemoteQuotes.dat";
         Random rng = new Random();
 
         DateTime timestampTwitch;
@@ -37,6 +38,26 @@ namespace JefBot.Commands
             timestampDiscord = DateTime.UtcNow;
             timestampTwitch = DateTime.UtcNow;
 
+            using(MySqlConnection con = new MySqlConnection(Bot.SQLConnectionString))
+            {
+                con.Open();
+                MySqlCommand _cmd = con.CreateCommand();
+                _cmd.CommandText = @"SELECT * FROM `Quotes`";
+                using (MySqlDataReader reader = _cmd.ExecuteReader())
+                {
+                    while (reader.Read()){
+                        var quote = reader.GetString(reader.GetOrdinal("QUOTE"));
+                        int id = reader.GetInt32(reader.GetOrdinal("ID"));
+                        var submitter = reader.GetString(reader.GetOrdinal("SUBMITTER"));
+                        DateTime timestamp = reader.GetDateTime(reader.GetOrdinal("TIMESTAMP"));
+                        var channel = reader.GetString(reader.GetOrdinal("CHANNEL"));
+                        quotes.Add(new Quote(quote,timestamp,submitter,channel,id));
+                    }
+                }
+            }
+
+            #region old code
+            /*
             if (File.Exists(quotefile))
             {
                 using (StreamReader r = new StreamReader(quotefile))
@@ -62,12 +83,14 @@ namespace JefBot.Commands
                     }
                 }
             }
+            */
+            #endregion
         }
 
         public void Execute(ChatCommand command, TwitchClient client)
         {
 
-            if (command.ChatMessage.Channel == "jefmajor" && !Bot.IsStreaming(command.ChatMessage.Channel))
+            if (command.ChatMessage.Channel == "jefmajor" && !Bot.IsStreaming(command.ChatMessage.Channel) || command.ChatMessage.Subscriber)
             {
                 if (timestampTwitch.AddMinutes(minutedelay) < DateTime.UtcNow || command.ChatMessage.IsModerator || command.ChatMessage.IsBroadcaster)
                 {
@@ -91,29 +114,33 @@ namespace JefBot.Commands
         public string migo()
         {
             var derp = quotes.ElementAt(rng.Next(0, quotes.Count));
-            return $"{derp.Quotestring} -submitted by: {derp.SubmittedBy}";
+            pickedquotes.Add(derp);
+            quotes.Remove(derp);
+            if (quotes.Count() < 5)
+            {
+                quotes.AddRange(pickedquotes);
+                pickedquotes.Clear();
+            }
+            return $"{derp.Quotestring} -submitted by: {derp.SubmittedBy} ID: {derp.id}";
             //client.SendMessage(command.ChatMessage.Channel, $"{derp.Quotestring} -submitted by: {derp.SubmittedBy}");
         }
 
     }
 
-
-
-
-
-
     class Quote
     {
         public string Quotestring { get; set; }
-        public string Datesubmitted { get; set; }
+        public DateTime Datesubmitted { get; set; }
         public string SubmittedBy { get; set; }
         public string Channel { get; set; }
-        public Quote(string quote, string date = "", string submitter ="", string channel="")
+        public int id { get; set; }
+        public Quote(string quote, DateTime date, string submitter ="", string channel="",int id = 0)
         {
             Quotestring = quote;
             Datesubmitted = date;
             SubmittedBy = submitter;
             Channel = channel;
+            this.id = id;
         }
     }
 }

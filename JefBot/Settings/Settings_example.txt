@@ -8,5 +8,10 @@ clientid=yourapplicationclientid
 #Discord Intergration
 #Bot token
 discordtoken=tokengoeshere
+#Living in the database creds
+dbserver=127.0.0.1
+dbbase=database
+userid=root
+userpassword=password
 # Real solid debugging on/off
 debug=false

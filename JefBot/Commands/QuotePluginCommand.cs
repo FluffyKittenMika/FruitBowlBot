@@ -6,6 +6,7 @@ using System.Net;
 using Discord;
 using System.Linq;
 using TwitchLib.Models.Client;
+using MySql.Data.MySqlClient;
 
 namespace JefBot.Commands
 {
@@ -55,17 +56,38 @@ namespace JefBot.Commands
             }
         }
 
-        public string quote(List<string> args, string channel,string username)
+        public void Discord(MessageEventArgs arg)
+        {
+            var args = arg.Message.Text.Split(' ').ToList().Skip(1).ToList(); //this is probably so wrong
+
+            if (args.Count > 0)
+            {
+                arg.Channel.SendMessage(quote(args, "jefmajor", arg.User.Name));
+            }
+        }
+
+        public string quote(List<string> args, string channel, string username)
         {
             if (args.Count > 0)
             {
 
-                string quote = string.Join(" ",args.ToArray());
-                Console.WriteLine(quote);
+                string quote = string.Join(" ", args.ToArray());
 
-                    //passive agressie anti double quote checker
+                //passive agressie anti double quote checker
                 var quoted = args.ToString()[0] == '"';
 
+                using (MySqlConnection con = new MySqlConnection(Bot.SQLConnectionString))
+                {
+                    con.Open();
+                    MySqlCommand _cmd = con.CreateCommand();
+                    _cmd.CommandText = "INSERT INTO `Quotes` (`ID`, `QUOTE`, `SUBMITTER`, `CHANNEL`, `TIMESTAMP`) VALUES (NULL, @QUOTE, @SUBMITTER, @CHANNEL, CURRENT_TIMESTAMP)";
+                    _cmd.Parameters.AddWithValue("@QUOTE", quote);
+                    _cmd.Parameters.AddWithValue("@SUBMITTER", username);
+                    _cmd.Parameters.AddWithValue("@CHANNEL", channel);
+                    _cmd.ExecuteNonQuery();
+                }
+
+                //keeping this for safekeeping quotes
                 using (var w = File.AppendText(channel + "_quotes.txt"))
                     w.Write($"\"{quote.Replace('|', ' ')}\"| {DateTime.Now} submitted by {username}" + Environment.NewLine);
 
@@ -86,16 +108,6 @@ namespace JefBot.Commands
 
             }
             return "no";
-        }
-
-        public void Discord(MessageEventArgs arg)
-        {
-            var args = arg.Message.Text.Split(' ').ToList().Skip(1).ToList(); //this is probably so wrong
-
-            if (args.Count > 0)
-            {
-                arg.Channel.SendMessage(quote(args, Convert.ToString(arg.Server.Id), arg.User.Name));
-            }
         }
     }
 }
