@@ -117,7 +117,7 @@ namespace JefBot.Commands
                 string q = $"```{qu.Quotestring}{Environment.NewLine}#{qu.id} by {qu.SubmittedBy}```";
                 arg.Channel.SendMessage(q);
             }
-            if (timestampDiscord.AddMinutes(minutedelay) < DateTime.UtcNow && args.Count < 0)
+            if (timestampDiscord.AddMinutes(minutedelay) < DateTime.UtcNow && args.Count > 0)
             {
                 Quote qu = searchMigo(args.ToString());
                 if (qu.SubmittedBy == null || qu.SubmittedBy == "")
