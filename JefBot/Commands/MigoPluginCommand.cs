@@ -89,7 +89,6 @@ namespace JefBot.Commands
 
         public void Execute(ChatCommand command, TwitchClient client)
         {
-
             if (command.ChatMessage.Channel == "jefmajor" && !Bot.IsStreaming(command.ChatMessage.Channel) || command.ChatMessage.Subscriber)
             {
                 if (timestampTwitch.AddMinutes(minutedelay) < DateTime.UtcNow || command.ChatMessage.IsModerator || command.ChatMessage.IsBroadcaster)
@@ -106,6 +105,8 @@ namespace JefBot.Commands
         {
 
             var args = arg.Message.Text.Split(' ').ToList().Skip(1).ToList();
+            string argstring = string.Join(" ", args.ToArray());
+
             if (timestampDiscord.AddMinutes(minutedelay) < DateTime.UtcNow && args.Count < 0)
             {
                 timestampDiscord = DateTime.UtcNow;
@@ -119,7 +120,7 @@ namespace JefBot.Commands
             }
             if (timestampDiscord.AddMinutes(minutedelay) < DateTime.UtcNow && args.Count > 0)
             {
-                Quote qu = searchMigo(args.ToString());
+                Quote qu = searchMigo(argstring);
                 if (qu.SubmittedBy == null || qu.SubmittedBy == "")
                 {
                     qu.SubmittedBy = "Unknown";
@@ -136,7 +137,7 @@ namespace JefBot.Commands
             {
                 con.Open();
                 MySqlCommand _cmd = con.CreateCommand();
-                _cmd.CommandText = @"SELECT * FROM Quotes WHERE MATCH(Quote) AGAINST('@input' IN NATURAL LANGUAGE MODE)";
+                _cmd.CommandText = @"SELECT * FROM Quotes WHERE MATCH(Quote) AGAINST(@input IN BOOLEAN MODE)";
                 _cmd.Parameters.AddWithValue("@input", search);
                 using (MySqlDataReader reader = _cmd.ExecuteReader())
                 {
@@ -151,7 +152,9 @@ namespace JefBot.Commands
                     }
                 }
             }
-            return new Quote("no quote found", DateTime.Now,"lord jef","jefmajor",9001);
+            Quote nonefound = migo();
+            nonefound.Quotestring = "Found no results, have this one instead: " + nonefound.Quotestring;
+            return nonefound;
         }
         
 
