@@ -136,7 +136,7 @@ namespace JefBot.Commands
             {
                 con.Open();
                 MySqlCommand _cmd = con.CreateCommand();
-                _cmd.CommandText = @"SELECT 1 FROM Quotes WHERE MATCH(Quote) AGAINST(@input IN NATURAL LANGUAGE MODE)";
+                _cmd.CommandText = @"SELECT * FROM Quotes WHERE MATCH(Quote) AGAINST('@input' IN NATURAL LANGUAGE MODE)";
                 _cmd.Parameters.AddWithValue("@input", search);
                 using (MySqlDataReader reader = _cmd.ExecuteReader())
                 {
