@@ -95,7 +95,9 @@ namespace JefBot.Commands
                 if (timestampTwitch.AddMinutes(minutedelay) < DateTime.UtcNow || command.ChatMessage.IsModerator || command.ChatMessage.IsBroadcaster)
                 {
                     timestampTwitch = DateTime.UtcNow;
-                    client.SendMessage(command.ChatMessage.Channel, migo());
+                    Quote qu = migo();
+                    string q = $"{qu.Quotestring} QuoteID:{qu.id}";
+                    client.SendMessage(command.ChatMessage.Channel, q);
                 }
             }
         }
@@ -105,13 +107,14 @@ namespace JefBot.Commands
             if (timestampDiscord.AddMinutes(minutedelay) < DateTime.UtcNow || arg.User.ServerPermissions.Administrator)
             {
                 timestampDiscord = DateTime.UtcNow;
-                arg.Channel.SendMessage(migo());
+                Quote qu = migo();
+                string q = $"```{qu.Quotestring}{Environment.NewLine}#{qu.id} by {qu.SubmittedBy}```";
+                arg.Channel.SendMessage(q);
             }
         }
+        
 
-
-
-        public string migo()
+        public Quote migo()
         {
             var derp = quotes.ElementAt(rng.Next(0, quotes.Count));
             pickedquotes.Add(derp);
@@ -121,9 +124,9 @@ namespace JefBot.Commands
                 quotes.AddRange(pickedquotes);
                 pickedquotes.Clear();
             }
-            return $"{derp.Quotestring} -submitted by: {derp.SubmittedBy} ID: {derp.id}";
-            //client.SendMessage(command.ChatMessage.Channel, $"{derp.Quotestring} -submitted by: {derp.SubmittedBy}");
+            return derp;
         }
+
 
     }
 
