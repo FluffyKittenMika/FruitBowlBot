@@ -107,7 +107,7 @@ namespace JefBot.Commands
             var args = arg.Message.Text.Split(' ').ToList().Skip(1).ToList();
             string argstring = string.Join(" ", args.ToArray());
 
-            if (arg.User.Id =! 230013297494196224 && args.Count == 0)
+            if (arg.User.Id != 230013297494196224 && args.Count == 0)
             {
                 timestampDiscord = DateTime.UtcNow;
                 Quote qu = migo();
@@ -118,7 +118,7 @@ namespace JefBot.Commands
                 string q = $"```{qu.Quotestring}{Environment.NewLine}#{qu.id} by {qu.SubmittedBy}```";
                 arg.Channel.SendMessage(q);
             }
-            if (arg.User.Id =! 230013297494196224 && args.Count > 0)
+            if (arg.User.Id != 230013297494196224 && args.Count > 0)
             {
                 Quote qu = searchMigo(argstring);
                 if (qu.SubmittedBy == null || qu.SubmittedBy == "")
