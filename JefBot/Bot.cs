@@ -7,6 +7,7 @@ using System.Threading;
 using Discord;
 using TwitchLib.Models.Client;
 using TwitchLib.Events.Client;
+using MySql.Data.MySqlClient;
 
 namespace JefBot
 {
@@ -172,6 +173,7 @@ namespace JefBot
 
             var enabledPlugins = _plugins.Where(plug => plug.Loaded).ToArray();
             var command = "";
+            storemessage(arg.Message.Text);
             if (arg.Message.Text[0] == '!') //TODO make option for this prefix :D
             {
                 try
@@ -201,11 +203,28 @@ namespace JefBot
             }
             return 1;
         }
+
+        /// <summary>
+        /// for collecting bot data
+        /// </summary>
+        /// <param name="msg"></param>
+        private void storemessage(string msg)
+        {
+            using (MySqlConnection con = new MySqlConnection(Bot.SQLConnectionString))
+            {
+                con.Open();
+                MySqlCommand _cmd = con.CreateCommand();
+                _cmd.CommandText = "INSERT INTO `Chat` (`CHAT`, `ID`) VALUES (@chat, NULL)";
+                _cmd.Parameters.AddWithValue("@chat", msg);
+                _cmd.ExecuteNonQuery();
+            }
+        }
         
 
         //Don't remove this, it's critical to see the chat in the bot, it quickly tells me if it's absolutely broken...
         private void Chatmsg(object sender, OnMessageReceivedArgs e)
         {
+            storemessage(e.ChatMessage.Message);
             Console.WriteLine($"{e.ChatMessage.Channel}-{e.ChatMessage.Username}: {e.ChatMessage.Message}");
         }
 

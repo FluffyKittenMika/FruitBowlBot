@@ -155,7 +155,7 @@ namespace JefBot.Commands
                     reader.Close();
                     if (quotes.Count > 0)
                     {
-                        return quotes[rng.Next(quotes.Count - 1)];
+                        return quotes[rng.Next(quotes.Count)];
                     }
                     else
                     {
