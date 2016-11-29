@@ -29,7 +29,10 @@ namespace JefBot
             {
                 return true;
             }
-            return false;
+            else
+            {
+                return false;
+            }
         }
         //constructor
         public Bot()

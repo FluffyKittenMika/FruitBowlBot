@@ -26,6 +26,7 @@ namespace JefBot.Commands
 
         DateTime timestampTwitch;
         DateTime timestampDiscord;
+        
 
         int minutedelay = 1;
         static string DatePattern = @"((\d{2}.\d{2}.\d{4}) (\d{2}.\d{2}.\d{2}))";
@@ -107,7 +108,7 @@ namespace JefBot.Commands
             var args = arg.Message.Text.Split(' ').ToList().Skip(1).ToList();
             string argstring = string.Join(" ", args.ToArray());
 
-            if (arg.User.Id != 230013297494196224 && args.Count == 0)
+            if (args.Count == 0)
             {
                 timestampDiscord = DateTime.UtcNow;
                 Quote qu = migo();
@@ -118,7 +119,7 @@ namespace JefBot.Commands
                 string q = $"```{qu.Quotestring}{Environment.NewLine}#{qu.id} by {qu.SubmittedBy}```";
                 arg.Channel.SendMessage(q);
             }
-            if (arg.User.Id != 230013297494196224 && args.Count > 0)
+            if (args.Count > 0)
             {
                 Quote qu = searchMigo(argstring);
                 if (qu.SubmittedBy == null || qu.SubmittedBy == "")
@@ -139,6 +140,7 @@ namespace JefBot.Commands
                 MySqlCommand _cmd = con.CreateCommand();
                 _cmd.CommandText = @"SELECT * FROM Quotes WHERE MATCH(Quote) AGAINST(@input IN BOOLEAN MODE)";
                 _cmd.Parameters.AddWithValue("@input", search);
+                List<Quote> quotes = new List<Quote>();
                 using (MySqlDataReader reader = _cmd.ExecuteReader())
                 {
                     while (reader.Read())
@@ -148,13 +150,22 @@ namespace JefBot.Commands
                         var submitter = reader.GetString(reader.GetOrdinal("SUBMITTER"));
                         DateTime timestamp = reader.GetDateTime(reader.GetOrdinal("TIMESTAMP"));
                         var channel = reader.GetString(reader.GetOrdinal("CHANNEL"));
-                        return new Quote(quote, timestamp, submitter, channel, id);
+                        quotes.Add(new Quote(quote, timestamp, submitter, channel, id));
+                    }
+                    reader.Close();
+                    if (quotes.Count > 0)
+                    {
+                        return quotes[rng.Next(quotes.Count - 1)];
+                    }
+                    else
+                    {
+                        Quote nonefound = migo();
+                        nonefound.Quotestring = "Found no results, have this one instead: " + nonefound.Quotestring;
+                        return nonefound;
                     }
                 }
             }
-            Quote nonefound = migo();
-            nonefound.Quotestring = "Found no results, have this one instead: " + nonefound.Quotestring;
-            return nonefound;
+          
         }
         
 
