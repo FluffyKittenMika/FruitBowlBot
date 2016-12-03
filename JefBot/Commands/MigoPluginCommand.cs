@@ -90,14 +90,27 @@ namespace JefBot.Commands
 
         public void Execute(ChatCommand command, TwitchClient client)
         {
-            if (command.ChatMessage.Channel == "jefmajor" && !Bot.IsStreaming(command.ChatMessage.Channel) || command.ChatMessage.Subscriber)
+            if (timestampTwitch.AddMinutes(minutedelay) < DateTime.UtcNow || command.ChatMessage.IsModerator || command.ChatMessage.IsBroadcaster)
             {
-                if (timestampTwitch.AddMinutes(minutedelay) < DateTime.UtcNow || command.ChatMessage.IsModerator || command.ChatMessage.IsBroadcaster)
+                if (!command.ChatMessage.IsModerator && !command.ChatMessage.IsBroadcaster)
                 {
                     timestampTwitch = DateTime.UtcNow;
+                }
+                if (command.ArgumentsAsList.Count == 0)
+                {
                     Quote qu = migo();
                     string q = $"{qu.Quotestring} QuoteID:{qu.id}";
                     client.SendMessage(command.ChatMessage.Channel, q);
+                }
+                else
+                {
+                    Quote qu = searchMigo(command.ArgumentsAsString);
+                    if (qu.SubmittedBy == null || qu.SubmittedBy == "")
+                    {
+                        qu.SubmittedBy = "Unknown";
+                    }
+                    string q = $"{qu.Quotestring} QuoteID:{qu.id}";
+                    client.SendMessage(q);
                 }
             }
         }
@@ -118,8 +131,7 @@ namespace JefBot.Commands
                 }
                 string q = $"```{qu.Quotestring}{Environment.NewLine}#{qu.id} by {qu.SubmittedBy}```";
                 arg.Channel.SendMessage(q);
-            }
-            if (args.Count > 0)
+            }else
             {
                 Quote qu = searchMigo(argstring);
                 if (qu.SubmittedBy == null || qu.SubmittedBy == "")
