@@ -99,7 +99,11 @@ namespace JefBot.Commands
                 if (command.ArgumentsAsList.Count == 0)
                 {
                     Quote qu = migo();
-                    string q = $"{qu.Quotestring} QuoteID:{qu.id}";
+                    if (qu.SubmittedBy == null || qu.SubmittedBy == "")
+                    {
+                        qu.SubmittedBy = "Unknown";
+                    }
+                    string q = $"{qu.Quotestring} submitted by {qu.SubmittedBy} #{qu.id}";
                     client.SendMessage(command.ChatMessage.Channel, q);
                 }
                 else
