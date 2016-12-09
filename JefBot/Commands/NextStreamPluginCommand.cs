@@ -47,13 +47,19 @@ namespace JefBot.Commands
                 }
                 times.Sort((a, b) => a.CompareTo(b)); //ascending sort
                 TimeSpan span = times[0].Subtract(DateTime.Now);
-                return $"Next stream in {span.Hours}:{(int)span.Minutes}:{(int)span.Seconds}:{(int)span.Milliseconds}~~ on the {times[0].Day}th";
+
+                return $"Next stream in {span.Hours}:{(int)span.Minutes}:{(int)span.Seconds}:{(int)span.Milliseconds}~~ on the {times[0].Day}{getSuffix(times[0].Day)}";
                 
             }
             else
             {
                 return $"He's on right now silly";
             }
+        }
+
+        private string getSuffix(int day)
+        {
+            return (day == 11 || day == 12 || day == 13) ? "th" : (day == 1) ? "st" : (day == 2) ? "nd" : (day == 3) ? "rd" : "th";
         }
 
         public void Discord(MessageEventArgs arg)

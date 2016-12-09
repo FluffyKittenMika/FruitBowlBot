@@ -15,7 +15,7 @@ namespace JefBot.Commands
     {
         public string PluginName => "Migo";
         public string Command => "migo";
-        public string Help => "Gets a random quote from the stream";
+        public string Help => "!m {search string}";
         public IEnumerable<string> Aliases => new[] { "m" };
         public bool Loaded { get; set; } = true;
 
@@ -27,18 +27,19 @@ namespace JefBot.Commands
         DateTime timestampTwitch;
         DateTime timestampDiscord;
         
-
         int minutedelay = 1;
+
+        /*
         static string DatePattern = @"((\d{2}.\d{2}.\d{4}) (\d{2}.\d{2}.\d{2}))";
         static string SubmitterPattern = @"(?:submitted by )([a-zA-Z0-9_-]+)";
         Regex dateregex = new Regex(DatePattern, RegexOptions.IgnoreCase);
         Regex submitterregex = new Regex(SubmitterPattern, RegexOptions.IgnoreCase);
+        */
 
         public MigoPluginCommand()
         {
             timestampDiscord = DateTime.UtcNow;
             timestampTwitch = DateTime.UtcNow;
-
             using(MySqlConnection con = new MySqlConnection(Bot.SQLConnectionString))
             {
                 con.Open();
@@ -56,36 +57,6 @@ namespace JefBot.Commands
                     }
                 }
             }
-
-            #region old code
-            /*
-            if (File.Exists(quotefile))
-            {
-                using (StreamReader r = new StreamReader(quotefile))
-                {
-                    string line;
-                    while ((line = r.ReadLine()) != null)
-                    {
-                        string[] split = line.Split('|'); //Split the quotes
-                        string date = "";
-                        string submitter = "";
-
-                        try
-                        {
-                            date = dateregex.Match(split[1]).Value;
-                            submitter = submitterregex.Match(split[1]).Groups[1].Value;
-                        }
-                        catch (Exception e)
-                        {
-                            Console.WriteLine(e.Message);
-                        }
-
-                        quotes.Add(new Quote(split[0], date, submitter)); //Add the quotes to the list, we don't care for the other part.
-                    }
-                }
-            }
-            */
-            #endregion
         }
 
         public void Execute(ChatCommand command, TwitchClient client)
@@ -183,8 +154,6 @@ namespace JefBot.Commands
             }
           
         }
-        
-
         public Quote migo()
         {
             var derp = quotes.ElementAt(rng.Next(0, quotes.Count));
@@ -197,8 +166,6 @@ namespace JefBot.Commands
             }
             return derp;
         }
-
-
     }
 
     class Quote

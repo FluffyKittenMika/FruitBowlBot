@@ -78,7 +78,6 @@ namespace JefBot.Commands
                         client.SendMessage(command.ChatMessage.Channel, $"I don't have a modlist for {modKey}");
                     }
                 }
-
             }
             else
             {
@@ -91,10 +90,7 @@ namespace JefBot.Commands
                     client.SendMessage(command.ChatMessage.Channel, $"I don't have a modlist for {channel.Game}");
                 }
             }
-
         }
-
-    
 
         private void Save()
         {
@@ -108,8 +104,6 @@ namespace JefBot.Commands
                 }
             }
         }
-
-
 
         private void Load()
         {
