@@ -33,7 +33,7 @@ namespace JefBot.Commands
             {
                 if (args.Count > 0)
                 {
-                    string dice = args.ToString().Trim(new Char[] { ' ' }).ToLower();
+                    string dice = string.Join(" ",args.ToArray()).Trim(new Char[] { ' ' }).ToLower();
 
                     
                     string[] split = dice.ToLower().Split(new Char[] { 'd' });

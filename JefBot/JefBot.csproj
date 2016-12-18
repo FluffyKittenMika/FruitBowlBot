@@ -167,6 +167,7 @@
     <Compile Include="Commands\NextStreamPluginCommand.cs" />
     <Compile Include="Commands\QuotePluginCommand.cs" />
     <Compile Include="Commands\RollPluginCommand.cs" />
+    <Compile Include="Commands\MusicPluginCommand.cs" />
     <Compile Include="Commands\TrollPluginCommand.cs" />
     <Compile Include="Commands\UptimePluginCommand.cs" />
     <Compile Include="Plugin.cs" />

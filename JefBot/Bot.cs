@@ -5,6 +5,7 @@ using System.IO;
 using TwitchLib;
 using System.Threading;
 using Discord;
+using Discord.Audio;
 using TwitchLib.Models.Client;
 using TwitchLib.Events.Client;
 using MySql.Data.MySqlClient;
@@ -79,13 +80,9 @@ namespace JefBot
             {
                 await discordClient.Connect(settings["discordtoken"],TokenType.Bot);
             }
-          //  discordClient.UsingCommands(x => {
-           //     x.HelpMode = HelpMode.Public;
-            //    x.CustomPrefixHandler += DiscordEvent;
-             //
-              //});
+
             
-            //FUCK IT WE'RE DOING IT THE OLD WAY WHEEE
+            //yee, handle that shit the old fasioned rough way bby <3
             discordClient.MessageReceived += (s, e)=>{
                 Console.WriteLine($"{e.Server}:{e.Channel}:{e.User}:{e.Message.Text}");
                 if (!e.User.IsBot)
@@ -93,7 +90,16 @@ namespace JefBot
                     DiscordEvent(e);
                 }
             };
+
+            discordClient.UsingAudio(x => 
+            {               
+                x.Mode = AudioMode.Outgoing; // Tells the AudioService that we will only be sending audio
+            });
+
             
+
+
+
             #endregion
 
             #region ChatClient init
@@ -121,43 +127,52 @@ namespace JefBot
 
             #region plugins
             Console.WriteLine("Loading Plugins");
-
-            // Magic to get plugins
-            var pluginCommand = typeof(IPluginCommand);
-            var pluginCommands = AppDomain.CurrentDomain.GetAssemblies()
-                .SelectMany(s => s.GetTypes())
-                .Where(p => pluginCommand.IsAssignableFrom(p) && p.BaseType != null);
-
-            foreach (var type in pluginCommands)
+            try
             {
-                _plugins.Add((IPluginCommand)Activator.CreateInstance(type));
-            }
+                // Magic to get plugins
+                var pluginCommand = typeof(IPluginCommand);
+                var pluginCommands = AppDomain.CurrentDomain.GetAssemblies()
+                    .SelectMany(s => s.GetTypes())
+                    .Where(p => pluginCommand.IsAssignableFrom(p) && p.BaseType != null);
 
-            var commands = new List<string>();
-            foreach (var plug in _plugins)
-            {
-                if (!commands.Contains(plug.Command))
+                foreach (var type in pluginCommands)
                 {
-                    commands.Add(plug.Command);
-                    if (plug.Loaded)
+                    _plugins.Add((IPluginCommand)Activator.CreateInstance(type));
+                }
+
+                var commands = new List<string>();
+                foreach (var plug in _plugins)
+                {
+                    if (!commands.Contains(plug.Command))
                     {
-                        Console.ForegroundColor = ConsoleColor.Green;
-                        Console.WriteLine($"Loaded: {plug.PluginName}");
+                        commands.Add(plug.Command);
+                        if (plug.Loaded)
+                        {
+                            Console.ForegroundColor = ConsoleColor.Green;
+                            Console.WriteLine($"Loaded: {plug.PluginName}");
+                        }
+                        else
+                        {
+                            Console.ForegroundColor = ConsoleColor.Red;
+                            Console.WriteLine($"NOT Loaded: {plug.PluginName}");
+                        }
                     }
                     else
                     {
                         Console.ForegroundColor = ConsoleColor.Red;
-                        Console.WriteLine($"NOT Loaded: {plug.PluginName}");
+                        Console.WriteLine($"NOT Loaded: {plug.PluginName} Main command conflicts with another plugin!!!");
                     }
                 }
-                else
-                {
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine($"NOT Loaded: {plug.PluginName} Main command conflicts with another plugin!!!");
-                }
-            }
 
-            Console.ForegroundColor = ConsoleColor.White;
+                Console.ForegroundColor = ConsoleColor.White;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.InnerException);
+                Console.WriteLine(e.Message);
+                Console.WriteLine(e.StackTrace);
+            }
+           
             #endregion
             Console.WriteLine("Bot init Complete");
         }

@@ -40,23 +40,33 @@ namespace JefBot.Commands
         {
             timestampDiscord = DateTime.UtcNow;
             timestampTwitch = DateTime.UtcNow;
-            using(MySqlConnection con = new MySqlConnection(Bot.SQLConnectionString))
+            try
             {
-                con.Open();
-                MySqlCommand _cmd = con.CreateCommand();
-                _cmd.CommandText = @"SELECT * FROM `Quotes`";
-                using (MySqlDataReader reader = _cmd.ExecuteReader())
+                using (MySqlConnection con = new MySqlConnection(Bot.SQLConnectionString))
                 {
-                    while (reader.Read()){
-                        var quote = reader.GetString(reader.GetOrdinal("QUOTE"));
-                        int id = reader.GetInt32(reader.GetOrdinal("ID"));
-                        var submitter = reader.GetString(reader.GetOrdinal("SUBMITTER"));
-                        DateTime timestamp = reader.GetDateTime(reader.GetOrdinal("TIMESTAMP"));
-                        var channel = reader.GetString(reader.GetOrdinal("CHANNEL"));
-                        quotes.Add(new Quote(quote,timestamp,submitter,channel,id));
+                    con.Open();
+                    MySqlCommand _cmd = con.CreateCommand();
+                    _cmd.CommandText = @"SELECT * FROM `Quotes`";
+                    using (MySqlDataReader reader = _cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            var quote = reader.GetString(reader.GetOrdinal("QUOTE"));
+                            int id = reader.GetInt32(reader.GetOrdinal("ID"));
+                            var submitter = reader.GetString(reader.GetOrdinal("SUBMITTER"));
+                            DateTime timestamp = reader.GetDateTime(reader.GetOrdinal("TIMESTAMP"));
+                            var channel = reader.GetString(reader.GetOrdinal("CHANNEL"));
+                            quotes.Add(new Quote(quote, timestamp, submitter, channel, id));
+                        }
                     }
                 }
             }
+            catch (Exception e)
+            {
+                Loaded = false;
+                Console.WriteLine(e.Message);
+            }
+         
         }
 
         public void Execute(ChatCommand command, TwitchClient client)
