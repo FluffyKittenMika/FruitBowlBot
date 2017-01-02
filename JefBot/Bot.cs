@@ -91,6 +91,8 @@ namespace JefBot
                 }
             };
 
+        
+
             discordClient.UsingAudio(x => 
             {               
                 x.Mode = AudioMode.Outgoing; // Tells the AudioService that we will only be sending audio

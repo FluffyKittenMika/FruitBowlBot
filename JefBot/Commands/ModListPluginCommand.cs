@@ -15,7 +15,7 @@ namespace JefBot.Commands
         public string Help => "!mods {set/clear} {result}; Will print out modlist for the current playing stream game.";
         public IEnumerable<string> Aliases => new[] { "mods" };
         public Dictionary<string, string> ModLists = new Dictionary<string, string>();
-        public bool Loaded { get; set; } = true;
+        public bool Loaded { get; set; } = false;
 
 
         private string memoryPath = "./modList.txt";
