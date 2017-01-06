@@ -19,34 +19,7 @@ namespace JefBot.Commands
         public bool Loaded { get; set; } = true;
 
         //Non default definitions
-        public List<string> quotes = new List<string>();
         Random rnd = new Random();
-
-        /// <summary>
-        /// The Constructor in this case just downloads the pre exsisting quote list off the website
-        /// </summary>
-        public QuotePluginCommand()
-        {
-            WebClient web = new WebClient();
-            var quotefile = @"./RemoteQuotes.dat";
-            web.DownloadFile(@"https://jefmajor.com/Quotes/FlatFileDatabase.memes", quotefile);
-           
-            if (File.Exists(quotefile)) 
-            {
-                using (StreamReader r = new StreamReader(quotefile))
-                {
-                    string line; 
-                    while ((line = r.ReadLine()) != null)
-                    {
-                        string[] split = line.Split('|'); //Split the quotes
-                        quotes.Add(split[0]); //Add the quotes to the list, we don't care for the other part.
-                    }
-                }
-            }else
-            {
-                Console.WriteLine($"Could not Download remote quotes, please check if jefmajor.com is accessible for memery");
-            }
-        }
 
         public void Execute(ChatCommand command, TwitchClient client)
         {

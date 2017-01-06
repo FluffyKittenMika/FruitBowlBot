@@ -24,6 +24,11 @@ namespace JefBot.Commands
             Load();
         }
 
+        public void Discord(MessageEventArgs arg)
+        {
+            arg.Channel.SendMessage("One day Mr Virite will implement this, i mean, have you looked at this code? holy shit, it's a mess, and it's not SQL");
+        }
+
         public void Execute(ChatCommand command, TwitchClient client)
         {
             try
@@ -172,10 +177,7 @@ namespace JefBot.Commands
             }
         }
 
-        public void Discord(MessageEventArgs arg)
-        {
-            arg.Channel.SendMessage("Not implemented yet");
-        }
+      
     }
 
     /// <summary>
