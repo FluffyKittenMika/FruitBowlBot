@@ -47,8 +47,12 @@ namespace JefBot.Commands
                 }
                 times.Sort((a, b) => a.CompareTo(b)); //ascending sort
                 TimeSpan span = times[0].Subtract(DateTime.Now);
+                if (span.Minutes < 0)
+                {
+                    span = times[1].Subtract(DateTime.Now);
+                }
 
-                return $"Next stream in {span.Hours}:{(int)span.Minutes}:{(int)span.Seconds}:{(int)span.Milliseconds}~~ on the {times[0].Day}{getSuffix(times[0].Day)}";
+                return $"Next stream in {span.Hours}:{span.Minutes}:{span.Seconds}:{span.Milliseconds}~~ on the {times[0].Day}{getSuffix(times[0].Day)}";
                 
             }
             else
