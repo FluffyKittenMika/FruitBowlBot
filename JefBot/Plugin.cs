@@ -14,6 +14,6 @@ namespace JefBot
         string Help { get; }
 
         void Execute(ChatCommand command, TwitchClient client);
-        void Discord(MessageEventArgs arg);
+        void Discord(MessageEventArgs arg, DiscordClient client);
     }
 }

@@ -29,7 +29,7 @@ namespace JefBot.Commands
             }
         }
 
-        public void Discord(MessageEventArgs arg)
+        public void Discord(MessageEventArgs arg, DiscordClient client)
         {
             var args = arg.Message.Text.Split(' ').ToList().Skip(1).ToList(); //this is probably so wrong
 

@@ -98,7 +98,7 @@ namespace JefBot.Commands
                 }
             }
         }
-        public void Discord(MessageEventArgs arg)
+        public void Discord(MessageEventArgs arg, DiscordClient client)
         {
             try
             {

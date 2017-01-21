@@ -34,7 +34,7 @@ namespace JefBot.Commands
 
         public async Task<string> time()
         {
-            var uptime = await TwitchApi.GetUptime("jefmajor");
+            var uptime = await TwitchApi.Streams.GetUptimeAsync("jefmajor");
             if (uptime.Ticks == 0)
             {
                 List<DateTime> times = new List<DateTime>();
@@ -66,7 +66,7 @@ namespace JefBot.Commands
             return (day == 11 || day == 12 || day == 13) ? "th" : (day == 1) ? "st" : (day == 2) ? "nd" : (day == 3) ? "rd" : "th";
         }
 
-        public void Discord(MessageEventArgs arg)
+        public void Discord(MessageEventArgs arg, DiscordClient client)
         {
             arg.Channel.SendMessage(time().Result);
         }

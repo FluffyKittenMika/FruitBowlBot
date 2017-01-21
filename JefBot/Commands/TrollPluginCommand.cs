@@ -50,7 +50,7 @@ namespace JefBot.Commands
         }
 
 
-        public void Discord(MessageEventArgs arg)
+        public void Discord(MessageEventArgs arg, DiscordClient client)
         {
             arg.Channel.SendMessage(Trollit(arg.User.Name, arg.Message.Text.Split(' ').ToList()));
         }

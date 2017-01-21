@@ -1,5 +1,6 @@
 ﻿using Discord;
 using System.Collections.Generic;
+using System.Linq;
 using TwitchLib;
 using TwitchLib.Models.Client;
 
@@ -13,33 +14,32 @@ namespace JefBot.Commands
         public IEnumerable<string> Aliases => new[] { "u", "up" };
         public bool Loaded { get; set; } = true;
 
-        public async void Execute(ChatCommand command, TwitchClient client)
+        public void Execute(ChatCommand command, TwitchClient client)
         {
-            var uptime = await TwitchApi.GetUptime(command.ChatMessage.Channel);
+            client.SendMessage(res(command.ChatMessage.Channel));
+        }
+
+        public string res(string channel)
+        {
+            var uptime = TwitchApi.Streams.GetUptime(channel);
             if (uptime.Ticks > 0)
+                return $"Time: {uptime.Hours}h {uptime.Minutes}m {uptime.Seconds}s";
+            else
+                return $"Channel offline";
+        }
+
+        public void Discord(MessageEventArgs arg, DiscordClient client)
+        {
+            var args = arg.Message.Text.Split(' ').ToList().Skip(1).ToList();
+            if (args.Count == 0)
             {
-                client.SendMessage(
-                    command.ChatMessage.Channel,
-                    $"Time: {uptime.Hours}h {uptime.Minutes}m {uptime.Seconds}s"
-                    );
+                arg.Channel.SendMessage("no channel specified");
             }
             else
             {
-                client.SendMessage(
-                    command.ChatMessage.Channel,
-                    "He's offline I think? :)"
-                    );
-                var arktime = await TwitchApi.GetUptime("arkentosh");
-                if (arktime.Ticks > 0)
-                {
-                    client.SendMessage(command.ChatMessage.Channel, $"But arkentosh is online, so check him out maybe? https://www.twitch.tv/arkentosh :)");
-                }
+                arg.Channel.SendMessage(res(args[0]));
             }
-        }
 
-        public void Discord(MessageEventArgs arg)
-        {
-            arg.Channel.SendMessage("Not implemented yet");
         }
     }
 }

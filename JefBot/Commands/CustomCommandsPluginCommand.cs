@@ -24,7 +24,7 @@ namespace JefBot.Commands
             Load();
         }
 
-        public void Discord(MessageEventArgs arg)
+        public void Discord(MessageEventArgs arg, DiscordClient client)
         {
             arg.Channel.SendMessage("One day Mr Virite will implement this, i mean, have you looked at this code? holy shit, it's a mess, and it's not SQL");
         }

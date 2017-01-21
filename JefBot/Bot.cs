@@ -26,8 +26,8 @@ namespace JefBot
 
         public static bool IsStreaming(string channel)
         {
-            var uptime = TwitchApi.GetUptime(channel);
-            if (uptime.Result.Ticks > 0)
+            var uptime = TwitchApi.Streams.GetUptime(channel);
+            if (uptime.Ticks > 0)
             {
                 return true;
             }
@@ -90,17 +90,11 @@ namespace JefBot
                     DiscordEvent(e);
                 }
             };
-
         
-
             discordClient.UsingAudio(x => 
             {               
                 x.Mode = AudioMode.Outgoing; // Tells the AudioService that we will only be sending audio
             });
-
-            
-
-
 
             #endregion
 
@@ -209,7 +203,7 @@ namespace JefBot
                 {
                     try
                     {
-                        plug.Discord(arg);
+                        plug.Discord(arg, discordClient);
                     }
                     catch (Exception err)
                     {
