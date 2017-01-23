@@ -51,7 +51,7 @@ namespace JefBot.Commands
                     }
                     if (args[0] == "play" && _vClient != null)
                     {
-
+                        var voicechannel = client.FindServers("Jef Chat Program").FirstOrDefault().VoiceChannels.FirstOrDefault();
                         var channelCount = arg.Server.Client.GetService<AudioService>().Config.Channels; //sound channel counts
                         var OutFormat = new WaveFormat(48000, 16, channelCount);
                         using (var MP3Reader = new Mp3FileReader("./test.mp3")) // Create a new Disposable MP3FileReader, to read audio from the filePath parameter
