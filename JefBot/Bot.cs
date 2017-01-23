@@ -24,6 +24,7 @@ namespace JefBot
         public static string SQLConnectionString;
         //discord intergration.
         public DiscordClient discordClient = new DiscordClient();
+        public static List<Server> servers = new List<Server>();
 
         public static bool IsStreaming(string channel)
         {
@@ -97,52 +98,14 @@ namespace JefBot
                 }
             };
 
-
-            // OK seriously, this is the worst, but it works... TODO, move it into the plugin.. sigh, why does discord hate this so much
-            discordClient.ServerAvailable += async (s, e) =>
+            
+            // OK seriously, this is the worst, but it works..
+            // REQUIRED to keep the server lists avaible for the music bot part
+            discordClient.ServerAvailable += (s, e) =>
             {
-                if(e.Server.Id == 236951447634182145){
-                    try
-                    {
-                        var voiceChannel = e.Server.VoiceChannels.FirstOrDefault(); // Finds the first VoiceChannel on the server 'Music Bot Server'
-                        var _vClient = await discordClient.GetService<AudioService>() // We use GetService to find the AudioService that we installed earlier. In previous versions, this was equivelent to _client.Audio()
-                                .Join(voiceChannel);
-                        var channelCount = discordClient.GetService<AudioService>().Config.Channels; // Get the number of AudioChannels our AudioService has been configured to use.
-                        var OutFormat = new WaveFormat(48000, 16, channelCount); // Create a new Output Format, using the spec that Discord will accept, and with the number of channels that our client supports.
-                        using (var MP3Reader = new Mp3FileReader(@"./This Side Out.mp3")) // Create a new Disposable MP3FileReader, to read audio from the filePath parameter
-                        using (var resampler = new MediaFoundationResampler(MP3Reader, OutFormat)) // Create a Disposable Resampler, which will convert the read MP3 data to PCM, using our Output Format
-                        {
-                            resampler.ResamplerQuality = 60; // Set the quality of the resampler to 60, the highest quality
-                            int blockSize = OutFormat.AverageBytesPerSecond / 50; // Establish the size of our AudioBuffer
-                            byte[] buffer = new byte[blockSize];
-                            int byteCount;
-
-                            while ((byteCount = resampler.Read(buffer, 0, blockSize)) > 0) // Read audio into our buffer, and keep a loop open while data is present
-                            {
-                                if (byteCount < blockSize)
-                                {
-                                    // Incomplete Frame
-                                    for (int i = byteCount; i < blockSize; i++)
-                                        buffer[i] = 0;
-                                }
-                                _vClient.Send(buffer, 0, blockSize); // Send the buffer to Discord
-                            }
-                            await _vClient.Disconnect();
-                        }
-                    }
-                    catch (Exception err)
-                    {
-                        Console.WriteLine(err.Message);
-                        Console.WriteLine(err.StackTrace);
-
-                    }
-                }
+                servers.Add(e.Server);
             };
-        
-         
-
-
-      
+            
 
 
             #endregion
