@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using TwitchLib;
 using TwitchLib.Models.API;
+using TwitchLib.Models.API.Stream;
 using TwitchLib.Models.Client;
 
 namespace JefBot.Commands

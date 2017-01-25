@@ -55,8 +55,8 @@ namespace JefBot.Commands
                         }
                         catch (Exception e)
                         {
-                            await arg.User.SendMessage(e.Message);
-                            await arg.User.SendMessage("Might just not be connected to anything");
+                            await arg.Channel.SendMessage(e.Message);
+                            await arg.Channel.SendMessage("Might just not be connected to anything");
                         }
                     }
                     if (args[0] == "play")
@@ -76,7 +76,7 @@ namespace JefBot.Commands
                             catch (Exception e)
                             {
                                 Console.WriteLine(e.Message);
-                                await arg.User.SendMessage("You might have to rejoin the voice channel, the bot is kinda not 10/10 at this");
+                                await arg.Message.Channel.SendMessage("You might have to rejoin the voice channel, the bot is kinda not 10/10 at this");
                             }
     
                         }
