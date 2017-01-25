@@ -26,25 +26,43 @@ namespace JefBot.Commands
 
         public void Discord(MessageEventArgs arg, DiscordClient client)
         {
-            arg.Channel.SendMessage("One day Mr Virite will implement this, i mean, have you looked at this code? holy shit, it's a mess, and it's not SQL");
+            var args = arg.Message.Text.Split(' ').ToList().Skip(1).ToList();
+            var command = arg.Message.Text.Split(' ').First();
+            //arg.Channel.SendMessage("One day Mr Virite will implement this, i mean, have you looked at this code? holy shit, it's a mess, and it's not SQL");
+            var response = customCommand(command.Substring(1), args, arg.User.ServerPermissions.Administrator, "jefmajor", arg.User.Name);
+            if (response != "null")
+            {
+                arg.Channel.SendMessage(response);
+            }
         }
 
         public void Execute(ChatCommand command, TwitchClient client)
+        {
+            client.SendMessage(command.ChatMessage.Channel,customCommand(command.Command,command.ArgumentsAsList,command.ChatMessage.IsModerator,command.ChatMessage.Channel,command.ChatMessage.Username));
+        }
+
+        /// <summary>
+        /// handles the custom command
+        /// </summary>
+        /// <param name="command">main command method</param>
+        /// <param name="args">arguments</param>
+        /// <param name="moderator">if the user is an administrator</param>
+        /// <returns></returns>
+        private string customCommand(string command, List<string> args, bool moderator, string channel = null, string username = null)
         {
             try
             {
                 // Main command methods
                 if (
-                    string.Equals(command.Command, "command", StringComparison.OrdinalIgnoreCase) ||
-                    string.Equals(command.Command, "commands", StringComparison.OrdinalIgnoreCase) ||
-                    string.Equals(command.Command, "cmd", StringComparison.OrdinalIgnoreCase) ||
-                    string.Equals(command.Command, "cmds", StringComparison.OrdinalIgnoreCase)
+                    string.Equals(command, "command", StringComparison.OrdinalIgnoreCase) ||
+                    string.Equals(command, "commands", StringComparison.OrdinalIgnoreCase) ||
+                    string.Equals(command, "cmd", StringComparison.OrdinalIgnoreCase) ||
+                    string.Equals(command, "cmds", StringComparison.OrdinalIgnoreCase)
                     )
                 {
-                    if (command.ArgumentsAsList.Count > 0)
+                    if (args.Count > 0)
                     {
-                        var args = command.ArgumentsAsList;
-                        if (command.ChatMessage.IsModerator || command.ChatMessage.IsBroadcaster)
+                       if (moderator)
                         {
                             if (string.Equals(args[0], "add", StringComparison.OrdinalIgnoreCase))
                             {
@@ -56,22 +74,23 @@ namespace JefBot.Commands
                                     // Looks like someone is trying to run a command!
                                     if (response.StartsWith("/") && !response.StartsWith("/me"))
                                     {
-                                        client.SendMessage(command.ChatMessage.Channel, $"I'm sorry, Dave. I'm afraid I can't do that.");
-                                        client.SendWhisper(command.ChatMessage.Username, $"Custom commands cannot run chat slash commands...");
-                                        return;
+
+                                        //client.SendMessage(command.ChatMessage.Channel, $"I'm sorry, Dave. I'm afraid I can't do that.");
+                                        //client.SendWhisper(command.ChatMessage.Username, $"Custom commands cannot run chat slash commands...");
+                                        return $"Custom commands cannot run chat slash commands...";
                                     }
 
-                                    CCommand cmd = new CCommand(newCommand, response, command.ChatMessage.Channel);
-                                    
-                                    CustomCommands.RemoveAll(cmdx => cmdx.Channel == command.ChatMessage.Channel && cmdx.Command == newCommand);
+                                    CCommand cmd = new CCommand(newCommand, response, channel);
+
+                                    CustomCommands.RemoveAll(cmdx => cmdx.Channel == channel && cmdx.Command == newCommand);
 
                                     CustomCommands.Add(cmd);
-                                    client.SendMessage(command.ChatMessage.Channel, $"Command {newCommand} has been added");
                                     Save();
+                                    return $"Command {newCommand} has been added";
                                 }
                                 else
                                 {
-                                    client.SendMessage(command.ChatMessage.Channel, "Usage !command add (command) (message)");
+                                    return "Usage !command add (command) (message)";
                                 }
                             }
 
@@ -81,47 +100,46 @@ namespace JefBot.Commands
                                 {
                                     var newCommand = args[1];
 
-                                    CustomCommands.RemoveAll(cmd => cmd.Channel == command.ChatMessage.Channel && cmd.Command == newCommand);
+                                    CustomCommands.RemoveAll(cmd => cmd.Channel == channel && cmd.Command == newCommand);
                                     Save();
-                                    client.SendMessage(command.ChatMessage.Channel, $"Command {newCommand} has been removed");
+                                   return $"Command {newCommand} has been removed";
                                 }
                                 else
                                 {
-                                    client.SendMessage(command.ChatMessage.Channel, "Usage !command remove [command]");
+                                    return  "Usage !command remove [command]";
                                 }
                             }
 
                             else
                             {
-                                client.SendMessage(command.ChatMessage.Channel, "Usage !command add/remove [command]");
+                              return "Usage !command add/remove [command]";
                             }
                         }
                         else
                         {
-                            client.SendMessage(command.ChatMessage.Channel, $"You're not a moderator {command.ChatMessage.Username} :)");
+                           return $"You're not a moderator {username} :)";
                         }
                     }
                     else
                     {
-                        if (command.ChatMessage.IsModerator)
+                        if (moderator)
                         {
-                            client.SendMessage(command.ChatMessage.Channel, $"Usage !command add [command] message]");
+                            return  $"Usage !command add [command] message]";
                         }
 
-                        string commands = string.Join(", ", CustomCommands.Where(cmd => cmd.Channel == command.ChatMessage.Channel).Select(cmd => cmd.Command).ToArray());
+                        string commands = string.Join(", ", CustomCommands.Where(cmd => cmd.Channel == channel).Select(cmd => cmd.Command).ToArray());
 
-                        client.SendMessage(command.ChatMessage.Channel, $"Commands: {commands}");
+                       return $"Commands: {commands}";
                     }
                 }
 
                 // Execute custom command
                 foreach (var item in CustomCommands)
                 {
-                    if (item.Command == command.Command && item.Channel == command.ChatMessage.Channel)
+                    if (item.Command == command && item.Channel == channel)
                     {
-                        var message = item.Response.Replace("{username}", command.ChatMessage.Username); //Display name will make the name blank if the user have no display name set;;
-                        client.SendMessage(command.ChatMessage.Channel, message);
-                        return;
+                        var message = item.Response.Replace("{username}", username); //Display name will make the name blank if the user have no display name set;;
+                        return message;
                     }
                 }
             }
@@ -130,10 +148,11 @@ namespace JefBot.Commands
                 Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine(e.Message);
                 Console.WriteLine(e.TargetSite);
-
                 Console.ForegroundColor = ConsoleColor.White;
+                return e.Message;
             }
-        }
+            return "null";
+        } 
 
         private void Save()
         {
