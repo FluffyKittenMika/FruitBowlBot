@@ -29,7 +29,7 @@ namespace JefBot.Commands
             var args = arg.Message.Text.Split(' ').ToList().Skip(1).ToList();
             var command = arg.Message.Text.Split(' ').First();
             //arg.Channel.SendMessage("One day Mr Virite will implement this, i mean, have you looked at this code? holy shit, it's a mess, and it's not SQL");
-            var response = customCommand(command.Substring(1), args, arg.User.ServerPermissions.Administrator, "jefmajor", arg.User.Name);
+            var response = customCommand(command.Substring(1), args, arg.User.ServerPermissions.Administrator, Convert.ToString(arg.Server.Id) , arg.User.Name);
             if (response != "null")
             {
                 arg.Channel.SendMessage(response);
