@@ -17,6 +17,7 @@ namespace JefBot.Commands
         public IEnumerable<string> Aliases => new[] { "musicplay" };
         public bool Loaded { get; set; } = true;
         IAudioClient _vClient;
+        
 
         public MusicPluginCommand()
         {
@@ -25,7 +26,6 @@ namespace JefBot.Commands
 
         public void Execute(ChatCommand command, TwitchClient client)
         {
-            
         }
 
         public async void Discord(MessageEventArgs arg, DiscordClient client)
@@ -44,10 +44,6 @@ namespace JefBot.Commands
 
                     if (args[0] == "disconnect")
                     {
-
-                        //var voicechannel = client.FindServers("Jef Chat Program").FirstOrDefault().VoiceChannels.FirstOrDefault();
-                        //_vClient = await client.GetService<AudioService>().Join(voicechannel);
-                        //_vClient = await client.GetService<AudioService>().Join(arg.User.VoiceChannel);
                         try
                         {
 
