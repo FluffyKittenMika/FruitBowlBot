@@ -29,12 +29,12 @@ namespace JefBot.Commands
                 var result = rng.Next(0, 2) == 1 ? "heads" : "tails";
 
                 
-                   return  $"{Username} flipped a coin, it was {result}");
+                   return  $"{Username} flipped a coin, it was {result}";
             }
             else
             {
                
-                   return $"{Username} flipped a coin, it landed on it's side...");
+                   return $"{Username} flipped a coin, it landed on it's side...";
             }
         }
 
