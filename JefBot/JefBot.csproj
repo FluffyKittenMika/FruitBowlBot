@@ -149,6 +149,10 @@
       <HintPath>..\packages\RogueSharp.3.0.0\lib\portable-net40+sl50+win+wpa81+wp80\RogueSharp.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="SharpMind, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SharpMind.1.0.0\lib\net45\SharpMind.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="StarkSoftProxy, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\smartirc4net-2015.0.5.9\lib\net40\StarkSoftProxy.dll</HintPath>
       <Private>True</Private>
@@ -158,8 +162,15 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Core" />
+    <Reference Include="System.IO.Compression" />
     <Reference Include="System.Net" />
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Runtime.InteropServices.RuntimeInformation, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Runtime.InteropServices.RuntimeInformation.4.0.0\lib\net45\System.Runtime.InteropServices.RuntimeInformation.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -184,11 +195,11 @@
     <Compile Include="Commands\DebugPluginCommand.cs" />
     <Compile Include="Commands\HelpPluginCommand.cs" />
     <Compile Include="Commands\MigoPluginCommand.cs" />
+    <Compile Include="Commands\NeuralPluginCommand.cs" />
     <Compile Include="Commands\NextStreamPluginCommand.cs" />
     <Compile Include="Commands\QuotePluginCommand.cs" />
     <Compile Include="Commands\RollPluginCommand.cs" />
     <Compile Include="Commands\MusicPluginCommand.cs" />
-    <Compile Include="Commands\TrollPluginCommand.cs" />
     <Compile Include="Commands\UptimePluginCommand.cs" />
     <Compile Include="Plugin.cs" />
     <Compile Include="Program.cs" />

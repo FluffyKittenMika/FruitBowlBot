@@ -7,7 +7,7 @@ using TwitchLib.Models.Client;
 
 namespace JefBot.Commands
 {
-    internal class NextStream : IPluginCommand
+    internal class NextStreamPluginCommand : IPluginCommand
     {
         public string PluginName => "NextStream";
         public string Command => "next";
@@ -17,7 +17,7 @@ namespace JefBot.Commands
 
         Dictionary<DayOfWeek, TimeSpan> streamtimes = new Dictionary<DayOfWeek, TimeSpan>();
 
-        public NextStream()
+        public NextStreamPluginCommand()
         {
             streamtimes.Add(DayOfWeek.Monday, TimeSpan.FromHours(21)); //Monday at 8 Norweeb time
             streamtimes.Add(DayOfWeek.Wednesday, TimeSpan.FromHours(21)); 

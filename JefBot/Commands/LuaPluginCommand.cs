@@ -34,7 +34,7 @@ namespace JefBot.Commands
                 state.DoString(@"import = function () end");
                 //var res = state.DoString("return 10 + 3*(5 + 2)")[0] as double?;
                 var res = state.DoString(script)[0];
-                arg.Channel.SendMessage(Convert.ToString(res));
+                arg.Channel.SendMessage("```"+Convert.ToString(res)+"```");
             }
             catch (Exception e)
             {
