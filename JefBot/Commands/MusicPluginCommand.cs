@@ -13,7 +13,7 @@ namespace JefBot.Commands
     {
         public string PluginName => "Music";
         public string Command => "music";
-        public string Help => "!music {summon}/{play} [url]";
+        public string Help => "!music {play} [url]";
         public IEnumerable<string> Aliases => new[] { "musicplay" };
         public bool Loaded { get; set; } = true;
         IAudioClient _vClient;

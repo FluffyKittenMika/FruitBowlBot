@@ -4,7 +4,7 @@ using TwitchLib;
 using Discord;
 using Discord.Commands;
 using TwitchLib.Models.Client;
-
+using NLua;
 namespace JefBot.Commands
 {
     internal class NeuralPluginCommand : IPluginCommand
@@ -15,7 +15,7 @@ namespace JefBot.Commands
         public IEnumerable<string> Aliases => new string[0];
         public bool Loaded { get; set; } = true;
 
-        Random rng = new Random();
+        Lua state = new Lua();
 
         public void Execute(ChatCommand command, TwitchClient client)
         {
@@ -24,7 +24,9 @@ namespace JefBot.Commands
 
         public void Discord(MessageEventArgs arg, DiscordClient client)
         {
-            arg.Channel.SendMessage("Not implemented yet");
+            state.DoFile(@"./Lua/grid-lstm/sample.lua");
         }
+
+
     }
 }
