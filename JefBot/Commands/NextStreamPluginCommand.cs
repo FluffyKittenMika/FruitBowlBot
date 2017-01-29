@@ -11,7 +11,7 @@ namespace JefBot.Commands
     {
         public string PluginName => "NextStream";
         public string Command => "next";
-        public string Help => "!n will give the estimated time untill the next stream.";
+        public string Help => "!next will give the estimated time untill the next stream.";
         public IEnumerable<string> Aliases => new[] { "n", "nextstream", "countdown" };
         public bool Loaded { get; set; } = true;
 
@@ -28,13 +28,22 @@ namespace JefBot.Commands
         {
             if (command.ChatMessage.Channel == "jefmajor")
             {
-                client.SendMessage(command.ChatMessage.Channel, time().Result);
+                client.SendMessage(command.ChatMessage.Channel, time());
             }
         }
 
-        public async Task<string> time()
+        public string time()
         {
-            var uptime = await TwitchApi.Streams.GetUptimeAsync("jefmajor");
+            TimeSpan uptime = new TimeSpan();
+
+            try
+            {
+                uptime = TwitchApi.Streams.GetUptime("jefmajor");
+            }
+            catch (Exception){}
+           
+            
+            
             if (uptime.Ticks == 0)
             {
                 List<DateTime> times = new List<DateTime>();
@@ -68,7 +77,7 @@ namespace JefBot.Commands
 
         public void Discord(MessageEventArgs arg, DiscordClient client)
         {
-            arg.Channel.SendMessage(time().Result);
+            arg.Channel.SendMessage(time());
         }
     }
 }
