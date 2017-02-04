@@ -9,7 +9,6 @@ using Discord.Audio;
 using TwitchLib.Models.Client;
 using TwitchLib.Events.Client;
 using MySql.Data.MySqlClient;
-using NAudio.Wave;
 
 namespace JefBot
 {
@@ -18,13 +17,14 @@ namespace JefBot
     class Bot
     {
         ConnectionCredentials Credentials;
-        List<TwitchClient> Clients = new List<TwitchClient>();
+        public static List<TwitchClient> Clients = new List<TwitchClient>();
         public static Dictionary<string, string> settings = new Dictionary<string, string>();
         public static readonly List<IPluginCommand> _plugins = new List<IPluginCommand>();
         public static string SQLConnectionString;
         //discord intergration.
         public DiscordClient discordClient = new DiscordClient();
         public static List<Server> servers = new List<Server>();
+        public static WebInterface webinterface;
 
         public static bool IsStreaming(string channel)
         {
@@ -180,7 +180,16 @@ namespace JefBot
                 Console.WriteLine(e.Message);
                 Console.WriteLine(e.StackTrace);
             }
-           
+
+            #endregion
+
+            #region WebInterface
+
+            Console.WriteLine("Starting webinterface");
+            webinterface = new WebInterface();
+            webinterface.Start();
+            Console.WriteLine("Webinterface started");
+
             #endregion
             Console.WriteLine("Bot init Complete");
         }

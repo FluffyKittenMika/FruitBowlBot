@@ -18,7 +18,7 @@ namespace JefBot.Commands
 
         public void Execute(ChatCommand command, TwitchClient client)
         {
-            if (!Bot.IsStreaming(command.ChatMessage.Channel))
+            if (Bot.IsStreaming(command.ChatMessage.Channel))
             {
                 try
                 {
