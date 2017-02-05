@@ -105,8 +105,8 @@ namespace JefBot
             {
                 servers.Add(e.Server);
             };
-            
 
+            discordClient.SetGame("www.twitch.tv/arkentosh");
 
             #endregion
 

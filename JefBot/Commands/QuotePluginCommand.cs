@@ -35,7 +35,8 @@ namespace JefBot.Commands
 
             if (args.Count > 0)
             {
-                arg.Channel.SendMessage(quote(args, "jefmajor", arg.User.Name));
+                string res = quote(args, "jefmajor", arg.User.Name);
+                arg.Channel.SendMessage(res);
             }
         }
 
