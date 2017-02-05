@@ -12,15 +12,15 @@ namespace JefBot.Web.Pages
                 var css = @"
                 <style>
                     div {
-                        width: 300px;
-                        border: 25px solid black;
-                        padding: 25px;
-                        margin: 25px;
+                        width: 100%;
+                        border: 1px solid black;
+                        padding: 5px;
+                        margin: 5px;
                     }
                 </style>
                 ";
                 int counter = 0;
-                string response = css + "<div>Crypto likes dat ass</div>";
+                string response = css + "<h1>Crypto likes dat ass</h1>";
 
                 foreach (var item in Bot._plugins)
                 {
@@ -33,7 +33,7 @@ namespace JefBot.Web.Pages
                     response += $"<p>Help:              {item.Help}</p>";
                     response += $"</div>";
                 }
-                response += $"<div>{counter}</div>";
+                response += $"<div>Amount of plugins: {counter}</div>";
                 return response;
             };
         }
