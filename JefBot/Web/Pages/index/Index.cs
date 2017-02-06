@@ -34,6 +34,7 @@ namespace JefBot.Web.Pages
                     response += $"</div>";
                 }
                 response += $"<div>Amount of plugins: {counter}</div>";
+                response += $"{Request.UserHostAddress}";
                 return response;
             };
         }

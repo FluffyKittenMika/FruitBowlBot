@@ -15,7 +15,7 @@ namespace JefBot.Commands
         public string Command => "lua";
         public string Help => "!lua {code}";
         public IEnumerable<string> Aliases => new string[0];
-        public bool Loaded { get; set; } = true;
+        public bool Loaded { get; set; } = false;
 
         
 

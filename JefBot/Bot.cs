@@ -98,7 +98,13 @@ namespace JefBot
                 }
             };
 
-            
+            discordClient.UserBanned += async (s, e) => {
+                // Create a Channel object by searching for a channel named '#logs' on the server the ban occurred in.
+                var logChannel = e.Server.FindChannels("super_secret_mod_shenanigans").FirstOrDefault();
+                // Send a message to the server's log channel, stating that a user was banned.
+                await logChannel.SendMessage($"User Banned: {e.User.Name} by {e.Server.GetBans().}");
+            };
+  
             // OK seriously, this is the worst, but it works..
             // REQUIRED to keep the server lists avaible for the music bot part
             discordClient.ServerAvailable += (s, e) =>
