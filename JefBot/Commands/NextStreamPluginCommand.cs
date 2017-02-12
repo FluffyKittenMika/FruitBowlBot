@@ -19,9 +19,9 @@ namespace JefBot.Commands
 
         public NextStreamPluginCommand()
         {
-            streamtimes.Add(DayOfWeek.Monday, TimeSpan.FromHours(21)); //Monday at 8 Norweeb time
-            streamtimes.Add(DayOfWeek.Wednesday, TimeSpan.FromHours(21)); 
-            streamtimes.Add(DayOfWeek.Saturday, TimeSpan.FromHours(21)); 
+            streamtimes.Add(DayOfWeek.Monday, TimeSpan.FromHours(22)); //+1 hour during norwegian winter time.
+            streamtimes.Add(DayOfWeek.Wednesday, TimeSpan.FromHours(22)); 
+            streamtimes.Add(DayOfWeek.Saturday, TimeSpan.FromHours(22)); 
         }
 
         public void Execute(ChatCommand command, TwitchClient client)
@@ -61,8 +61,9 @@ namespace JefBot.Commands
                     span = times[1].Subtract(DateTime.Now);
                 }
 
-                return $"Next stream in {span.Days} Day(s) {span.Hours} Hour(s)+-1 {span.Minutes} Minute(s) {span.Seconds} Secound(s) on the {times[0].Day}{getSuffix(times[0].Day)}";
-                
+                return $"Next stream in {span.Days} Day(s) {span.Hours} Hour(s) {span.Minutes} Minute(s) {span.Seconds} Second(s) on the {times[0].Day}{getSuffix(times[0].Day)} That being a total of {span.Seconds} seconds from now.";
+
+
             }
             else
             {
