@@ -4,6 +4,7 @@ using TwitchLib;
 using Discord;
 using Discord.Commands;
 using TwitchLib.Models.Client;
+using Discord.WebSocket;
 
 namespace JefBot.Commands
 {
@@ -38,9 +39,9 @@ namespace JefBot.Commands
             }
         }
 
-        public void Discord(MessageEventArgs arg, DiscordClient client)
+        public void Discord(SocketMessage arg, DiscordSocketClient discordClient)
         {
-            coin(arg.Message.User.Name);
+            arg.Channel.SendMessageAsync(coin(arg.Author.Username));
         }
     }
 }

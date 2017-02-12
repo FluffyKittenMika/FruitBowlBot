@@ -8,6 +8,7 @@ using Discord;
 using TwitchLib.Models.Client;
 using MySql.Data;
 using MySql.Data.MySqlClient;
+using Discord.WebSocket;
 
 namespace JefBot.Commands
 {
@@ -100,10 +101,10 @@ namespace JefBot.Commands
             }
         }
 
-        public void Discord(MessageEventArgs arg, DiscordClient client)
+        public void Discord(SocketMessage arg, DiscordSocketClient discordClient)
         {
 
-            var args = arg.Message.Text.Split(' ').ToList().Skip(1).ToList();
+            var args = arg.Content.Split(' ').ToList().Skip(1).ToList();
             string argstring = string.Join(" ", args.ToArray());
 
             if (args.Count == 0)
@@ -115,7 +116,7 @@ namespace JefBot.Commands
                     qu.SubmittedBy = "Unknown";
                 }
                 string q = $"```{qu.Quotestring}{Environment.NewLine}#{qu.id} by {qu.SubmittedBy}```";
-                arg.Channel.SendMessage(q);
+                arg.Channel.SendMessageAsync(q);
             }else
             {
                 Quote qu = searchMigo(argstring);
@@ -124,7 +125,7 @@ namespace JefBot.Commands
                     qu.SubmittedBy = "Unknown";
                 }
                 string q = $"```{qu.Quotestring}{Environment.NewLine}#{qu.id} by {qu.SubmittedBy}```";
-                arg.Channel.SendMessage(q);
+                arg.Channel.SendMessageAsync(q);
             }
             
         }

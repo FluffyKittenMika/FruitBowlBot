@@ -6,6 +6,7 @@ using Discord;
 using TwitchLib.Models.Client;
 using RogueSharp.DiceNotation;
 using System.Linq;
+using Discord.WebSocket;
 
 namespace JefBot.Commands
 {
@@ -95,13 +96,13 @@ namespace JefBot.Commands
             }
             
         }
-        public void Discord(MessageEventArgs arg, DiscordClient client)
+        public void Discord(SocketMessage arg, DiscordSocketClient discordClient)
         {
             try
             {
-                var args = arg.Message.Text.Split(' ').ToList().Skip(1).ToList();
+                var args = arg.Content.Split(' ').ToList().Skip(1).ToList();
                 var result = Dice.Roll(string.Join("", args.ToArray()));
-                arg.Channel.SendMessage($"{arg.User.Name} got {result}");
+                arg.Channel.SendMessageAsync($"{arg.Author.Username} got {result}");
 
                 //var sent = arg.Channel.SendMessage($"{arg.User.Name} got {result}").Result; //comment away the line above if this one is active
                 //deletes the message and result after sending
@@ -111,7 +112,7 @@ namespace JefBot.Commands
             }
             catch (Exception e)
             {
-                arg.Channel.SendMessage($"{e.Message}");
+                arg.Channel.SendMessageAsync($"{e.Message}");
             }
 
         }

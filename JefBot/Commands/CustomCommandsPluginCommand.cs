@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Discord;
 using TwitchLib;
 using TwitchLib.Models.Client;
+using Discord.WebSocket;
+using Discord;
+
 
 namespace JefBot.Commands
 {
@@ -24,15 +26,14 @@ namespace JefBot.Commands
             Load();
         }
 
-        public void Discord(MessageEventArgs arg, DiscordClient client)
+        public void Discord(SocketMessage arg, DiscordSocketClient discordClient)
         {
-            var args = arg.Message.Text.Split(' ').ToList().Skip(1).ToList();
-            var command = arg.Message.Text.Split(' ').First();
-            //arg.Channel.SendMessage("One day Mr Virite will implement this, i mean, have you looked at this code? holy shit, it's a mess, and it's not SQL");
-            var response = customCommand(command.Substring(1), args, arg.User.ServerPermissions.Administrator, Convert.ToString(arg.Server.Id) , arg.User.Name);
+            var args = arg.Content.Split(' ').ToList().Skip(1).ToList();
+            var command = arg.Content.Split(' ').First();
+            var response = customCommand(command.Substring(1), args,((SocketGuildUser)arg.Author).GuildPermissions.Administrator , Convert.ToString(arg.Channel.Id) , arg.Author.Username);
             if (response != "null")
             {
-                arg.Channel.SendMessage(response);
+                arg.Channel.SendMessageAsync(response);
             }
         }
 

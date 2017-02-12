@@ -4,6 +4,7 @@ using TwitchLib;
 using System.Linq;
 using Discord;
 using TwitchLib.Models.Client;
+using Discord.WebSocket;
 
 namespace JefBot.Commands
 {
@@ -65,11 +66,11 @@ namespace JefBot.Commands
           
         }
 
-        public void Discord(MessageEventArgs arg, DiscordClient client)
+        public void Discord(SocketMessage arg, DiscordSocketClient discordClient)
         {
             try
             {
-                var args = arg.Message.Text.Split(' ').ToList().Skip(1).ToList(); //this is probably so wrong
+                var args = arg.Content.Split(' ').ToList().Skip(1).ToList(); //this is probably so wrong
 
                 plug = new List<IPluginCommand>();
                 plug.AddRange(Bot._plugins.Where(plug => plug.Aliases.Contains(args[0])).ToList());
@@ -89,11 +90,11 @@ namespace JefBot.Commands
                     {
                         result = $"No command / alias found for {args[0]} and therefore no help can be given";
                     }
-                    arg.Channel.SendMessage($"{result}");
+                    arg.Channel.SendMessageAsync($"{result}");
                 }
                 else
                 {
-                    arg.Channel.SendMessage($"{Help}");
+                    arg.Channel.SendMessageAsync($"{Help}");
                 }
             }
             catch (Exception err)

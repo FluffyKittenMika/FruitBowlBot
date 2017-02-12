@@ -1,5 +1,6 @@
 ﻿using Discord;
 using Discord.Commands;
+using Discord.WebSocket;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -55,11 +56,11 @@ namespace JefBot.Commands
             return message;
         }
 
-        public void Discord(MessageEventArgs arg, DiscordClient client)
+        public void Discord(SocketMessage arg, DiscordSocketClient discordClient)
         {
 
-            var args = arg.Message.Text.Split(' ').ToList().Skip(1).ToList(); //this is probably so wrong
-            arg.Channel.SendMessage(air(args, chattype.Discord));
+            var args = arg.Content.Split(' ').ToList().Skip(1).ToList(); //this is probably so wrong
+            arg.Channel.SendMessageAsync(air(args, chattype.Discord));
 
         }
 

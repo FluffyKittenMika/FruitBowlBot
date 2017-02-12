@@ -5,6 +5,7 @@ using TwitchLib;
 using TwitchLib.Models.API;
 using TwitchLib.Models.API.Stream;
 using TwitchLib.Models.Client;
+using Discord.WebSocket;
 
 namespace JefBot.Commands
 {
@@ -40,10 +41,9 @@ namespace JefBot.Commands
 
 
         //echo command
-        public void Discord(MessageEventArgs arg, DiscordClient client)
+        public void Discord(SocketMessage arg, DiscordSocketClient discordClient)
         {
-            arg.Channel.SendMessage($"{arg.Message.Text}");
+            arg.Channel.SendMessageAsync($"{arg.Content}");
         }
-
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Discord;
+using Discord.WebSocket;
 using System.Collections.Generic;
 using System.Linq;
 using TwitchLib;
@@ -28,16 +29,16 @@ namespace JefBot.Commands
                 return $"Channel offline";
         }
 
-        public void Discord(MessageEventArgs arg, DiscordClient client)
+        public void Discord(SocketMessage arg, DiscordSocketClient discordClient)
         {
-            var args = arg.Message.Text.Split(' ').ToList().Skip(1).ToList();
+            var args = arg.Content.Split(' ').ToList().Skip(1).ToList();
             if (args.Count == 0)
             {
-                arg.Channel.SendMessage("no channel specified");
+                arg.Channel.SendMessageAsync("no channel specified");
             }
             else
             {
-                arg.Channel.SendMessage(res(args[0]));
+                arg.Channel.SendMessageAsync(res(args[0]));
             }
 
         }

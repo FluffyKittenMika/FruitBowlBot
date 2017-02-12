@@ -6,9 +6,11 @@ using TwitchLib;
 using System.Threading;
 using Discord;
 using Discord.Audio;
+using Discord.WebSocket;
 using TwitchLib.Models.Client;
 using TwitchLib.Events.Client;
 using MySql.Data.MySqlClient;
+using System.Threading.Tasks;
 
 namespace JefBot
 {
@@ -21,9 +23,9 @@ namespace JefBot
         public static Dictionary<string, string> settings = new Dictionary<string, string>();
         public static readonly List<IPluginCommand> _plugins = new List<IPluginCommand>();
         public static string SQLConnectionString;
+
         //discord intergration.
-        public DiscordClient discordClient = new DiscordClient();
-        public static List<Server> servers = new List<Server>();
+        public DiscordSocketClient discordClient;
         public static WebInterface webinterface;
 
         public static bool IsStreaming(string channel)
@@ -38,6 +40,7 @@ namespace JefBot
                 return false;
             }
         }
+     
         //constructor
         public Bot()
         {
@@ -80,43 +83,30 @@ namespace JefBot
             #region discord init
             if (settings["discordtoken"] != "tokengoeshere")
             {
-                await discordClient.Connect(settings["discordtoken"],TokenType.Bot);
+                discordClient = new DiscordSocketClient(
+                  new DiscordSocketConfig{
+                      WebSocketProvider = Discord.Net.Providers.WS4Net.WS4NetProvider.Instance
+                  });
+            
+                await discordClient.LoginAsync(TokenType.Bot, settings["discordtoken"]);
+                await discordClient.ConnectAsync();
+                await discordClient.SetGameAsync("www.twitch.tv/arkentosh");
             }
 
+            discordClient.MessageReceived += async (e) =>{
+                Console.WriteLine($"{e.Channel.Name}:{e.Author.Username}:{e.Content}");
 
-            //yee, handle that shit the old fasioned rough way bby <3   
-            discordClient.UsingAudio(x => 
-            {               
-                x.Mode = AudioMode.Outgoing; // Tells the AudioService that we will only be sending audio
-            });
-
-            discordClient.MessageReceived += (s, e)=>{
-                Console.WriteLine($"{e.Server}:{e.Channel}:{e.User}:{e.Message.Text}");
-                if (!e.User.IsBot)
+                if (!e.Author.IsBot)
                 {
-                    DiscordEvent(e);
+                    await DiscordEvent(e);
                 }
+
             };
 
-            discordClient.UserBanned += async (s, e) => {
-                // Create a Channel object by searching for a channel named '#logs' on the server the ban occurred in.
-                var logChannel = e.Server.FindChannels("super_secret_mod_shenanigans").FirstOrDefault();
-                // Send a message to the server's log channel, stating that a user was banned.
-                await logChannel.SendMessage($"User Banned: {e.User.Name}");
-            };
-  
-            // OK seriously, this is the worst, but it works..
-            // REQUIRED to keep the server lists avaible for the music bot part
-            discordClient.ServerAvailable += (s, e) =>
-            {
-                servers.Add(e.Server);
-            };
-
-            discordClient.SetGame("www.twitch.tv/arkentosh");
 
             #endregion
 
-            #region ChatClient init
+            #region Twitch Chat Client init
             Credentials = new ConnectionCredentials(settings["username"], settings["oauth"]);
 
             if (settings["clientid"] != null)
@@ -199,23 +189,22 @@ namespace JefBot
             #endregion
             Console.WriteLine("Bot init Complete");
         }
- 
 
         /// <summary>
         /// custom discord command parser lol
         /// </summary>
         /// <param name="arg"> the whole shibboleetbangbanglesbians</param>
         /// <returns></returns>
-        private int DiscordEvent(MessageEventArgs arg)
+        private Task DiscordEvent(SocketMessage arg)
         {
             var enabledPlugins = _plugins.Where(plug => plug.Loaded).ToArray();
             var command = "";
-            storemessage(arg.Message.Text);
-            if (arg.Message.Text[0] == '!') //TODO make option for this prefix :D
+            storemessage(arg.Content);
+            if (arg.Content[0] == '!') //TODO make option for this prefix :D ///meeh
             {
                 try
                 {
-                    command = arg.Message.Text.Remove(0, 1).Split(' ')[0].ToLower(); 
+                    command = arg.Content.Remove(0, 1).Split(' ')[0].ToLower(); 
                 }
                 catch (Exception err)
                 {
@@ -238,7 +227,7 @@ namespace JefBot
                     break;
                 }
             }
-            return 1;
+            return Task.CompletedTask;
         }
 
         /// <summary>

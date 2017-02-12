@@ -7,6 +7,7 @@ using Discord;
 using System.Linq;
 using TwitchLib.Models.Client;
 using MySql.Data.MySqlClient;
+using Discord.WebSocket;
 
 namespace JefBot.Commands
 {
@@ -29,14 +30,14 @@ namespace JefBot.Commands
             }
         }
 
-        public void Discord(MessageEventArgs arg, DiscordClient client)
+        public void Discord(SocketMessage arg, DiscordSocketClient discordClient)
         {
-            var args = arg.Message.Text.Split(' ').ToList().Skip(1).ToList(); //this is probably so wrong
+            var args = arg.Content.Split(' ').ToList().Skip(1).ToList(); //this is probably so wrong
 
             if (args.Count > 0)
             {
-                string res = quote(args, "jefmajor", arg.User.Name);
-                arg.Channel.SendMessage(res);
+                string res = quote(args, "jefmajor", arg.Author.Username);
+                arg.Channel.SendMessageAsync(res);
             }
         }
 
