@@ -102,7 +102,7 @@ namespace JefBot
                 // Create a Channel object by searching for a channel named '#logs' on the server the ban occurred in.
                 var logChannel = e.Server.FindChannels("super_secret_mod_shenanigans").FirstOrDefault();
                 // Send a message to the server's log channel, stating that a user was banned.
-                await logChannel.SendMessage($"User Banned: {e.User.Name} by {e.Server.GetBans().}");
+                await logChannel.SendMessage($"User Banned: {e.User.Name}");
             };
   
             // OK seriously, this is the worst, but it works..
@@ -208,7 +208,6 @@ namespace JefBot
         /// <returns></returns>
         private int DiscordEvent(MessageEventArgs arg)
         {
-
             var enabledPlugins = _plugins.Where(plug => plug.Loaded).ToArray();
             var command = "";
             storemessage(arg.Message.Text);
@@ -262,6 +261,7 @@ namespace JefBot
         //Don't remove this, it's critical to see the chat in the bot, it quickly tells me if it's absolutely broken...
         private void Chatmsg(object sender, OnMessageReceivedArgs e)
         {
+
             storemessage(e.ChatMessage.Message);
             Console.WriteLine($"{e.ChatMessage.Channel}-{e.ChatMessage.Username}: {e.ChatMessage.Message}");
         }
