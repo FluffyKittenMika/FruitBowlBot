@@ -48,9 +48,10 @@ namespace JefBot.Commands
             if (uptime.Ticks == 0)
             {
                 List<DateTime> times = new List<DateTime>();
+                DateTime start = DateTime.Now;
+
                 foreach (var item in streamtimes)
                 {
-                    DateTime start = DateTime.Now;
                     DateTime then = start.AddDays(((int)item.Key - (int)start.DayOfWeek + 7) % 7);
                     then = then.Date + item.Value; // sets the time from whatever to the 20'th hour
                     times.Add(then);
@@ -62,7 +63,7 @@ namespace JefBot.Commands
                     span = times[1].Subtract(DateTime.Now);
                 }
 
-                return $"Next stream in {span.Days} Day(s) {span.Hours} Hour(s) {span.Minutes} Minute(s) {span.Seconds} Second(s) on the {times[0].Day}{getSuffix(times[0].Day)} That being a total of {span.TotalSeconds} seconds from now.";
+                return $"Next stream might be in {span.Days} Day(s) {span.Hours} Hour(s) {span.Minutes} Minute(s) {span.Seconds} Second(s) on the {(start + span).Day}{getSuffix((start + span).Day)}That being a total of {span.TotalSeconds} seconds from now.";
 
 
             }
