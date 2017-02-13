@@ -63,7 +63,7 @@ namespace JefBot.Commands
                     span = times[1].Subtract(DateTime.Now);
                 }
 
-                return $"Next stream might be in {span.Days} Day(s) {span.Hours} Hour(s) {span.Minutes} Minute(s) {span.Seconds} Second(s) on the {(start + span).Day}{getSuffix((start + span).Day)}That being a total of {span.TotalSeconds} seconds from now.";
+                return $"Next stream might be in {span.Days} Day(s), {span.Hours} Hour(s), {span.Minutes} Minute(s), {span.Seconds} Second(s), on the {(start + span).Day}{getSuffix((start + span).Day)}. That being a total of {span.TotalHours} Hour(s) from now.";
 
 
             }
@@ -80,7 +80,7 @@ namespace JefBot.Commands
 
         public void Discord(SocketMessage arg, DiscordSocketClient discordClient)
         {
-            arg.Channel.SendMessageAsync(time());
+            arg.Channel.SendMessageAsync("```"+time()+"```");
         }
     }
 }
