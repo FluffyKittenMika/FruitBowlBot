@@ -263,6 +263,9 @@ namespace JefBot
 
         private void RecivedResub(object sender, OnReSubscriberArgs e)
         {
+
+            var chatClient = (TwitchClient)sender;
+            chatClient.SendMessage(e.ReSubscriber.Channel,$"That's {e.ReSubscriber.Months/12} years jef");
             Console.WriteLine($@"{e.ReSubscriber.DisplayName} subbed for {e.ReSubscriber.Months} with the message '{e.ReSubscriber.ResubMessage}' :)");
         }
 
