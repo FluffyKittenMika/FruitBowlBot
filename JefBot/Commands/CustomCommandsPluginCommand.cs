@@ -39,7 +39,11 @@ namespace JefBot.Commands
 
         public void Execute(ChatCommand command, TwitchClient client)
         {
-            client.SendMessage(command.ChatMessage.Channel,customCommand(command.Command,command.ArgumentsAsList,command.ChatMessage.IsModerator,command.ChatMessage.Channel,command.ChatMessage.Username));
+            var response = customCommand(command.Command, command.ArgumentsAsList, command.ChatMessage.IsModerator, command.ChatMessage.Channel, command.ChatMessage.Username);
+            if (response != "null")
+            {
+                client.SendMessage(command.ChatMessage.Channel, response);
+            }
         }
 
         /// <summary>
