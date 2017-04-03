@@ -26,7 +26,6 @@ namespace JefBot
 
         //discord intergration.
         public DiscordSocketClient discordClient;
-        public static WebInterface webinterface;
 
         public static bool IsStreaming(string channel)
         {
@@ -44,11 +43,13 @@ namespace JefBot
         //constructor
         public Bot()
         {
-            init();
+            Init();
         }
 
         //Start shit up m8
-        private async void init()
+#pragma warning disable AvoidAsyncVoid // Avoid async void
+        private async void Init()
+#pragma warning restore AvoidAsyncVoid // Avoid async void
         {
             #region config loading
             var settingsFile = @"./Settings/Settings.txt";
@@ -89,7 +90,7 @@ namespace JefBot
                   });
             
                 await discordClient.LoginAsync(TokenType.Bot, settings["discordtoken"]);
-                await discordClient.ConnectAsync();
+                await discordClient.GetConnectionsAsync();
                 await discordClient.SetGameAsync("www.twitch.tv/arkentosh");
             }
 
@@ -98,7 +99,7 @@ namespace JefBot
 
                 if (!e.Author.IsBot)
                 {
-                    await DiscordEvent(e);
+                    await DiscordEventAsync(e);
                 }
 
             };
@@ -179,15 +180,9 @@ namespace JefBot
 
             #endregion
 
-            #region WebInterface
 
-            Console.WriteLine("Starting webinterface");
-            webinterface = new WebInterface();
-            webinterface.Start();
-            Console.WriteLine("Webinterface started");
-
-            #endregion
             Console.WriteLine("Bot init Complete");
+
         }
 
         /// <summary>
@@ -195,7 +190,7 @@ namespace JefBot
         /// </summary>
         /// <param name="arg"> the whole shibboleetbangbanglesbians</param>
         /// <returns></returns>
-        private Task DiscordEvent(SocketMessage arg)
+        private Task DiscordEventAsync(SocketMessage arg)
         {
             var enabledPlugins = _plugins.Where(plug => plug.Loaded).ToArray();
             var command = "";
