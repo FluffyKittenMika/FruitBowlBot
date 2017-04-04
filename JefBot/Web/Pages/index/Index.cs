@@ -20,7 +20,7 @@ namespace JefBot.Web.Pages
                 </style>
                 ";
                 int counter = 0;
-                string response = css + "<h1>Crypto likes dat ass</h1>";
+                string response = css;
 
                 foreach (var item in Bot._plugins)
                 {
