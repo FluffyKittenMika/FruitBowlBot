@@ -90,8 +90,9 @@ namespace JefBot
                   });
             
                 await discordClient.LoginAsync(TokenType.Bot, settings["discordtoken"]);
+                await discordClient.GetGroupChannelsAsync();
+                await discordClient.StartAsync();
                 await discordClient.GetConnectionsAsync();
-                await discordClient.SetGameAsync("www.twitch.tv/arkentosh");
             }
 
             discordClient.MessageReceived += async (e) =>{
@@ -179,7 +180,6 @@ namespace JefBot
             }
 
             #endregion
-
 
             Console.WriteLine("Bot init Complete");
 
