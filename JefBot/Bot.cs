@@ -108,6 +108,7 @@ namespace JefBot
             discordClient.MessageDeleted += async (e,d) =>
             {
                 string msg = $"{e.Value.Author}: {e.Value.Content}";
+                Console.WriteLine(msg);
 
                 if (e.Value.Channel.Id != 306093853885071360)
                 {
