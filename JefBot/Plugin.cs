@@ -15,7 +15,6 @@ namespace JefBot
 
         void Execute(ChatCommand command, TwitchClient client);
         void Discord(SocketMessage arg, DiscordSocketClient discordClient);
-        void MessageHandler(Message msg);
     }
 
 
