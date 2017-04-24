@@ -85,17 +85,17 @@ namespace JefBot
             if (settings["discordtoken"] != "tokengoeshere")
             {
                 discordClient = new DiscordSocketClient(
-                  new DiscordSocketConfig{
+                  new DiscordSocketConfig {
                       WebSocketProvider = Discord.Net.Providers.WS4Net.WS4NetProvider.Instance
                   });
-            
+
                 await discordClient.LoginAsync(TokenType.Bot, settings["discordtoken"]);
                 await discordClient.GetGroupChannelsAsync();
                 await discordClient.StartAsync();
                 await discordClient.GetConnectionsAsync();
             }
 
-            discordClient.MessageReceived += async (e) =>{
+            discordClient.MessageReceived += async (e) => {
                 Console.WriteLine($"{e.Channel.Name}:{e.Author.Username}:{e.Content}");
 
                 if (!e.Author.IsBot)
@@ -103,6 +103,17 @@ namespace JefBot
                     await DiscordEventAsync(e);
                 }
 
+            };
+
+            discordClient.MessageDeleted += async (e,d) =>
+            {
+                string msg = $"{e.Value.Author}: {e.Value.Content}";
+
+                if (e.Value.Channel.Id != 306093853885071360)
+                {
+                    await discordClient.GetGuild(236951447634182145).GetTextChannel(306093853885071360).SendMessageAsync(msg);
+                }
+            
             };
 
 
