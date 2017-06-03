@@ -30,16 +30,16 @@ namespace JefBot.Commands
         {
             var args = arg.Content.Split(' ').ToList().Skip(1).ToList();
             var command = arg.Content.Split(' ').First();
-            var response = customCommand(command.Substring(1), args,((SocketGuildUser)arg.Author).GuildPermissions.Administrator , Convert.ToString(arg.Channel.Id) , arg.Author.Username);
+            var response = CustomCommand(command.Substring(1), args,((SocketGuildUser)arg.Author).GuildPermissions.Administrator , Convert.ToString(arg.Channel.Id) , arg.Author.Username);
             if (response != "null")
             {
                 arg.Channel.SendMessageAsync(response);
             }
         }
 
-        public void Execute(ChatCommand command, TwitchClient client)
+        public void Twitch(ChatCommand command, TwitchClient client)
         {
-            var response = customCommand(command.Command, command.ArgumentsAsList, command.ChatMessage.IsModerator, command.ChatMessage.Channel, command.ChatMessage.Username);
+            var response = CustomCommand(command.Command, command.ArgumentsAsList, command.ChatMessage.IsModerator, command.ChatMessage.Channel, command.ChatMessage.Username);
             if (response != "null")
             {
                 client.SendMessage(command.ChatMessage.Channel, response);
@@ -53,7 +53,7 @@ namespace JefBot.Commands
         /// <param name="args">arguments</param>
         /// <param name="moderator">if the user is an administrator</param>
         /// <returns></returns>
-        private string customCommand(string command, List<string> args, bool moderator, string channel = null, string username = null)
+        private string CustomCommand(string command, List<string> args, bool moderator, string channel = null, string username = null)
         {
             try
             {
@@ -138,7 +138,7 @@ namespace JefBot.Commands
                     }
                 }
 
-                // Execute custom command
+                // Twitch custom command
                 foreach (var item in CustomCommands)
                 {
                     if (item.Command == command && item.Channel == channel)

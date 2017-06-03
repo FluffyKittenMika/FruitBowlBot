@@ -22,11 +22,11 @@ namespace JefBot.Commands
         //Non default definitions
         Random rnd = new Random();
 
-        public void Execute(ChatCommand command, TwitchClient client)
+        public void Twitch(ChatCommand command, TwitchClient client)
         {
             if (command.ArgumentsAsList.Count > 0)
             {
-                    client.SendMessage(command.ChatMessage.Channel, quote(command.ArgumentsAsList,command.ChatMessage.Channel,command.ChatMessage.Username));
+                    client.SendMessage(command.ChatMessage.Channel, Quote(command.ArgumentsAsList,command.ChatMessage.Channel,command.ChatMessage.Username));
             }
         }
 
@@ -36,12 +36,12 @@ namespace JefBot.Commands
 
             if (args.Count > 0)
             {
-                string res = quote(args, "jefmajor", arg.Author.Username);
+                string res = Quote(args, "jefmajor", arg.Author.Username);
                 arg.Channel.SendMessageAsync(res);
             }
         }
 
-        public string quote(List<string> args, string channel, string username)
+        public string Quote(List<string> args, string channel, string username)
         {
             if (args.Count > 0)
             {
@@ -67,7 +67,7 @@ namespace JefBot.Commands
                     w.Write($"\"{quote.Replace('|', ' ')}\"| {DateTime.Now} submitted by {username}" + Environment.NewLine);
 
                 if (!quoted)
-                    switch (rnd.Next(3))
+                    switch (rnd.Next(4))
                     {
                         case 0:
                             return "Quote submitted! 👌";
@@ -75,6 +75,8 @@ namespace JefBot.Commands
                             return "👌 Thanks!";
                         case 2:
                             return "Thanks for the quote!";
+                        case 3:
+                            return "Great! Thanks for the Quote!";
                         default:
                             return "Quote sent for review! 👌";
                     }

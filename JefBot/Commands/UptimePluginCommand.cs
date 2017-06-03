@@ -15,12 +15,12 @@ namespace JefBot.Commands
         public IEnumerable<string> Aliases => new[] { "u", "up" };
         public bool Loaded { get; set; } = true;
 
-        public void Execute(ChatCommand command, TwitchClient client)
+        public void Twitch(ChatCommand command, TwitchClient client)
         {
-            client.SendMessage(res(command.ChatMessage.Channel));
+            client.SendMessage(Res(command.ChatMessage.Channel));
         }
 
-        public string res(string channel)
+        public string Res(string channel)
         {
             var uptime = TwitchApi.Streams.GetUptime(channel);
             if (uptime.Ticks > 0)
@@ -38,7 +38,7 @@ namespace JefBot.Commands
             }
             else
             {
-                arg.Channel.SendMessageAsync(res(args[0]));
+                arg.Channel.SendMessageAsync(Res(args[0]));
             }
 
         }

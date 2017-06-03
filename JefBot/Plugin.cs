@@ -13,7 +13,7 @@ namespace JefBot
         bool Loaded { get; }
         string Help { get; }
 
-        void Execute(ChatCommand command, TwitchClient client);
+        void Twitch(ChatCommand command, TwitchClient client);
         void Discord(SocketMessage arg, DiscordSocketClient discordClient);
     }
 
@@ -24,6 +24,5 @@ namespace JefBot
         public string Channel { get; set; }
         public string Command { get; set; }
         public string Username { get; set; }
-
     }
 }

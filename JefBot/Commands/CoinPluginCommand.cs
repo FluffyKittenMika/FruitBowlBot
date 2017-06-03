@@ -18,12 +18,12 @@ namespace JefBot.Commands
 
         Random rng = new Random();
 
-        public void Execute(ChatCommand command, TwitchClient client)
+        public void Twitch(ChatCommand command, TwitchClient client)
         {
-            client.SendMessage(command.ChatMessage.Channel, coin(command.ChatMessage.Username));
+            client.SendMessage(command.ChatMessage.Channel, Coin(command.ChatMessage.Username));
         }
 
-        public string coin(string Username)
+        public string Coin(string Username)
         {
             if (rng.Next(1000) > 1)
             {
@@ -41,7 +41,7 @@ namespace JefBot.Commands
 
         public void Discord(SocketMessage arg, DiscordSocketClient discordClient)
         {
-            arg.Channel.SendMessageAsync(coin(arg.Author.Username));
+            arg.Channel.SendMessageAsync(Coin(arg.Author.Username));
         }
     }
 }

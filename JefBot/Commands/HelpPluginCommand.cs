@@ -19,51 +19,46 @@ namespace JefBot.Commands
         List<IPluginCommand> plug = new List<IPluginCommand>();
         Random rng = new Random();
 
-        public void Execute(ChatCommand command, TwitchClient client)
+        public void Twitch(ChatCommand command, TwitchClient client)
         {
-            if (!Bot.IsStreaming(command.ChatMessage.Channel))
+            try
             {
-                try
+                if (command.ArgumentsAsList.Count > 0)
                 {
-                    if (command.ArgumentsAsList.Count > 0)
+
+                    var args = command.ArgumentsAsList;
+                    var result = "";
+                    plug = new List<IPluginCommand>();
+                    plug.AddRange(Bot._plugins.Where(plug => plug.Aliases.Contains(args[0])).ToList());
+                    plug.AddRange(Bot._plugins.Where(plug => plug.Command == args[0]).ToList());
+
+
+                    foreach (var item in plug)
                     {
-
-                        var args = command.ArgumentsAsList;
-                        var result = "";
-                        plug = new List<IPluginCommand>();
-                        plug.AddRange(Bot._plugins.Where(plug => plug.Aliases.Contains(args[0])).ToList());
-                        plug.AddRange(Bot._plugins.Where(plug => plug.Command == args[0]).ToList());
-
-
-                        foreach (var item in plug)
+                        if (item.Command == args[0] || item.Aliases.Contains(args[0]))
                         {
-                            if (item.Command == args[0] || item.Aliases.Contains(args[0]))
-                            {
-                                result = item.Help;
-                                break;
-                            }
+                            result = item.Help;
+                            break;
+                        }
 
-                        }
-                        if (result == "")
-                        {
-                            result = $"No command / alias found for {args[0]} and therefore no help can be given";
-                        }
-                        client.SendMessage(command.ChatMessage.Channel, $"{result}");
                     }
-                    else
+                    if (result == "")
                     {
-                        client.SendMessage(command.ChatMessage.Channel, $"{Help}");
+                        result = $"No command / alias found for {args[0]} and therefore no help can be given";
                     }
+                    client.SendMessage(command.ChatMessage.Channel, $"{result}");
                 }
-                catch (Exception e)
+                else
                 {
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine(e.Message);
-                    Console.ForegroundColor = ConsoleColor.White;
+                    client.SendMessage(command.ChatMessage.Channel, $"{Help}");
                 }
             }
-           
-          
+            catch (Exception e)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine(e.Message);
+                Console.ForegroundColor = ConsoleColor.White;
+            }
         }
 
         public void Discord(SocketMessage arg, DiscordSocketClient discordClient)

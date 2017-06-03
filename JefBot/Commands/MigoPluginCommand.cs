@@ -70,7 +70,10 @@ namespace JefBot.Commands
          
         }
 
-        public void Execute(ChatCommand command, TwitchClient client)
+
+
+
+        public void Twitch(ChatCommand command, TwitchClient client)
         {
             if (timestampTwitch.AddMinutes(minutedelay) < DateTime.UtcNow || command.ChatMessage.IsModerator || command.ChatMessage.IsBroadcaster)
             {
@@ -80,23 +83,37 @@ namespace JefBot.Commands
                 }
                 if (command.ArgumentsAsList.Count == 0)
                 {
-                    Quote qu = migo();
+                    Quote qu = Migo();
                     if (qu.SubmittedBy == null || qu.SubmittedBy == "")
                     {
                         qu.SubmittedBy = "Unknown";
                     }
-                    string q = $"{qu.Quotestring} submitted by {qu.SubmittedBy} #{qu.id}";
+                    string q = $"{qu.Quotestring} submitted by {qu.SubmittedBy} #{qu.Id}";
                     client.SendMessage(command.ChatMessage.Channel, q);
                 }
                 else
                 {
-                    Quote qu = searchMigo(command.ArgumentsAsString);
-                    if (qu.SubmittedBy == null || qu.SubmittedBy == "")
+                    if (Int32.TryParse(command.ArgumentsAsString, out int x))
                     {
-                        qu.SubmittedBy = "Unknown";
+                        Quote qu = SearchMigo(x);
+                        if (qu.SubmittedBy == null || qu.SubmittedBy == "")
+                        {
+                            qu.SubmittedBy = "Unknown";
+                        }
+                        string q = $"{qu.Quotestring} QuoteID:{qu.Id}";
+                        client.SendMessage(q);
                     }
-                    string q = $"{qu.Quotestring} QuoteID:{qu.id}";
-                    client.SendMessage(q);
+                    else
+                    {
+                        Quote qu = SearchMigo(command.ArgumentsAsString);
+                        if (qu.SubmittedBy == null || qu.SubmittedBy == "")
+                        {
+                            qu.SubmittedBy = "Unknown";
+                        }
+                        string q = $"{qu.Quotestring} QuoteID:{qu.Id}";
+                        client.SendMessage(q);
+                    }
+                  
                 }
             }
         }
@@ -106,31 +123,73 @@ namespace JefBot.Commands
 
             var args = arg.Content.Split(' ').ToList().Skip(1).ToList();
             string argstring = string.Join(" ", args.ToArray());
-
+            Quote qu;
             if (args.Count == 0)
             {
                 timestampDiscord = DateTime.UtcNow;
-                Quote qu = migo();
+                qu = Migo();
                 if (qu.SubmittedBy == null || qu.SubmittedBy == "")
                 {
                     qu.SubmittedBy = "Unknown";
                 }
-                string q = $"```{qu.Quotestring}{Environment.NewLine}#{qu.id} by {qu.SubmittedBy}```";
+                string q = $"```{qu.Quotestring}{Environment.NewLine}#{qu.Id} by {qu.SubmittedBy}```";
                 arg.Channel.SendMessageAsync(q);
             }else
             {
-                Quote qu = searchMigo(argstring);
+                if (Int32.TryParse(argstring, out int x))
+                {
+                    qu = SearchMigo(x); //id search
+                }
+                else
+                {
+                    qu = SearchMigo(argstring);
+                }
                 if (qu.SubmittedBy == null || qu.SubmittedBy == "")
                 {
                     qu.SubmittedBy = "Unknown";
                 }
-                string q = $"```{qu.Quotestring}{Environment.NewLine}#{qu.id} by {qu.SubmittedBy}```";
+                string q = $"```{qu.Quotestring}{Environment.NewLine}#{qu.Id} by {qu.SubmittedBy}```";
                 arg.Channel.SendMessageAsync(q);
             }
             
         }
 
-        public Quote searchMigo(string search)
+        public Quote SearchMigo(int search)
+        {
+            using (MySqlConnection con = new MySqlConnection(Bot.SQLConnectionString))
+            {
+                con.Open();
+                MySqlCommand _cmd = con.CreateCommand();
+                _cmd.CommandText = @"SELECT * FROM `Quotes` WHERE `ID` = @input";
+                _cmd.Parameters.AddWithValue("@input", search);
+                List<Quote> quotes = new List<Quote>();
+                using (MySqlDataReader reader = _cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        var quote = reader.GetString(reader.GetOrdinal("QUOTE"));
+                        int id = reader.GetInt32(reader.GetOrdinal("ID"));
+                        var submitter = reader.GetString(reader.GetOrdinal("SUBMITTER"));
+                        DateTime timestamp = reader.GetDateTime(reader.GetOrdinal("TIMESTAMP"));
+                        var channel = reader.GetString(reader.GetOrdinal("CHANNEL"));
+                        quotes.Add(new Quote(quote, timestamp, submitter, channel, id));
+                    }
+                    reader.Close();
+                    if (quotes.Count > 0)
+                    {
+                        return quotes[rng.Next(quotes.Count)];
+                    }
+                    else
+                    {
+                        Quote nonefound = Migo();
+                        nonefound.Quotestring = "Found no results, have this one instead: " + nonefound.Quotestring;
+                        return nonefound;
+                    }
+                }
+            }
+        }
+
+        public Quote SearchMigo(string search)
         {
             using (MySqlConnection con = new MySqlConnection(Bot.SQLConnectionString))
             {
@@ -157,7 +216,7 @@ namespace JefBot.Commands
                     }
                     else
                     {
-                        Quote nonefound = migo();
+                        Quote nonefound = Migo();
                         nonefound.Quotestring = "Found no results, have this one instead: " + nonefound.Quotestring;
                         return nonefound;
                     }
@@ -165,7 +224,7 @@ namespace JefBot.Commands
             }
           
         }
-        public Quote migo()
+        public Quote Migo()
         {
             var derp = quotes.ElementAt(rng.Next(0, quotes.Count));
             pickedquotes.Add(derp);
@@ -185,14 +244,14 @@ namespace JefBot.Commands
         public DateTime Datesubmitted { get; set; }
         public string SubmittedBy { get; set; }
         public string Channel { get; set; }
-        public int id { get; set; }
+        public int Id { get; set; }
         public Quote(string quote, DateTime date, string submitter ="", string channel="",int id = 0)
         {
             Quotestring = quote;
             Datesubmitted = date;
             SubmittedBy = submitter;
             Channel = channel;
-            this.id = id;
+            this.Id = id;
         }
     }
 }

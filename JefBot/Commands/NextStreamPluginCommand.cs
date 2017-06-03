@@ -25,15 +25,15 @@ namespace JefBot.Commands
             streamtimes.Add(DayOfWeek.Saturday, TimeSpan.FromHours(21)); 
         }
 
-        public void Execute(ChatCommand command, TwitchClient client)
+        public void Twitch(ChatCommand command, TwitchClient client)
         {
             if (command.ChatMessage.Channel == "jefmajor")
             {
-                client.SendMessage(command.ChatMessage.Channel, time());
+                client.SendMessage(command.ChatMessage.Channel, Time());
             }
         }
 
-        public string time()
+        public string Time()
         {
             TimeSpan uptime = new TimeSpan();
 
@@ -63,7 +63,7 @@ namespace JefBot.Commands
                     span = times[1].Subtract(DateTime.Now);
                 }
 
-                return $"Next stream might be in {span.Days} Day(s), {span.Hours} Hour(s), {span.Minutes} Minute(s), {span.Seconds} Second(s), on the {(start + span).Day}{getSuffix((start + span).Day)}. That being a total of {span.TotalHours} Hour(s) from now.";
+                return $"Next stream might be in {span.Days} Day(s), {span.Hours} Hour(s), {span.Minutes} Minute(s), {span.Seconds} Second(s), on the {(start + span).Day}{GetSuffix((start + span).Day)}. That being a total of {span.TotalHours} Hour(s) from now.";
 
 
             }
@@ -73,14 +73,14 @@ namespace JefBot.Commands
             }
         }
 
-        private string getSuffix(int day)
+        private string GetSuffix(int day)
         {
             return (day == 11 || day == 12 || day == 13) ? "th" : (day == 1) ? "st" : (day == 2) ? "nd" : (day == 3) ? "rd" : "th";
         }
 
         public void Discord(SocketMessage arg, DiscordSocketClient discordClient)
         {
-            arg.Channel.SendMessageAsync("```"+time()+"```");
+            arg.Channel.SendMessageAsync("```"+Time()+"```");
         }
     }
 }

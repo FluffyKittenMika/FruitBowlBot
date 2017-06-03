@@ -5,7 +5,6 @@ using System.IO;
 using TwitchLib;
 using System.Threading;
 using Discord;
-using Discord.Audio;
 using Discord.WebSocket;
 using TwitchLib.Models.Client;
 using TwitchLib.Events.Client;
@@ -39,7 +38,7 @@ namespace JefBot
                 return false;
             }
         }
-     
+
         //constructor
         public Bot()
         {
@@ -79,7 +78,7 @@ namespace JefBot
             #endregion
 
             #region dbstring
-            SQLConnectionString = "SERVER=" + settings["dbserver"] + ";" + "DATABASE=" + settings["dbbase"] + ";" + "UID=" + settings["userid"] + ";" + "PASSWORD=" + settings["userpassword"] + ";";
+            SQLConnectionString = $"SERVER={settings["dbserver"]}; DATABASE = {settings["dbbase"]}; UID ={settings["userid"]}; PASSWORD = {settings["userpassword"]};";
             #endregion
             #region discord init
             if (settings["discordtoken"] != "tokengoeshere")
@@ -103,18 +102,6 @@ namespace JefBot
                     await DiscordEventAsync(e);
                 }
 
-            };
-
-            discordClient.MessageDeleted += async (e,d) =>
-            {
-                string msg = $"{e.Value.Author}: {e.Value.Content}";
-                Console.WriteLine(msg);
-
-                if (e.Value.Channel.Id != 306093853885071360)
-                {
-                    await discordClient.GetGuild(236951447634182145).GetTextChannel(306093853885071360).SendMessageAsync(msg);
-                }
-            
             };
 
 
@@ -206,7 +193,7 @@ namespace JefBot
         {
             var enabledPlugins = _plugins.Where(plug => plug.Loaded).ToArray();
             var command = "";
-            storemessage(arg.Content);
+            Storemessage(arg.Content);
             if (arg.Content[0] == '!') //TODO make option for this prefix :D ///meeh
             {
                 try
@@ -241,8 +228,9 @@ namespace JefBot
         /// for collecting bot data
         /// </summary>
         /// <param name="msg"></param>
-        private void storemessage(string msg)
+        private void Storemessage(string msg)
         {
+
             using (MySqlConnection con = new MySqlConnection(Bot.SQLConnectionString))
             {
                 con.Open();
@@ -258,8 +246,9 @@ namespace JefBot
         private void Chatmsg(object sender, OnMessageReceivedArgs e)
         {
 
-            storemessage(e.ChatMessage.Message);
+            Storemessage(e.ChatMessage.Message);
             Console.WriteLine($"{e.ChatMessage.Channel}-{e.ChatMessage.Username}: {e.ChatMessage.Message}");
+            Console.ForegroundColor = ConsoleColor.White;
         }
 
         private void Disconnected(object sender, OnDisconnectedArgs e)
@@ -272,7 +261,6 @@ namespace JefBot
         {
 
             var chatClient = (TwitchClient)sender;
-            chatClient.SendMessage(e.ReSubscriber.Channel,$"That's {e.ReSubscriber.Months/12} years jef");
             Console.WriteLine($@"{e.ReSubscriber.DisplayName} subbed for {e.ReSubscriber.Months} with the message '{e.ReSubscriber.ResubMessage}' :)");
         }
 
@@ -280,6 +268,7 @@ namespace JefBot
         {
             Console.WriteLine($@"{e.Subscriber.Name} Just subbed! What a bro!' :)");
         }
+        
 
         /// <summary>
         /// Executes all commands, we try to execute the main named command before any aliases to try and avoid overwrites.
@@ -299,7 +288,7 @@ namespace JefBot
             {
                 if (plug.Command == command)
                 {
-                    plug.Execute(e.Command, chatClient);
+                    plug.Twitch(e.Command, chatClient);
                     mainExecuted = true;
                     break;
                 }
@@ -309,14 +298,14 @@ namespace JefBot
             {
                 if (plug.Aliases.Contains(command))
                 {
-                    plug.Execute(e.Command, chatClient);
+                    plug.Twitch(e.Command, chatClient);
                     //aliasExecuted = true;
                     break;
                 }
             }
         }
 
-        public void run()
+        public void Run()
         {
             while (true)
             {

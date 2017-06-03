@@ -16,7 +16,7 @@ namespace JefBot
                 try //This just makes it a bit harder to permamently crash
                 {
                     Bot bot = new Bot();
-                    bot.run();
+                    bot.Run();
                 }
                 catch (Exception e)
                 {

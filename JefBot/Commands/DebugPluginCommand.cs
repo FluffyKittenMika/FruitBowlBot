@@ -17,7 +17,7 @@ namespace JefBot.Commands
         public IEnumerable<string> Aliases => new string[0];
         public bool Loaded { get; set; } = true;
 
-        public void Execute(ChatCommand command, TwitchClient client)
+        public void Twitch(ChatCommand command, TwitchClient client)
         {
             if (Bot.IsStreaming(command.ChatMessage.Channel))
             {
