@@ -158,10 +158,12 @@ namespace JefBot.Commands
 
                     using (Stream stream = new MemoryStream())//transform bmp to png in memory
                     {
+                        galaxy.Save(stream, System.Drawing.Imaging.ImageFormat.Png);
                         MultipartFormDataContent form = new MultipartFormDataContent();
                         HttpContent co = new StringContent("fiskebolle");
                         form.Add(co, "k");
                         co = new StreamContent(stream);
+                        co.Headers.Add("Content-Type", "image/png");
                         co.Headers.ContentDisposition = new System.Net.Http.Headers.ContentDispositionHeaderValue("form-data")
                         {
                             Name = "d",
