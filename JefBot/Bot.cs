@@ -210,9 +210,11 @@ namespace JefBot
             {
                 if (plug.Aliases.Contains(command) || plug.Command == command)
                 {
+
                     try
                     {
                         plug.Discord(arg, discordClient);
+                        arg.DeleteAsync();
                     }
                     catch (Exception err)
                     {

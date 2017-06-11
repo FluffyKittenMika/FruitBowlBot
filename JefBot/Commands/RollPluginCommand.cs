@@ -100,6 +100,7 @@ namespace JefBot.Commands
         {
             try
             {
+
                 var args = arg.Content.Split(' ').ToList().Skip(1).ToList();
                 var result = Dice.Roll(string.Join("", args.ToArray()));
                 arg.Channel.SendMessageAsync($"{arg.Author.Username} got {result}");

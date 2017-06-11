@@ -65,6 +65,7 @@ namespace JefBot.Commands
         {
             try
             {
+               
                 var args = arg.Content.Split(' ').ToList().Skip(1).ToList(); //this is probably so wrong
 
                 plug = new List<IPluginCommand>();

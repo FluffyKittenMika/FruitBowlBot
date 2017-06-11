@@ -7,6 +7,9 @@ using TwitchLib.Models.Client;
 using Discord.WebSocket;
 using System.Drawing;
 using System.IO;
+using System.Net;
+using System.Net.Http;
+using System.Globalization;
 
 namespace JefBot.Commands
 {
@@ -17,6 +20,7 @@ namespace JefBot.Commands
         public string Help => "!galaxy {stars}  (discord only)";
         public IEnumerable<string> Aliases => new[] { "g" };
         public bool Loaded { get; set; } = true;
+        public static HttpClient client = new HttpClient();
 
         List<IPluginCommand> plug = new List<IPluginCommand>();
         Random rng = new Random();
@@ -26,22 +30,17 @@ namespace JefBot.Commands
             //this is a discord only command. thanks
         }
 
-
         /// <summary>
         /// Returns a 250x250 Galaxy image
         /// </summary>
-        /// <param name="stars"></param>
-        /// <returns></returns>
-        public Bitmap Galaxy(int stars = 1000)
+        /// <param name="stars">how many stars you want, max of 10k</param>
+        /// <returns>Bitmap</returns>
+        public Bitmap Galaxy(int stars = 1000, int width = 250, int height = 250)
         {
             //define the map
-            Bitmap bmp = new Bitmap(250, 250);//hardcoded size, don't want it to use too much power 62500 pixels is plenty
-
-
+            Bitmap bmp = new Bitmap(width, height);//hardcoded size, don't want it to use too much power 62500 pixels is plenty
             //define the colour white
             System.Drawing.Color c = System.Drawing.Color.FromArgb(255, 255, 255);
-
-
 
             //make and fill image
             using (Graphics gfx = Graphics.FromImage(bmp))
@@ -71,7 +70,7 @@ namespace JefBot.Commands
             //define the bend
             double armrotation = 5;
             //a bit of a random sprinkles to remove the lines
-            double randomoffset = 0.04;
+            double randomoffset = 0.02d;
 
             //first loop, where we generate everything
             for (int i = 0; i < stars; i++)
@@ -101,12 +100,12 @@ namespace JefBot.Commands
                 angle = (int)(angle / armdistance) * armdistance + armoffset + rotation;
 
                 //define x and y
-                double starX = Math.Cos(angle) + distance;
-                double starY = Math.Sin(angle) + distance;
+                double starX = Math.Cos(angle) * (((2/width) - 25) * distance);
+                double starY = Math.Sin(angle) * (((2/height) - 25) * distance);
 
-                //add offset
-                starX += rng.NextDouble() * randomoffset + (0.5 * 250);
-                starY += rng.NextDouble() * randomoffset + (0.5 * 250);
+                //add offset and center
+                starX += (rng.NextDouble() * randomoffset) + (0.5 * 250);
+                starY += (rng.NextDouble() * randomoffset) + (0.5 * 250);
                 
 
                 //add stars to the mass exodus list
@@ -118,21 +117,12 @@ namespace JefBot.Commands
             {
                 bmp.SetPixel((int)item.X, (int)item.Y, c); //set the pixel cords to the correct colour
             }
-            bmp.Save($"{rng.Next()}.png",System.Drawing.Imaging.ImageFormat.Png);
-
             return bmp;
         }
-
-
-
-
-
-
-
-
+        
         public void Discord(SocketMessage arg, DiscordSocketClient discordClient)
         {
-            //try
+            try
             {
                 var args = arg.Content.Split(' ').ToList().Skip(1).ToList(); //this is probably so wrong (pro tip, it's verry bad)
                 if (args.Count > 0) //if arguments is greater than nothing at all, then we go on to round 1
@@ -141,28 +131,54 @@ namespace JefBot.Commands
 
                     Bitmap galaxy = Galaxy(x);
                     //transform bmp to png in memory
-                    using (MemoryStream stream = new MemoryStream())
+                    using (Stream stream = new MemoryStream())
                     {
                         //explicit call to imageformat 'casuse fuck 'discords' lib sometimes
                         galaxy.Save(stream, System.Drawing.Imaging.ImageFormat.Png);
-                        arg.Channel.SendFileAsync(stream, "Galaxy");
+
+                        MultipartFormDataContent form = new MultipartFormDataContent();
+                        HttpContent co = new StringContent("fiskebolle");
+                        form.Add(co, "k");
+                        co = new StreamContent(stream);
+                        co.Headers.ContentDisposition = new System.Net.Http.Headers.ContentDispositionHeaderValue("form-data")
+                        {
+                            Name = "d",
+                            FileName = $"{rng.Next()}.png"
+                        };
+                        form.Add(co);
+                        var res = client.PostAsync("http://u.rubixy.com/", form);
+                        arg.Channel.SendMessageAsync(res.Result.Content.ReadAsStringAsync().Result);
+
+                        // arg.Channel.SendFileAsync(stream, "Galaxy.png","blep",false);
                     }
                 }
                 else
                 {
                     Bitmap galaxy = Galaxy();//no arg then no barge
-                    //transform bmp to png in memory
-                    using (MemoryStream stream = new MemoryStream())
+
+                    using (Stream stream = new MemoryStream())//transform bmp to png in memory
                     {
-                        //same as before
-                        galaxy.Save(stream, System.Drawing.Imaging.ImageFormat.Png);
-                        arg.Channel.SendFileAsync(stream, "Galaxy");
+                        MultipartFormDataContent form = new MultipartFormDataContent();
+                        HttpContent co = new StringContent("fiskebolle");
+                        form.Add(co, "k");
+                        co = new StreamContent(stream);
+                        co.Headers.ContentDisposition = new System.Net.Http.Headers.ContentDispositionHeaderValue("form-data")
+                        {
+                            Name = "d",
+                            FileName = $"{rng.Next()}.png"
+                        };
+                        form.Add(co);
+                        var res = client.PostAsync("http://u.rubixy.com/", form);
+                        arg.Channel.SendMessageAsync(res.Result.Content.ReadAsStringAsync().Result);
                     }
                 }
+                arg.DeleteAsync();
+
             }
-            //catch (Exception err)
+            catch (Exception err)
             {
-                //Console.WriteLine(err.Message);
+                Console.WriteLine(err.Message);
+                Console.WriteLine(err.StackTrace);
             }
 
         }
