@@ -62,7 +62,7 @@ namespace JefBot.Commands
             //static things
 
             //amount of galaxy branches
-            int arms = 5;
+            int arms = rng.Next(2,9);
             //offset (width of branches)
             double armoffsetmax = 0.5d;
             //prefered distance between the branches
@@ -100,8 +100,8 @@ namespace JefBot.Commands
                 angle = (int)(angle / armdistance) * armdistance + armoffset + rotation;
 
                 //define x and y
-                double starX = Math.Cos(angle) * (((2/width) - 25) * distance);
-                double starY = Math.Sin(angle) * (((2/height) - 25) * distance);
+                double starX = Math.Cos(angle) * (100 * distance);
+                double starY = Math.Sin(angle) * (100 * distance);
 
                 //add offset and center
                 starX += (rng.NextDouble() * randomoffset) + (0.5 * 250);
@@ -139,6 +139,7 @@ namespace JefBot.Commands
                         MultipartFormDataContent form = new MultipartFormDataContent();
                         HttpContent co = new StringContent("fiskebolle");
                         form.Add(co, "k");
+                        stream.Position = 0;
                         co = new StreamContent(stream);
                         co.Headers.ContentDisposition = new System.Net.Http.Headers.ContentDispositionHeaderValue("form-data")
                         {
@@ -156,22 +157,30 @@ namespace JefBot.Commands
                 {
                     Bitmap galaxy = Galaxy();//no arg then no barge
 
-                    using (Stream stream = new MemoryStream())//transform bmp to png in memory
-                    {
+                    using (Stream stream = new MemoryStream())
+                    { //transform bmp to png in memory
+
+
                         galaxy.Save(stream, System.Drawing.Imaging.ImageFormat.Png);
+                        //galaxy.Save("a.png", System.Drawing.Imaging.ImageFormat.Png);
+
+
                         MultipartFormDataContent form = new MultipartFormDataContent();
                         HttpContent co = new StringContent("fiskebolle");
                         form.Add(co, "k");
+                        stream.Position = 0;
                         co = new StreamContent(stream);
-                        co.Headers.Add("Content-Type", "image/png");
                         co.Headers.ContentDisposition = new System.Net.Http.Headers.ContentDispositionHeaderValue("form-data")
                         {
                             Name = "d",
-                            FileName = $"{rng.Next()}.png"
+                            FileName = $"{rng.Next()}.png",
+                            Size = stream.Length
                         };
                         form.Add(co);
                         var res = client.PostAsync("http://u.rubixy.com/", form);
+
                         arg.Channel.SendMessageAsync(res.Result.Content.ReadAsStringAsync().Result);
+
                     }
                 }
                 arg.DeleteAsync();
