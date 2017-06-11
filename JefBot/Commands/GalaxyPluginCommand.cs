@@ -124,65 +124,38 @@ namespace JefBot.Commands
         {
             try
             {
+                Bitmap galaxy;
                 var args = arg.Content.Split(' ').ToList().Skip(1).ToList(); //this is probably so wrong (pro tip, it's verry bad)
                 if (args.Count > 0) //if arguments is greater than nothing at all, then we go on to round 1
                 {
                     Int32.TryParse(args[0], out int x);
-
-                    Bitmap galaxy = Galaxy(x);
-                    //transform bmp to png in memory
-                    using (Stream stream = new MemoryStream())
-                    {
-                        //explicit call to imageformat 'casuse fuck 'discords' lib sometimes
-                        galaxy.Save(stream, System.Drawing.Imaging.ImageFormat.Png);
-
-                        MultipartFormDataContent form = new MultipartFormDataContent();
-                        HttpContent co = new StringContent("fiskebolle");
-                        form.Add(co, "k");
-                        stream.Position = 0;
-                        co = new StreamContent(stream);
-                        co.Headers.ContentDisposition = new System.Net.Http.Headers.ContentDispositionHeaderValue("form-data")
-                        {
-                            Name = "d",
-                            FileName = $"{rng.Next()}.png"
-                        };
-                        form.Add(co);
-                        var res = client.PostAsync("http://u.rubixy.com/", form);
-                        arg.Channel.SendMessageAsync(res.Result.Content.ReadAsStringAsync().Result);
-
-                        // arg.Channel.SendFileAsync(stream, "Galaxy.png","blep",false);
-                    }
+                    galaxy = Galaxy(x);
                 }
                 else
                 {
-                    Bitmap galaxy = Galaxy();//no arg then no barge
-
-                    using (Stream stream = new MemoryStream())
-                    { //transform bmp to png in memory
-
-
-                        galaxy.Save(stream, System.Drawing.Imaging.ImageFormat.Png);
-                        //galaxy.Save("a.png", System.Drawing.Imaging.ImageFormat.Png);
-
-
-                        MultipartFormDataContent form = new MultipartFormDataContent();
-                        HttpContent co = new StringContent("fiskebolle");
-                        form.Add(co, "k");
-                        stream.Position = 0;
-                        co = new StreamContent(stream);
-                        co.Headers.ContentDisposition = new System.Net.Http.Headers.ContentDispositionHeaderValue("form-data")
-                        {
-                            Name = "d",
-                            FileName = $"{rng.Next()}.png",
-                            Size = stream.Length
-                        };
-                        form.Add(co);
-                        var res = client.PostAsync("http://u.rubixy.com/", form);
-
-                        arg.Channel.SendMessageAsync(res.Result.Content.ReadAsStringAsync().Result);
-
-                    }
+                    galaxy = Galaxy();//no arg then no barge
                 }
+
+                using (Stream stream = new MemoryStream())
+                { //transform bmp to png in memory
+                    galaxy.Save(stream, System.Drawing.Imaging.ImageFormat.Png);
+                    //galaxy.Save("a.png", System.Drawing.Imaging.ImageFormat.Png);
+                    MultipartFormDataContent form = new MultipartFormDataContent();
+                    HttpContent co = new StringContent("fiskebolle");
+                    form.Add(co, "k");
+                    stream.Position = 0;
+                    co = new StreamContent(stream);
+                    co.Headers.ContentDisposition = new System.Net.Http.Headers.ContentDispositionHeaderValue("form-data")
+                    {
+                        Name = "d",
+                        FileName = $"{rng.Next()}.png",
+                        Size = stream.Length
+                    };
+                    form.Add(co);
+                    var res = client.PostAsync("http://u.rubixy.com/", form);
+                    arg.Channel.SendMessageAsync("<" + res.Result.Content.ReadAsStringAsync().Result + ">");
+                }
+
                 arg.DeleteAsync();
 
             }
