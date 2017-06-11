@@ -174,7 +174,7 @@ namespace JefBot.Commands
                         var channel = reader.GetString(reader.GetOrdinal("CHANNEL"));
                         quotes.Add(new Quote(quote, timestamp, submitter, channel, id));
                     }
-                    reader.Close();
+                    //reader.Close();
                     if (quotes.Count > 0)
                     {
                         return quotes[rng.Next(quotes.Count)];
@@ -209,7 +209,7 @@ namespace JefBot.Commands
                         var channel = reader.GetString(reader.GetOrdinal("CHANNEL"));
                         quotes.Add(new Quote(quote, timestamp, submitter, channel, id));
                     }
-                    reader.Close();
+                    //reader.Close();
                     if (quotes.Count > 0)
                     {
                         return quotes[rng.Next(quotes.Count)];
