@@ -43,7 +43,7 @@ namespace JefBot.Commands
             "Ask again, and Greb might know the answer you seek",
             "Donate $1 to Arkentosh, and he will reveal your answer",
             "Feel the wind, and you will know the truth",
-            "Definitly",
+            "Definitely",
             "Ask Selenaut about his game and he will tell you the truth about yourself",
             "Only you, my friend, knows this, within your heart",
             ":blep:",
