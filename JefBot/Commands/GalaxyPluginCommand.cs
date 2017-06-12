@@ -329,7 +329,13 @@ namespace JefBot.Commands
                     item.RotateDegrees(RNG - (360 / TotalFrames));
                     CartPoint Point = new CartPoint(item);
                     Point.Translate((int)(0.5f * Dimension), (int)(0.5f * Dimension));
-                    Frame.SetPixel((int)Point.X, (int)Point.Y, c); 
+                    try
+                    {
+                        Frame.SetPixel((int)Point.X, (int)Point.Y, c);
+                    }
+                    catch (Exception e)
+                    {
+                    }
                     item.RotateDegrees(0 - RNG);
                 }
                 OutList.Add(Frame);
