@@ -325,10 +325,12 @@ namespace JefBot.Commands
                 Bitmap Frame = new Bitmap(Base);
                 foreach (var item in StarList)
                 {
-                    item.RotateDegrees(0 - (360 / TotalFrames));
+                    Int32 RNG = rng.Next(10) - 5;
+                    item.RotateDegrees(RNG + (360 / TotalFrames));
                     CartPoint Point = new CartPoint(item);
                     Point.Translate((int)(0.5f * Dimension), (int)(0.5f * Dimension));
-                    Frame.SetPixel((int)Point.X, (int)Point.Y, c); //set the pixel cords to the correct colour
+                    Frame.SetPixel((int)Point.X, (int)Point.Y, c); 
+                    item.RotateDegrees(0 - RNG);
                 }
                 OutList.Add(Frame);
             }
