@@ -214,7 +214,6 @@ namespace JefBot
                     try
                     {
                         plug.Discord(arg, discordClient);
-                        arg.DeleteAsync();
                     }
                     catch (Exception err)
                     {

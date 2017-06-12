@@ -27,6 +27,21 @@ namespace JefBot.Commands
 
         public void Twitch(ChatCommand command, TwitchClient client)
         {
+            if (command.ChatMessage.IsModerator)
+            {
+                Bitmap galaxy = Galaxy(2500, 500, 500);
+
+                using (Stream stream = new MemoryStream())
+                { //transform bmp to png in memory
+                    galaxy.Save(stream, System.Drawing.Imaging.ImageFormat.Png);
+                    //galaxy.Save("a.png", System.Drawing.Imaging.ImageFormat.Png);
+
+                    stream.Position = 0;
+                    //arg.Channel.SendMessageAsync($"<{UploadImage.Upload(stream)}>");
+                    client.SendMessage(command.ChatMessage.Channel,UploadImage.Upload(stream));
+                }
+
+            }
             //this is a discord only command. thanks
         }
 
@@ -46,7 +61,7 @@ namespace JefBot.Commands
             using (Graphics gfx = Graphics.FromImage(bmp))
             using (SolidBrush brush = new SolidBrush(System.Drawing.Color.FromArgb(0, 0, 0)))
             {
-                gfx.FillRectangle(brush, 0, 0, 250, 250);//hardcoded size
+                gfx.FillRectangle(brush, 0, 0, width, height);//hardcoded size
             }
 
 
@@ -62,7 +77,7 @@ namespace JefBot.Commands
             //static things
 
             //amount of galaxy branches
-            int arms = rng.Next(2,9);
+            int arms = rng.Next(2, 9);
             //offset (width of branches)
             double armoffsetmax = 0.5d;
             //prefered distance between the branches
@@ -100,16 +115,16 @@ namespace JefBot.Commands
                 angle = (int)(angle / armdistance) * armdistance + armoffset + rotation;
 
                 //define x and y
-                double starX = Math.Cos(angle) * (100 * distance);
-                double starY = Math.Sin(angle) * (100 * distance);
+                double starX = Math.Cos(angle) * ((width / 2) * distance);
+                double starY = Math.Sin(angle) * ((height / 2) * distance);
 
                 //add offset and center
-                starX += (rng.NextDouble() * randomoffset) + (0.5 * 250);
-                starY += (rng.NextDouble() * randomoffset) + (0.5 * 250);
-                
+                starX += (rng.NextDouble() * randomoffset) + (0.5 * width);
+                starY += (rng.NextDouble() * randomoffset) + (0.5 * height);
+
 
                 //add stars to the mass exodus list
-                StarList.Add(new Star(starX,starY));
+                StarList.Add(new Star(starX, starY));
             }
 
             //probably end up merging the 2 loops
@@ -119,7 +134,7 @@ namespace JefBot.Commands
             }
             return bmp;
         }
-        
+
         public void Discord(SocketMessage arg, DiscordSocketClient discordClient)
         {
             try
@@ -140,22 +155,11 @@ namespace JefBot.Commands
                 { //transform bmp to png in memory
                     galaxy.Save(stream, System.Drawing.Imaging.ImageFormat.Png);
                     //galaxy.Save("a.png", System.Drawing.Imaging.ImageFormat.Png);
-                    MultipartFormDataContent form = new MultipartFormDataContent();
-                    HttpContent co = new StringContent("fiskebolle");
-                    form.Add(co, "k");
-                    stream.Position = 0;
-                    co = new StreamContent(stream);
-                    co.Headers.ContentDisposition = new System.Net.Http.Headers.ContentDispositionHeaderValue("form-data")
-                    {
-                        Name = "d",
-                        FileName = $"{rng.Next()}.png",
-                        Size = stream.Length
-                    };
-                    form.Add(co);
-                    var res = client.PostAsync("http://u.rubixy.com/", form);
-                    arg.Channel.SendMessageAsync("<" + res.Result.Content.ReadAsStringAsync().Result + ">");
-                }
 
+                    stream.Position = 0;
+                    arg.Channel.SendMessageAsync($"<{UploadImage.Upload(stream)}>");
+                   // arg.Channel.SendFileAsync(stream,"Galaxy","bepis");
+                }
                 arg.DeleteAsync();
 
             }
@@ -166,6 +170,30 @@ namespace JefBot.Commands
             }
 
         }
+
+        public static class UploadImage
+        {
+            static Random rng = new Random();
+            public static string Upload(Stream stream)
+            {
+                MultipartFormDataContent form = new MultipartFormDataContent();
+                HttpContent co = new StringContent("fiskebolle");
+                form.Add(co, "k");
+                stream.Position = 0;
+                co = new StreamContent(stream);
+                co.Headers.ContentDisposition = new System.Net.Http.Headers.ContentDispositionHeaderValue("form-data")
+                {
+                    Name = "d",
+                    FileName = $"{rng.Next()}.png",
+                    Size = stream.Length
+                };
+                form.Add(co);
+                var res = client.PostAsync("http://u.rubixy.com/", form);
+                return res.Result.Content.ReadAsStringAsync().Result;
+                
+            }
+        }
+
 
         public class Star
         {
