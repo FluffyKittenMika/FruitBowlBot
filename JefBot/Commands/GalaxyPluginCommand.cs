@@ -50,7 +50,7 @@ namespace JefBot.Commands
         /// </summary>
         /// <param name="stars">how many stars you want, max of 10k</param>
         /// <returns>Bitmap</returns>
-        public Bitmap Galaxy(int stars = 1000, int width = 250, int height = 250)
+        public Bitmap Galaxy(int stars = 2500, int width = 500, int height = 500)
         {
             //define the map
             Bitmap bmp = new Bitmap(width, height);//hardcoded size, don't want it to use too much power 62500 pixels is plenty
@@ -69,9 +69,9 @@ namespace JefBot.Commands
             List<Star> StarList = new List<Star>();
 
             //limit the amount to 10k
-            if (stars > 10000)
+            if (stars > 25000)
             {
-                stars = 10000;
+                stars = 25000;
             }
 
             //static things

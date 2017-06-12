@@ -76,6 +76,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Bot.cs" />
+    <Compile Include="Commands\8ballPluginCommand.cs" />
     <Compile Include="Commands\CoinPluginCommand.cs" />
     <Compile Include="Commands\CustomCommandsPluginCommand.cs" />
     <Compile Include="Commands\DebugPluginCommand.cs" />
@@ -118,6 +119,9 @@
     <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="BumpKit, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Bumpkit.1.0.2\lib\BumpKit.dll</HintPath>
+    </Reference>
     <Reference Include="Discord.Net.Commands, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Discord.Net.Commands.1.0.0-rc\lib\netstandard1.3\Discord.Net.Commands.dll</HintPath>
     </Reference>
