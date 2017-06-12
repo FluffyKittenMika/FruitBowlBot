@@ -326,7 +326,7 @@ namespace JefBot.Commands
                 foreach (var item in StarList)
                 {
                     Int32 RNG = rng.Next(10) - 5;
-                    item.RotateDegrees(RNG + (360 / TotalFrames));
+                    item.RotateDegrees(RNG - (360 / TotalFrames));
                     CartPoint Point = new CartPoint(item);
                     Point.Translate((int)(0.5f * Dimension), (int)(0.5f * Dimension));
                     Frame.SetPixel((int)Point.X, (int)Point.Y, c); 
