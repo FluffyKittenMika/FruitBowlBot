@@ -140,27 +140,60 @@ namespace JefBot.Commands
 
         public string MakeGif(List<Bitmap> bitmaps)
         {
-            foreach (var item in bitmaps)
+            
+            Stream stream = new MemoryStream();
+            System.Drawing.Image image;
+            var gif = File.OpenWrite("gif.gif");
+            var encoder = new BumpKit.GifEncoder(gif) { FrameDelay = new TimeSpan(1) };
+
+            for (int i = 0; i < bitmaps.Count; i++)
             {
-                using (Stream str = new MemoryStream())
-                {
-                    item.Save(str, System.Drawing.Imaging.ImageFormat.Gif);
-                    str.Position = 0;
-                    using (var image = System.Drawing.Image.FromStream(str))
-                    using (var gif = File.OpenWrite("gif.gif"))
-                    using (var encoder = new BumpKit.GifEncoder(gif))
-                        encoder.AddFrame(image);
-                    
-                }
+                //move bitmap to memory stream
+                stream.Position = 0;
+                bitmaps[i].Save(stream, System.Drawing.Imaging.ImageFormat.Png);
+                stream.Position = 0;
+                image = System.Drawing.Image.FromStream(stream);
+                encoder.AddFrame(image);
+            }
+            stream.Position = 0;
+            gif.Close();
+            stream.Close();
+            
+            Stream strm = new FileStream("gif.gif", FileMode.Open);
+            return UploadImage.Upload(strm,"gif");
+
+        }
+
+
+        /// <summary>
+        /// Returns status of file
+        /// </summary>
+        /// <param name="file"></param>
+        /// <returns>Bool</returns>
+        protected virtual bool IsFileLocked(FileInfo file)
+        {
+            FileStream stream = null;
+
+            try
+            {
+                stream = file.Open(FileMode.Open, FileAccess.Read, FileShare.None);
+            }
+            catch (IOException)
+            {
+                //the file is unavailable because it is:
+                //still being written to
+                //or being processed by another thread
+                //or does not exist (has already been processed)
+                return true;
+            }
+            finally
+            {
+                if (stream != null)
+                    stream.Close();
             }
 
-
-            Stream strm = new FileStream("gif.gif", FileMode.Open);
-            
-
-            return UploadImage.Upload(strm);
-
-
+            //file is not locked
+            return false;
         }
 
 
@@ -242,13 +275,13 @@ namespace JefBot.Commands
             //static things
 
             //amount of galaxy branches
-            int arms = rng.Next(1, 9);
+            int arms = rng.Next(1, 10);
             //offset (width of branches)
-            double armoffsetmax = 0.5d;
+            double armoffsetmax = 0.8d;
             //prefered distance between the branches
             double armdistance = 2 * Math.PI / arms;
             //define the bend
-            double armrotation = 5;
+            double armrotation = rng.Next(3,9);
             //a bit of a random sprinkles to remove the lines
             //double randomoffset = 0.02d;
 
@@ -292,7 +325,7 @@ namespace JefBot.Commands
                 Bitmap Frame = new Bitmap(Base);
                 foreach (var item in StarList)
                 {
-                    item.RotateDegrees((360 / TotalFrames));
+                    item.RotateDegrees(0 - (360 / TotalFrames));
                     CartPoint Point = new CartPoint(item);
                     Point.Translate((int)(0.5f * Dimension), (int)(0.5f * Dimension));
                     Frame.SetPixel((int)Point.X, (int)Point.Y, c); //set the pixel cords to the correct colour
@@ -344,7 +377,7 @@ namespace JefBot.Commands
         public static class UploadImage
         {
             static Random rng = new Random();
-            public static string Upload(Stream stream)
+            public static string Upload(Stream stream, string type = "png")
             {
                 MultipartFormDataContent form = new MultipartFormDataContent();
                 HttpContent co = new StringContent("fiskebolle");
@@ -354,7 +387,7 @@ namespace JefBot.Commands
                 co.Headers.ContentDisposition = new System.Net.Http.Headers.ContentDispositionHeaderValue("form-data")
                 {
                     Name = "d",
-                    FileName = $"{rng.Next()}.png",
+                    FileName = $"{rng.Next()}.{type}",
                     Size = stream.Length
                 };
                 form.Add(co);
