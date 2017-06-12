@@ -48,7 +48,7 @@ namespace JefBot.Commands
         /// <summary>
         /// Returns a 250x250 Galaxy image
         /// </summary>
-        /// <param name="stars">how many stars you want, max of 10k</param>
+        /// <param name="stars">how many stars you want</param>
         /// <returns>Bitmap</returns>
         public Bitmap Galaxy(int stars = 2500, int width = 500, int height = 500)
         {
@@ -68,7 +68,6 @@ namespace JefBot.Commands
             //initialise the list of points
             List<Star> StarList = new List<Star>();
 
-            //limit the amount to 10k
             if (stars > 25000)
             {
                 stars = 25000;
@@ -205,6 +204,7 @@ namespace JefBot.Commands
             {
                 Console.WriteLine(err.Message);
                 Console.WriteLine(err.StackTrace);
+                arg.Channel.SendMessageAsync(err.Message);
             }
 
         }
@@ -230,7 +230,6 @@ namespace JefBot.Commands
             //initialise the list of points
             List<PolarStar> StarList = new List<PolarStar>();
 
-            //limit the amount to 10k
             if (stars > 25000)
             {
                 stars = 25000;
