@@ -23,7 +23,7 @@ namespace JefBot.Commands
         public static HttpClient client = new HttpClient();
 
         List<IPluginCommand> plug = new List<IPluginCommand>();
-        Random rng = new Random();
+        public static Random rng = new Random();
 
         public void Twitch(ChatCommand command, TwitchClient client)
         {
@@ -72,6 +72,10 @@ namespace JefBot.Commands
             if (stars > 25000)
             {
                 stars = 25000;
+            }
+            if (stars < 100)
+            {
+                stars = 100;
             }
 
             //static things
@@ -135,12 +139,47 @@ namespace JefBot.Commands
             return bmp;
         }
 
+        public string MakeGif(List<Bitmap> bitmaps)
+        {
+            foreach (var item in bitmaps)
+            {
+                using (Stream str = new MemoryStream())
+                {
+                    item.Save(str, System.Drawing.Imaging.ImageFormat.Gif);
+                    str.Position = 0;
+                    using (var image = System.Drawing.Image.FromStream(str))
+                    using (var gif = File.OpenWrite("gif.gif"))
+                    using (var encoder = new BumpKit.GifEncoder(gif))
+                        encoder.AddFrame(image);
+                    
+                }
+            }
+
+
+            Stream strm = new FileStream("gif.gif", FileMode.Open);
+            
+
+            return UploadImage.Upload(strm);
+
+
+        }
+
+
         public void Discord(SocketMessage arg, DiscordSocketClient discordClient)
         {
             try
             {
                 Bitmap galaxy;
+
                 var args = arg.Content.Split(' ').ToList().Skip(1).ToList(); //this is probably so wrong (pro tip, it's verry bad)
+                if (args.Count > 0)
+                {
+                    if (args[0] == "gif")
+                    {
+                        arg.Channel.SendMessageAsync(MakeGif(AnimatedGalaxy(1000, 250, 30))); 
+                        return;
+                    }
+                }
                 if (args.Count > 0) //if arguments is greater than nothing at all, then we go on to round 1
                 {
                     Int32.TryParse(args[0], out int x);
@@ -160,7 +199,6 @@ namespace JefBot.Commands
                     arg.Channel.SendMessageAsync($"<{UploadImage.Upload(stream)}>");
                    // arg.Channel.SendFileAsync(stream,"Galaxy","bepis");
                 }
-                arg.DeleteAsync();
 
             }
             catch (Exception err)
@@ -169,6 +207,139 @@ namespace JefBot.Commands
                 Console.WriteLine(err.StackTrace);
             }
 
+        }
+
+
+        
+        public static List<Bitmap> AnimatedGalaxy(int stars = 1000, int Dimension = 250, int TotalFrames = 1)
+        {
+            List<Bitmap> OutList = new List<Bitmap>();
+            //define the map
+            Bitmap Base = new Bitmap(Dimension, Dimension);//hardcoded size, don't want it to use too much power 62500 pixels is plenty
+            //define the colour white
+            System.Drawing.Color c = System.Drawing.Color.FromArgb(255, 255, 255);
+
+            //make and fill image
+            using (Graphics gfx = Graphics.FromImage(Base))
+            using (SolidBrush brush = new SolidBrush(System.Drawing.Color.FromArgb(0, 0, 0)))
+            {
+                gfx.FillRectangle(brush, 0, 0, Dimension, Dimension);//hardcoded size
+            }
+
+
+            //initialise the list of points
+            List<PolarStar> StarList = new List<PolarStar>();
+
+            //limit the amount to 10k
+            if (stars > 25000)
+            {
+                stars = 25000;
+            }
+            if (stars < 100)
+            {
+                stars = 100;
+            }
+
+            //static things
+
+            //amount of galaxy branches
+            int arms = rng.Next(1, 9);
+            //offset (width of branches)
+            double armoffsetmax = 0.5d;
+            //prefered distance between the branches
+            double armdistance = 2 * Math.PI / arms;
+            //define the bend
+            double armrotation = 5;
+            //a bit of a random sprinkles to remove the lines
+            //double randomoffset = 0.02d;
+
+            //first loop, where we generate everything
+            for (int i = 0; i < stars; i++)
+            {
+                //distance from center
+                double distance = rng.NextDouble();
+                distance = Math.Pow(distance, 2);
+
+                //angle of a circle
+                double angle = rng.NextDouble() * 2 * Math.PI;
+
+                //set the offset
+                double armoffset = rng.NextDouble() * armoffsetmax;
+                armoffset = armoffset - armoffsetmax / 2; //limits it to the lines
+                armoffset = armoffset * (1 / distance); //spread em out a bit
+
+                //sqare em up
+                double sqaredarmoffset = Math.Pow(armoffset, 2);
+                if (armoffset < 0)
+                    sqaredarmoffset = sqaredarmoffset * -1;
+                armoffset = sqaredarmoffset;
+
+                //calculate rotation point
+                double rotation = distance * armrotation;
+
+                //manipulate it a bit
+                angle = (int)(angle / armdistance) * armdistance + armoffset + rotation;
+
+                //add stars to the mass exodus list
+
+                StarList.Add(new PolarStar(distance * Dimension * 0.5f, angle));
+
+                //maybe not add to list if a star is already there?
+            }
+
+            //probably end up merging the 2 loops
+            for (Int32 Index = 0; Index < TotalFrames; Index++)
+            {
+                Bitmap Frame = new Bitmap(Base);
+                foreach (var item in StarList)
+                {
+                    item.RotateDegrees((360 / TotalFrames));
+                    CartPoint Point = new CartPoint(item);
+                    Point.Translate((int)(0.5f * Dimension), (int)(0.5f * Dimension));
+                    Frame.SetPixel((int)Point.X, (int)Point.Y, c); //set the pixel cords to the correct colour
+                }
+                OutList.Add(Frame);
+            }
+            return OutList;
+        }
+
+
+
+        public class PolarStar
+        {
+
+            public PolarStar(double Distance, double AngleR)
+            {
+                this.Distance = Distance;
+                this.AngleD = AngleR / Math.PI * 180;
+            }
+
+            public PolarStar()
+            {
+
+            }
+            public void RotateDegrees(double Degrees)
+            {
+                AngleD += Degrees;
+            }
+            public double Distance { get; set; }
+            public double AngleD { get; set; }
+        }
+
+        public class CartPoint
+        {
+            public CartPoint(PolarStar Star)
+            {
+                X = Math.Cos(Star.AngleD / 180 * Math.PI) * Star.Distance;
+                Y = Math.Sin(Star.AngleD / 180 * Math.PI) * Star.Distance;
+            }
+            public void Translate(int NewCenterX, int NewCenterY)
+            {
+                X += NewCenterX;
+                Y += NewCenterY;
+            }
+            public double X { get; set; }
+            public double Y { get; set; }
         }
 
         public static class UploadImage
