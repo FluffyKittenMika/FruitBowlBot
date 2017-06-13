@@ -10,6 +10,7 @@ using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Globalization;
+using System.Threading.Tasks;
 
 namespace JefBot.Commands
 {
@@ -27,9 +28,9 @@ namespace JefBot.Commands
 
         public void Twitch(ChatCommand command, TwitchClient client)
         {
-            client.SendMessage(command.ChatMessage.Channel,GetLink(command.ArgumentsAsList));
+            client.SendMessage(command.ChatMessage.Channel, GetLink(command.ArgumentsAsList));
         }
-        
+
         public string GetLink(List<string> args)
         {
             try
@@ -103,6 +104,23 @@ namespace JefBot.Commands
         }
 
         /// <summary>
+        /// makes a black bitmap to the specific size
+        /// </summary>
+        /// <param name="width">Width of the image</param>
+        /// <param name="height">height of the image</param>
+        /// <returns>Bitmap</returns>
+        public static Bitmap BaseFactory(int width, int height)
+        {
+            Bitmap bit = new Bitmap(width, height);
+            using (Graphics gfx = Graphics.FromImage(bit))
+            using (SolidBrush brush = new SolidBrush(System.Drawing.Color.FromArgb(0, 0, 0)))
+            {
+                gfx.FillRectangle(brush, 0, 0, width, height);
+            }
+            return bit;
+        }
+
+        /// <summary>
         /// Returns a list of galaxy images
         /// </summary>
         /// <param name="stars">Number of stars</param>
@@ -112,18 +130,12 @@ namespace JefBot.Commands
         public static List<Bitmap> Galaxy(int stars = 1000, int Dimension = 250, int TotalFrames = 1)
         {
             List<Bitmap> OutList = new List<Bitmap>();
-            //define the map
-            Bitmap Base = new Bitmap(Dimension, Dimension);//hardcoded size, don't want it to use too much power 62500 pixels is plenty
+
             //define the colour white
             System.Drawing.Color c = System.Drawing.Color.FromArgb(255, 255, 255);
 
             //make and fill image
-            using (Graphics gfx = Graphics.FromImage(Base))
-            using (SolidBrush brush = new SolidBrush(System.Drawing.Color.FromArgb(0, 0, 0)))
-            {
-                gfx.FillRectangle(brush, 0, 0, Dimension, Dimension);//hardcoded size
-            }
-
+    
 
             //initialise the list of points
             List<PolarStar> StarList = new List<PolarStar>();
@@ -146,13 +158,13 @@ namespace JefBot.Commands
             //prefered distance between the branches
             double armdistance = 2 * Math.PI / arms;
             //define the bend
-            double armrotation = rng.Next(3,9);
+            double armrotation = rng.Next(3, 9);
             //a bit of a random sprinkles to remove the lines
             //double randomoffset = 0.02d;
 
             //first loop, where we generate everything
-            for (int i = 0; i < stars; i++)
-            {
+            Parallel.For(0, stars, res => {
+
                 //distance from center
                 double distance = rng.NextDouble();
                 distance = Math.Pow(distance, 2);
@@ -179,50 +191,59 @@ namespace JefBot.Commands
 
                 //add stars to the mass exodus list
 
-                StarList.Add(new PolarStar(distance * Dimension * 0.5f, angle));
+                try
+                {
+                    StarList.Add(new PolarStar(distance * Dimension * 0.5f, angle));
+
+                }
+                catch (Exception){}
 
                 //maybe not add to list if a star is already there?
-            }
+            });
 
-            //probably end up merging the 2 loops
+            //clean out the errors (they happen)
+            try
+            {
+                StarList.RemoveAll(item => item == null);
+            }
+            catch (Exception) { }
+
+
+            //put the dots on the table
             for (Int32 Index = 0; Index < TotalFrames; Index++)
             {
-                Bitmap Frame = new Bitmap(Base);
-                foreach (var item in StarList)
+                Bitmap Frame = BaseFactory(Dimension,Dimension);
+                Parallel.ForEach(StarList, item =>
                 {
                     Int32 RNG = rng.Next(10) - 5;
                     item.RotateDegrees(RNG - (360 / TotalFrames));
                     CartPoint Point = new CartPoint(item);
-                    Point.Translate((int)(0.5f * (Dimension-1)), (int)(0.5f * (Dimension-1)));
+                    Point.Translate((int)(0.5f * (Dimension - 1)), (int)(0.5f * (Dimension - 1)));
                     try
                     {
                         Frame.SetPixel((int)Point.X, (int)Point.Y, c);
                     }
-                    catch (Exception e)
-                    {
-                    }
+                    catch (Exception) { }
                     item.RotateDegrees(0 - RNG);
+                });
+                try
+                {
+                    OutList.Add(Frame);
                 }
-                OutList.Add(Frame);
+                catch (Exception) { }
             }
+            
             return OutList;
         }
 
-
-
         public class PolarStar
         {
-
             public PolarStar(double Distance, double AngleR)
             {
                 this.Distance = Distance;
-                this.AngleD = AngleR / Math.PI * 180;
+                AngleD = AngleR / Math.PI * 180;
             }
-
-            public PolarStar()
-            {
-
-            }
+            public PolarStar() { }
             public void RotateDegrees(double Degrees)
             {
                 AngleD += Degrees;
@@ -247,9 +268,6 @@ namespace JefBot.Commands
             public double Y { get; set; }
         }
 
-
-
-        
         public static class UploadImage
         {
             static Random rng = new Random();
@@ -275,20 +293,16 @@ namespace JefBot.Commands
                 form.Add(co);
                 var res = client.PostAsync("http://u.rubixy.com/", form);
                 return res.Result.Content.ReadAsStringAsync().Result;
-                
             }
         }
 
-
         public class Star
         {
-
             public Star(double X, double Y)
             {
                 this.X = X;
                 this.Y = Y;
             }
-
             public Star()
             {
 
@@ -296,6 +310,5 @@ namespace JefBot.Commands
             public double X { get; set; }
             public double Y { get; set; }
         }
-
     }
 }
