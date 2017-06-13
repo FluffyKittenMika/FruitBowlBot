@@ -13,7 +13,7 @@ namespace JefBot.Commands
     internal class RestartPluginCommand : IPluginCommand
     {
         public string PluginName => "Restart";
-        public string Command => "Restart";
+        public string Command => "restart";
         public string Help => "!restart to restart the bot";
         public IEnumerable<string> Aliases => new[] { "reset" };
         public bool Loaded { get; set; } = true;
