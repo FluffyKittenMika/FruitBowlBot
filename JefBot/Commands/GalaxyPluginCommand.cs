@@ -17,7 +17,7 @@ namespace JefBot.Commands
     {
         public string PluginName => "Galaxy";
         public string Command => "galaxy";
-        public string Help => "!galaxy {stars}  (discord only)";
+        public string Help => "!galaxy {stars} {dimension} {frames}";
         public IEnumerable<string> Aliases => new[] { "g" };
         public bool Loaded { get; set; } = true;
         public static HttpClient client = new HttpClient();
@@ -27,120 +27,58 @@ namespace JefBot.Commands
 
         public void Twitch(ChatCommand command, TwitchClient client)
         {
-            if (command.ChatMessage.IsModerator)
+            client.SendMessage(command.ChatMessage.Channel,GetLink(command.ArgumentsAsList));
+        }
+        
+        public string GetLink(List<string> args)
+        {
+            try
             {
-                Bitmap galaxy = Galaxy(2500, 500, 500);
+                int stars = 2500;
+                int dimension = 500;
+                int frames = 1;
 
-                using (Stream stream = new MemoryStream())
-                { //transform bmp to png in memory
-                    galaxy.Save(stream, System.Drawing.Imaging.ImageFormat.Png);
-                    //galaxy.Save("a.png", System.Drawing.Imaging.ImageFormat.Png);
+                if (args.ElementAtOrDefault(0) != null) //check if position 0 of array is set for stars
+                    Int32.TryParse(args[0], out stars);
+                if (args.ElementAtOrDefault(1) != null) //dimension
+                    Int32.TryParse(args[1], out dimension);
 
-                    stream.Position = 0;
-                    //arg.Channel.SendMessageAsync($"<{UploadImage.Upload(stream)}>");
-                    client.SendMessage(command.ChatMessage.Channel,UploadImage.Upload(stream));
-                }
+                if (dimension > 2000)
+                    dimension = 2000;
+                if (dimension < 250)
+                    dimension = 250;
+
+                if (args.ElementAtOrDefault(2) != null)
+                    Int32.TryParse(args[2], out frames);
+                if (frames > 60)
+                    frames = 60;
+                if (frames < 1)
+                    frames = 1;
+
+                return MakeGif(Galaxy(stars, dimension, frames));
 
             }
-            //this is a discord only command. thanks
+            catch (Exception err)
+            {
+                Console.WriteLine(err.Message);
+                Console.WriteLine(err.StackTrace);
+                return err.Message;
+            }
+        }
+
+        public void Discord(SocketMessage arg, DiscordSocketClient discordClient)
+        {
+            var args = arg.Content.Split(' ').ToList().Skip(1).ToList(); //skips the !g
+            arg.Channel.SendMessageAsync(GetLink(args));
         }
 
         /// <summary>
-        /// Returns a 250x250 Galaxy image
+        /// Compiles a list of bitmaps into a gif, and uploads it automatically
         /// </summary>
-        /// <param name="stars">how many stars you want</param>
-        /// <returns>Bitmap</returns>
-        public Bitmap Galaxy(int stars = 2500, int width = 500, int height = 500)
-        {
-            //define the map
-            Bitmap bmp = new Bitmap(width, height);//hardcoded size, don't want it to use too much power 62500 pixels is plenty
-            //define the colour white
-            System.Drawing.Color c = System.Drawing.Color.FromArgb(255, 255, 255);
-
-            //make and fill image
-            using (Graphics gfx = Graphics.FromImage(bmp))
-            using (SolidBrush brush = new SolidBrush(System.Drawing.Color.FromArgb(0, 0, 0)))
-            {
-                gfx.FillRectangle(brush, 0, 0, width, height);//hardcoded size
-            }
-
-
-            //initialise the list of points
-            List<Star> StarList = new List<Star>();
-
-            if (stars > 25000)
-            {
-                stars = 25000;
-            }
-            if (stars < 100)
-            {
-                stars = 100;
-            }
-
-            //static things
-
-            //amount of galaxy branches
-            int arms = rng.Next(2, 9);
-            //offset (width of branches)
-            double armoffsetmax = 0.5d;
-            //prefered distance between the branches
-            double armdistance = 2 * Math.PI / arms;
-            //define the bend
-            double armrotation = 5;
-            //a bit of a random sprinkles to remove the lines
-            double randomoffset = 0.02d;
-
-            //first loop, where we generate everything
-            for (int i = 0; i < stars; i++)
-            {
-                //distance from center
-                double distance = rng.NextDouble();
-                distance = Math.Pow(distance, 2);
-
-                //angle of a circle
-                double angle = rng.NextDouble() * 2 * Math.PI;
-
-                //set the offset
-                double armoffset = rng.NextDouble() * armoffsetmax;
-                armoffset = armoffset - armoffsetmax / 2; //limits it to the lines
-                armoffset = armoffset * (1 / distance); //spread em out a bit
-
-                //sqare em up
-                double sqaredarmoffset = Math.Pow(armoffset, 2);
-                if (armoffset < 0)
-                    sqaredarmoffset = sqaredarmoffset * -1;
-                armoffset = sqaredarmoffset;
-
-                //calculate rotation point
-                double rotation = distance * armrotation;
-
-                //manipulate it a bit
-                angle = (int)(angle / armdistance) * armdistance + armoffset + rotation;
-
-                //define x and y
-                double starX = Math.Cos(angle) * ((width / 2) * distance);
-                double starY = Math.Sin(angle) * ((height / 2) * distance);
-
-                //add offset and center
-                starX += (rng.NextDouble() * randomoffset) + (0.5 * width);
-                starY += (rng.NextDouble() * randomoffset) + (0.5 * height);
-
-
-                //add stars to the mass exodus list
-                StarList.Add(new Star(starX, starY));
-            }
-
-            //probably end up merging the 2 loops
-            foreach (var item in StarList)
-            {
-                bmp.SetPixel((int)item.X, (int)item.Y, c); //set the pixel cords to the correct colour
-            }
-            return bmp;
-        }
-
+        /// <param name="bitmaps"></param>
+        /// <returns></returns>
         public string MakeGif(List<Bitmap> bitmaps)
         {
-            
             Stream stream = new MemoryStream();
             System.Drawing.Image image;
             var gif = File.OpenWrite("gif.gif");
@@ -158,93 +96,20 @@ namespace JefBot.Commands
             stream.Position = 0;
             gif.Close();
             stream.Close();
-            
+
             Stream strm = new FileStream("gif.gif", FileMode.Open);
-            return UploadImage.Upload(strm,"gif");
+            return UploadImage.Upload(strm, "gif");
 
         }
-
 
         /// <summary>
-        /// Returns status of file
+        /// Returns a list of galaxy images
         /// </summary>
-        /// <param name="file"></param>
-        /// <returns>Bool</returns>
-        protected virtual bool IsFileLocked(FileInfo file)
-        {
-            FileStream stream = null;
-
-            try
-            {
-                stream = file.Open(FileMode.Open, FileAccess.Read, FileShare.None);
-            }
-            catch (IOException)
-            {
-                //the file is unavailable because it is:
-                //still being written to
-                //or being processed by another thread
-                //or does not exist (has already been processed)
-                return true;
-            }
-            finally
-            {
-                if (stream != null)
-                    stream.Close();
-            }
-
-            //file is not locked
-            return false;
-        }
-
-
-        public void Discord(SocketMessage arg, DiscordSocketClient discordClient)
-        {
-            try
-            {
-                Bitmap galaxy;
-
-                var args = arg.Content.Split(' ').ToList().Skip(1).ToList(); //this is probably so wrong (pro tip, it's verry bad)
-                if (args.Count > 0)
-                {
-                    if (args[0] == "gif")
-                    {
-                        arg.Channel.SendMessageAsync(MakeGif(AnimatedGalaxy(1000, 250, 30))); 
-                        return;
-                    }
-                }
-                if (args.Count > 0) //if arguments is greater than nothing at all, then we go on to round 1
-                {
-                    Int32.TryParse(args[0], out int x);
-                    galaxy = Galaxy(x);
-                }
-                else
-                {
-                    galaxy = Galaxy();//no arg then no barge
-                }
-
-                using (Stream stream = new MemoryStream())
-                { //transform bmp to png in memory
-                    galaxy.Save(stream, System.Drawing.Imaging.ImageFormat.Png);
-                    //galaxy.Save("a.png", System.Drawing.Imaging.ImageFormat.Png);
-
-                    stream.Position = 0;
-                    arg.Channel.SendMessageAsync($"<{UploadImage.Upload(stream)}>");
-                   // arg.Channel.SendFileAsync(stream,"Galaxy","bepis");
-                }
-
-            }
-            catch (Exception err)
-            {
-                Console.WriteLine(err.Message);
-                Console.WriteLine(err.StackTrace);
-                arg.Channel.SendMessageAsync(err.Message);
-            }
-
-        }
-
-
-        
-        public static List<Bitmap> AnimatedGalaxy(int stars = 1000, int Dimension = 250, int TotalFrames = 1)
+        /// <param name="stars">Number of stars</param>
+        /// <param name="Dimension">Size of the image</param>
+        /// <param name="TotalFrames">Number of frames</param>
+        /// <returns>List of images</returns>
+        public static List<Bitmap> Galaxy(int stars = 1000, int Dimension = 250, int TotalFrames = 1)
         {
             List<Bitmap> OutList = new List<Bitmap>();
             //define the map
@@ -263,9 +128,9 @@ namespace JefBot.Commands
             //initialise the list of points
             List<PolarStar> StarList = new List<PolarStar>();
 
-            if (stars > 25000)
+            if (stars > 10000)
             {
-                stars = 25000;
+                stars = 10000;
             }
             if (stars < 100)
             {
@@ -328,7 +193,7 @@ namespace JefBot.Commands
                     Int32 RNG = rng.Next(10) - 5;
                     item.RotateDegrees(RNG - (360 / TotalFrames));
                     CartPoint Point = new CartPoint(item);
-                    Point.Translate((int)(0.5f * Dimension), (int)(0.5f * Dimension));
+                    Point.Translate((int)(0.5f * (Dimension-1)), (int)(0.5f * (Dimension-1)));
                     try
                     {
                         Frame.SetPixel((int)Point.X, (int)Point.Y, c);
@@ -382,9 +247,18 @@ namespace JefBot.Commands
             public double Y { get; set; }
         }
 
+
+
+        
         public static class UploadImage
         {
             static Random rng = new Random();
+            /// <summary>
+            /// Upload a stream to U.Rubixy.com
+            /// </summary>
+            /// <param name="stream">Bitmap / Image stream</param>
+            /// <param name="type">jpg/png/gif/ect</param>
+            /// <returns>String URL</returns>
             public static string Upload(Stream stream, string type = "png")
             {
                 MultipartFormDataContent form = new MultipartFormDataContent();
