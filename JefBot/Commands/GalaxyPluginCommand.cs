@@ -159,7 +159,8 @@ namespace JefBot.Commands
             //double randomoffset = 0.02d;
 
             //loop de loop
-            Parallel.For(0, stars, res => {
+            Parallel.For(0, stars, res =>
+            {
 
                 //distance from center
                 double distance = rng.NextDouble();
@@ -189,7 +190,8 @@ namespace JefBot.Commands
                 PolarStar star = new PolarStar(distance * Dimension * 0.5f, angle);
                 //maybe not add to list if a star is already there?
 
-                Parallel.For(0, TotalFrames, frame => {
+                Parallel.For(0, TotalFrames, frame =>
+                {
                     Int32 RNG = rng.Next(10) - 5;
                     star.RotateDegrees(RNG - (360 / TotalFrames));
                     CartPoint Point = new CartPoint(star);

@@ -84,7 +84,8 @@ namespace JefBot
             if (settings["discordtoken"] != "tokengoeshere")
             {
                 discordClient = new DiscordSocketClient(
-                  new DiscordSocketConfig {
+                  new DiscordSocketConfig
+                  {
                       WebSocketProvider = Discord.Net.Providers.WS4Net.WS4NetProvider.Instance
                   });
 
@@ -94,7 +95,8 @@ namespace JefBot
                 await discordClient.GetConnectionsAsync();
             }
 
-            discordClient.MessageReceived += async (e) => {
+            discordClient.MessageReceived += async (e) =>
+            {
                 Console.WriteLine($"{e.Channel.Name}:{e.Author.Username}:{e.Content}");
 
                 if (!e.Author.IsBot)
@@ -198,7 +200,7 @@ namespace JefBot
             {
                 try
                 {
-                    command = arg.Content.Remove(0, 1).Split(' ')[0].ToLower(); 
+                    command = arg.Content.Remove(0, 1).Split(' ')[0].ToLower();
                 }
                 catch (Exception err)
                 {
@@ -256,7 +258,7 @@ namespace JefBot
                 _cmd.ExecuteNonQuery();
             }
         }
-        
+
 
         //Don't remove this, it's critical to see the chat in the bot, it quickly tells me if it's absolutely broken...
         private void Chatmsg(object sender, OnMessageReceivedArgs e)
@@ -282,7 +284,7 @@ namespace JefBot
         {
             Console.WriteLine($@"{e.Subscriber.Name} Just subbed! What a bro!' :)");
         }
-        
+
 
         /// <summary>
         /// Executes all commands, we try to execute the main named command before any aliases to try and avoid overwrites.
@@ -314,8 +316,8 @@ namespace JefBot
 
                     string reaction = plug.Action(msg);
                     if (reaction != null)
-                        chatClient.SendMessage(e.Command.ChatMessage.Channel,reaction);
-                    
+                        chatClient.SendMessage(e.Command.ChatMessage.Channel, reaction);
+
                     //plug.Twitch(e.Command, chatClient);
                     mainExecuted = true;
                     break;
