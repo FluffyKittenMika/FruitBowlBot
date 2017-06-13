@@ -139,7 +139,6 @@ namespace JefBot.Commands
 
             //initialise the list of points
             List<PolarStar> StarList = new List<PolarStar>();
-
             if (stars > 10000)
             {
                 stars = 10000;
@@ -148,6 +147,13 @@ namespace JefBot.Commands
             {
                 stars = 100;
             }
+
+            for (int i = 0; i < stars; i++)
+            {
+                StarList.Add(new PolarStar());
+            }
+
+         
 
             //static things
 
@@ -163,7 +169,7 @@ namespace JefBot.Commands
             //double randomoffset = 0.02d;
 
             //first loop, where we generate everything
-            Parallel.For(0, stars, res => {
+            Parallel.ForEach(StarList, item => {
 
                 //distance from center
                 double distance = rng.NextDouble();
@@ -191,22 +197,19 @@ namespace JefBot.Commands
 
                 //add stars to the mass exodus list
 
+                item.Distance = distance * Dimension * 0.5f;
+                item.AngleD = angle / Math.PI * 180;
+
+                /*
                 try
                 {
                     StarList.Add(new PolarStar(distance * Dimension * 0.5f, angle));
 
                 }
-                catch (Exception){}
+                catch (Exception){}*/
 
                 //maybe not add to list if a star is already there?
             });
-
-            //clean out the errors (they happen)
-            try
-            {
-                StarList.RemoveAll(item => item == null);
-            }
-            catch (Exception) { }
 
 
             //put the dots on the table
