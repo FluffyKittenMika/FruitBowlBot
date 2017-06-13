@@ -64,7 +64,7 @@ namespace JefBot.Commands
 
         private string GetSuffix(int day)
         {
-            return (day == 11 || day == 12 || day == 13) ? "th" : (day == 1) ? "st" : (day == 2) ? "nd" : (day == 3) ? "rd" : "th";
+            return (day == 1 || day == 21) ? "st" : (day == 2 || day == 22) ? "nd" : (day == 3 || day == 23) ? "rd" : "th";
         }
     }
 }
