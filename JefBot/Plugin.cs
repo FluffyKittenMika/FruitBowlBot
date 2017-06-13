@@ -13,16 +13,18 @@ namespace JefBot
         bool Loaded { get; }
         string Help { get; }
 
-        void Twitch(ChatCommand command, TwitchClient client);
-        void Discord(SocketMessage arg, DiscordSocketClient discordClient);
+        string Action(Message message);
     }
 
 
     public class Message
     {
-        public string MessageText { get; set; }
+        public string RawMessage { get; set; }
         public string Channel { get; set; }
         public string Command { get; set; }
         public string Username { get; set; }
+
+        public bool IsModerator { get; set; }
+        public List<string> Arguments { get; set; }
     }
 }

@@ -19,19 +19,17 @@ namespace JefBot.Commands
         List<IPluginCommand> plug = new List<IPluginCommand>();
         Random rng = new Random();
 
-        public void Twitch(ChatCommand command, TwitchClient client)
+        public string Action(Message message)
         {
             try
             {
-                if (command.ArgumentsAsList.Count > 0)
+                if (message.Arguments.Count > 0)
                 {
-
-                    var args = command.ArgumentsAsList;
+                    var args = message.Arguments;
                     var result = "";
                     plug = new List<IPluginCommand>();
                     plug.AddRange(Bot._plugins.Where(plug => plug.Aliases.Contains(args[0])).ToList());
                     plug.AddRange(Bot._plugins.Where(plug => plug.Command == args[0]).ToList());
-
 
                     foreach (var item in plug)
                     {
@@ -40,17 +38,16 @@ namespace JefBot.Commands
                             result = item.Help;
                             break;
                         }
-
                     }
-                    if (result == "")
+                    if (result == "" || result == null)
                     {
                         result = $"No command / alias found for {args[0]} and therefore no help can be given";
                     }
-                    client.SendMessage(command.ChatMessage.Channel, $"{result}");
+                    return $"{result}";
                 }
                 else
                 {
-                    client.SendMessage(command.ChatMessage.Channel, $"{Help}");
+                    return $"{Help}";
                 }
             }
             catch (Exception e)
@@ -58,46 +55,8 @@ namespace JefBot.Commands
                 Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine(e.Message);
                 Console.ForegroundColor = ConsoleColor.White;
+                return e.Message;
             }
-        }
-
-        public void Discord(SocketMessage arg, DiscordSocketClient discordClient)
-        {
-            try
-            {
-               
-                var args = arg.Content.Split(' ').ToList().Skip(1).ToList(); //this is probably so wrong
-
-                plug = new List<IPluginCommand>();
-                plug.AddRange(Bot._plugins.Where(plug => plug.Aliases.Contains(args[0])).ToList());
-                plug.AddRange(Bot._plugins.Where(plug => plug.Command == args[0]).ToList());
-                var result = "";
-                if (args.Count > 0)
-                {
-                    foreach (var item in plug)
-                    {
-                        if (item.Command == args[0] || item.Aliases.Contains(args[0]))
-                        {
-                            result = item.Help;
-                            break;
-                        }
-                    }
-                    if (result == "")
-                    {
-                        result = $"No command / alias found for {args[0]} and therefore no help can be given";
-                    }
-                    arg.Channel.SendMessageAsync($"{result}");
-                }
-                else
-                {
-                    arg.Channel.SendMessageAsync($"{Help}");
-                }
-            }
-            catch (Exception err)
-            {
-                Console.WriteLine(err.Message);
-            }
-
         }
     }
 }

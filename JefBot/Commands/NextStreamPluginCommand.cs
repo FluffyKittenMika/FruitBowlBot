@@ -25,25 +25,21 @@ namespace JefBot.Commands
             streamtimes.Add(DayOfWeek.Saturday, TimeSpan.FromHours(21)); 
         }
 
-        public void Twitch(ChatCommand command, TwitchClient client)
+        public string Action(Message message)
         {
-            if (command.ChatMessage.Channel == "jefmajor")
-            {
-                client.SendMessage(command.ChatMessage.Channel, Time());
-            }
+            if (message.Channel == "jefmajor")
+                return Time();
+            return null;
         }
 
         public string Time()
         {
             TimeSpan uptime = new TimeSpan();
-
             try
             {
                 uptime = TwitchApi.Streams.GetUptime("jefmajor");
             }
             catch (Exception){}
-           
-            
             
             if (uptime.Ticks == 0)
             {
@@ -62,25 +58,15 @@ namespace JefBot.Commands
                 {
                     span = times[1].Subtract(DateTime.Now);
                 }
-
                 return $"Next stream might be in {span.Days} Day(s), {span.Hours} Hour(s), {span.Minutes} Minute(s), {span.Seconds} Second(s), on the {(start + span).Day}{GetSuffix((start + span).Day)}. That being a total of {span.TotalHours} Hour(s) from now.";
-
-
             }
             else
-            {
                 return $"He's on right now silly";
-            }
         }
 
         private string GetSuffix(int day)
         {
             return (day == 11 || day == 12 || day == 13) ? "th" : (day == 1) ? "st" : (day == 2) ? "nd" : (day == 3) ? "rd" : "th";
-        }
-
-        public void Discord(SocketMessage arg, DiscordSocketClient discordClient)
-        {
-            arg.Channel.SendMessageAsync("```"+Time()+"```");
         }
     }
 }

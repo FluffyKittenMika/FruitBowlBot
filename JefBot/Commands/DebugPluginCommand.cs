@@ -17,33 +17,27 @@ namespace JefBot.Commands
         public IEnumerable<string> Aliases => new string[0];
         public bool Loaded { get; set; } = true;
 
-        public void Twitch(ChatCommand command, TwitchClient client)
+        public string Action(Message message)
         {
-            if (Bot.IsStreaming(command.ChatMessage.Channel))
+            if (Bot.IsStreaming(message.Channel))
             {
                 try
                 {
                     //totally ok to add yourself to debug :^)
-                    if (command.ChatMessage.Username == "mikaelssen" || command.ChatMessage.IsBroadcaster || command.ChatMessage.IsModerator)
+                    if (message.Username == "mikaelssen" || message.IsModerator)
                     {
-                        Stream stream = TwitchApi.Streams.GetStream(command.ChatMessage.Channel);
-                        client.SendMessage(command.ChatMessage.Channel, $"AvFPS:{stream.AverageFps} Delay:{stream.Delay} Game:{stream.Game} Viewers:{stream.Viewers} videoHeight:{stream.VideoHeight}");
+                        Stream stream = TwitchApi.Streams.GetStream(message.Channel);
+                        return $"AvFPS:{stream.AverageFps} Delay:{stream.Delay} Game:{stream.Game} Viewers:{stream.Viewers} videoHeight:{stream.VideoHeight}";
                     }
                 }
                 catch (Exception e)
                 {
                     Console.WriteLine(e.Message);
+                    return e.Message;
                 }
 
             }
-
-        }
-
-
-        //echo command
-        public void Discord(SocketMessage arg, DiscordSocketClient discordClient)
-        {
-            arg.Channel.SendMessageAsync($"{arg.Content}");
+            return null;
         }
     }
 }

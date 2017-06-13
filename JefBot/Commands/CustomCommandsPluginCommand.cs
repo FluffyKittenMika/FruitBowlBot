@@ -26,23 +26,16 @@ namespace JefBot.Commands
             Load();
         }
 
-        public void Discord(SocketMessage arg, DiscordSocketClient discordClient)
+        public string Action(Message message)
         {
-            var args = arg.Content.Split(' ').ToList().Skip(1).ToList();
-            var command = arg.Content.Split(' ').First();
-            var response = CustomCommand(command.Substring(1), args,((SocketGuildUser)arg.Author).GuildPermissions.Administrator , Convert.ToString(arg.Channel.Id) , arg.Author.Username);
+            var response = CustomCommand(message.Command, message.Arguments, message.IsModerator, message.Channel, message.Username);
             if (response != "null")
             {
-                arg.Channel.SendMessageAsync(response);
+                return response;
             }
-        }
-
-        public void Twitch(ChatCommand command, TwitchClient client)
-        {
-            var response = CustomCommand(command.Command, command.ArgumentsAsList, command.ChatMessage.IsModerator, command.ChatMessage.Channel, command.ChatMessage.Username);
-            if (response != "null")
+            else
             {
-                client.SendMessage(command.ChatMessage.Channel, response);
+                return null;
             }
         }
 
@@ -201,7 +194,7 @@ namespace JefBot.Commands
             }
         }
 
-      
+    
     }
 
     /// <summary>

@@ -15,11 +15,6 @@ namespace JefBot.Commands
         public IEnumerable<string> Aliases => new[] { "u", "up" };
         public bool Loaded { get; set; } = true;
 
-        public void Twitch(ChatCommand command, TwitchClient client)
-        {
-            client.SendMessage(Res(command.ChatMessage.Channel));
-        }
-
         public string Res(string channel)
         {
             var uptime = TwitchApi.Streams.GetUptime(channel);
@@ -29,18 +24,12 @@ namespace JefBot.Commands
                 return $"Channel offline";
         }
 
-        public void Discord(SocketMessage arg, DiscordSocketClient discordClient)
+        public string Action(Message message)
         {
-            var args = arg.Content.Split(' ').ToList().Skip(1).ToList();
-            if (args.Count == 0)
-            {
-                arg.Channel.SendMessageAsync("no channel specified");
-            }
+            if (message.Arguments.Count == 0)
+                return "no channel specified";
             else
-            {
-                arg.Channel.SendMessageAsync(Res(args[0]));
-            }
-
+                return Res(message.Arguments[0]);
         }
     }
 }

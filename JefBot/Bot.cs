@@ -208,12 +208,27 @@ namespace JefBot
 
             foreach (var plug in enabledPlugins)
             {
+
                 if (plug.Aliases.Contains(command) || plug.Command == command)
                 {
-
+                    var args = arg.Content.Split(' ').ToList().Skip(1).ToList();
                     try
                     {
-                        plug.Discord(arg, discordClient);
+
+                        Message msg = new Message()
+                        {
+                            Arguments = args,
+                            Command = command,
+                            Channel = Convert.ToString(arg.Channel.Id),
+                            IsModerator = ((SocketGuildUser)arg.Author).GuildPermissions.Administrator,
+                            RawMessage = arg.Content,
+                            Username = arg.Author.Username
+                        };
+
+                        string reaction = plug.Action(msg);
+                        if (reaction != null)
+                            arg.Channel.SendMessageAsync(plug.Action(msg));
+                        //plug.Discord(arg, discordClient);
                     }
                     catch (Exception err)
                     {
@@ -246,10 +261,8 @@ namespace JefBot
         //Don't remove this, it's critical to see the chat in the bot, it quickly tells me if it's absolutely broken...
         private void Chatmsg(object sender, OnMessageReceivedArgs e)
         {
-
             Storemessage(e.ChatMessage.Message);
             Console.WriteLine($"{e.ChatMessage.Channel}-{e.ChatMessage.Username}: {e.ChatMessage.Message}");
-            Console.ForegroundColor = ConsoleColor.White;
         }
 
         private void Disconnected(object sender, OnDisconnectedArgs e)
@@ -289,7 +302,21 @@ namespace JefBot
             {
                 if (plug.Command == command)
                 {
-                    plug.Twitch(e.Command, chatClient);
+                    Message msg = new Message()
+                    {
+                        Arguments = e.Command.ArgumentsAsList,
+                        Command = command,
+                        Channel = e.Command.ChatMessage.Channel,
+                        IsModerator = e.Command.ChatMessage.IsModerator,
+                        RawMessage = e.Command.ChatMessage.Message,
+                        Username = e.Command.ChatMessage.Username
+                    };
+
+                    string reaction = plug.Action(msg);
+                    if (reaction != null)
+                        chatClient.SendMessage(e.Command.ChatMessage.Channel,reaction);
+                    
+                    //plug.Twitch(e.Command, chatClient);
                     mainExecuted = true;
                     break;
                 }
@@ -299,7 +326,21 @@ namespace JefBot
             {
                 if (plug.Aliases.Contains(command))
                 {
-                    plug.Twitch(e.Command, chatClient);
+                    Message msg = new Message()
+                    {
+                        Arguments = e.Command.ArgumentsAsList,
+                        Command = command,
+                        Channel = e.Command.ChatMessage.Channel,
+                        IsModerator = e.Command.ChatMessage.IsModerator,
+                        RawMessage = e.Command.ChatMessage.Message,
+                        Username = e.Command.ChatMessage.Username
+                    };
+
+                    string reaction = plug.Action(msg);
+                    if (reaction != null)
+                        chatClient.SendMessage(e.Command.ChatMessage.Channel, reaction);
+
+                    //plug.Twitch(e.Command, chatClient);
                     //aliasExecuted = true;
                     break;
                 }

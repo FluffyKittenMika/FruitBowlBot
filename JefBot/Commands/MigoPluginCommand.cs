@@ -73,86 +73,57 @@ namespace JefBot.Commands
 
 
 
-        public void Twitch(ChatCommand command, TwitchClient client)
+        public string Action(Message message)
         {
-            if (timestampTwitch.AddMinutes(minutedelay) < DateTime.UtcNow || command.ChatMessage.IsModerator || command.ChatMessage.IsBroadcaster)
+            try
             {
-                if (!command.ChatMessage.IsModerator && !command.ChatMessage.IsBroadcaster)
+                if (timestampTwitch.AddMinutes(minutedelay) < DateTime.UtcNow || message.IsModerator)
                 {
-                    timestampTwitch = DateTime.UtcNow;
-                }
-                if (command.ArgumentsAsList.Count == 0)
-                {
-                    Quote qu = Migo();
-                    if (qu.SubmittedBy == null || qu.SubmittedBy == "")
+                    if (!message.IsModerator)
                     {
-                        qu.SubmittedBy = "Unknown";
+                        timestampTwitch = DateTime.UtcNow;
                     }
-                    string q = $"{qu.Quotestring} submitted by {qu.SubmittedBy} #{qu.Id}";
-                    client.SendMessage(command.ChatMessage.Channel, q);
-                }
-                else
-                {
-                    if (Int32.TryParse(command.ArgumentsAsString, out int x))
+                    if (message.Arguments.Count == 0)
                     {
-                        Quote qu = SearchMigo(x);
+                        Quote qu = Migo();
                         if (qu.SubmittedBy == null || qu.SubmittedBy == "")
                         {
                             qu.SubmittedBy = "Unknown";
                         }
-                        string q = $"{qu.Quotestring} QuoteID:{qu.Id}";
-                        client.SendMessage(q);
+                        return $"{qu.Quotestring} submitted by {qu.SubmittedBy} #{qu.Id}";
                     }
                     else
                     {
-                        Quote qu = SearchMigo(command.ArgumentsAsString);
-                        if (qu.SubmittedBy == null || qu.SubmittedBy == "")
+                        string msg = String.Join(" ", message.Arguments);
+                        if (Int32.TryParse(msg, out int x))
                         {
-                            qu.SubmittedBy = "Unknown";
+                            Quote qu = SearchMigo(x);
+                            if (qu.SubmittedBy == null || qu.SubmittedBy == "")
+                            {
+                                qu.SubmittedBy = "Unknown";
+                            }
+                            return $"{qu.Quotestring} QuoteID:{qu.Id}";
                         }
-                        string q = $"{qu.Quotestring} QuoteID:{qu.Id}";
-                        client.SendMessage(q);
+                        else
+                        {
+                            Quote qu = SearchMigo(msg);
+                            if (qu.SubmittedBy == null || qu.SubmittedBy == "")
+                            {
+                                qu.SubmittedBy = "Unknown";
+                            }
+                            return $"{qu.Quotestring} QuoteID:{qu.Id}";
+                        }
+
                     }
-                  
                 }
             }
-        }
-
-        public void Discord(SocketMessage arg, DiscordSocketClient discordClient)
-        {
-
-            var args = arg.Content.Split(' ').ToList().Skip(1).ToList();
-            string argstring = string.Join(" ", args.ToArray());
-            Quote qu;
-            if (args.Count == 0)
+            catch (Exception e)
             {
-                timestampDiscord = DateTime.UtcNow;
-                qu = Migo();
-                if (qu.SubmittedBy == null || qu.SubmittedBy == "")
-                {
-                    qu.SubmittedBy = "Unknown";
-                }
-                string q = $"```{qu.Quotestring}{Environment.NewLine}#{qu.Id} by {qu.SubmittedBy}```";
-                arg.Channel.SendMessageAsync(q);
-            }else
-            {
-                if (Int32.TryParse(argstring, out int x))
-                {
-                    qu = SearchMigo(x); //id search
-                }
-                else
-                {
-                    qu = SearchMigo(argstring);
-                }
-                if (qu.SubmittedBy == null || qu.SubmittedBy == "")
-                {
-                    qu.SubmittedBy = "Unknown";
-                }
-                string q = $"```{qu.Quotestring}{Environment.NewLine}#{qu.Id} by {qu.SubmittedBy}```";
-                arg.Channel.SendMessageAsync(q);
+                return e.Message;
             }
-            
+            return null;
         }
+        
 
         public Quote SearchMigo(int search)
         {
@@ -236,6 +207,8 @@ namespace JefBot.Commands
             }
             return derp;
         }
+
+      
     }
 
     class Quote

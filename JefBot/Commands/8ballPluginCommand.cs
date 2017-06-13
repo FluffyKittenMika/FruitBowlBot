@@ -16,7 +16,6 @@ namespace JefBot.Commands
         public IEnumerable<string> Aliases => new[] { "8" };
         public bool Loaded { get; set; } = true;
 
-
         List<string> responses = new List<string>
         {
             "As i see it, yes",
@@ -52,25 +51,18 @@ namespace JefBot.Commands
         };
 
         Random rng = new Random();
-
-        public void Twitch(ChatCommand command, TwitchClient client)
+        public string Action(Message message)
         {
-            client.SendMessage(command.ChatMessage.Channel, EightBall(command.ChatMessage.Message));
+            return EightBall(message.RawMessage);
         }
 
         public string EightBall(string args)
         {
             string msg = "Please type a question!";
             if (args != "")
-            {
                 msg = responses[rng.Next(responses.Count)];
-            }
             return msg;
         }
-
-        public void Discord(SocketMessage arg, DiscordSocketClient discordClient)
-        {
-            arg.Channel.SendMessageAsync(EightBall(arg.Content));
-        }
+        
     }
 }

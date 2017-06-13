@@ -17,31 +17,16 @@ namespace JefBot.Commands
         public bool Loaded { get; set; } = true;
 
         Random rng = new Random();
-
-        public void Twitch(ChatCommand command, TwitchClient client)
-        {
-            client.SendMessage(command.ChatMessage.Channel, Coin(command.ChatMessage.Username));
-        }
-
-        public string Coin(string Username)
+        
+        public string Action(Message message)
         {
             if (rng.Next(1000) > 1)
             {
                 var result = rng.Next(0, 2) == 1 ? "heads" : "tails";
-
-                
-                   return  $"{Username} flipped a coin, it was {result}";
+                return $"{message.Username} flipped a coin, it was {result}";
             }
             else
-            {
-               
-                   return $"{Username} flipped a coin, it landed on it's side...";
-            }
-        }
-
-        public void Discord(SocketMessage arg, DiscordSocketClient discordClient)
-        {
-            arg.Channel.SendMessageAsync(Coin(arg.Author.Username));
+                return $"{message.Username} flipped a coin, it landed on it's side...";
         }
     }
 }

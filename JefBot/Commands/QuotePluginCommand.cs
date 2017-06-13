@@ -21,31 +21,23 @@ namespace JefBot.Commands
 
         //Non default definitions
         Random rnd = new Random();
+        
 
-        public void Twitch(ChatCommand command, TwitchClient client)
+        public string Action(Message message)
         {
-            if (command.ArgumentsAsList.Count > 0)
+            if (message.Arguments.Count > 0)
             {
-                    client.SendMessage(command.ChatMessage.Channel, Quote(command.ArgumentsAsList,command.ChatMessage.Channel,command.ChatMessage.Username));
+                if (message.Channel == "236951447634182145")
+                    message.Channel = "jefmajor";
+                return Quote(message.Arguments, message.Channel, message.Username);
             }
-        }
-
-        public void Discord(SocketMessage arg, DiscordSocketClient discordClient)
-        {
-            var args = arg.Content.Split(' ').ToList().Skip(1).ToList(); //this is probably so wrong
-
-            if (args.Count > 0)
-            {
-                string res = Quote(args, "jefmajor", arg.Author.Username);
-                arg.Channel.SendMessageAsync(res);
-            }
+            return null;
         }
 
         public string Quote(List<string> args, string channel, string username)
         {
             if (args.Count > 0)
             {
-
                 string quote = string.Join(" ", args.ToArray());
 
                 //passive agressie anti double quote checker
@@ -86,5 +78,6 @@ namespace JefBot.Commands
             }
             return "no";
         }
+
     }
 }

@@ -24,7 +24,7 @@ namespace JefBot.Commands
 
         //TODO make this into a better more recursive thing, so one can roll multiple dice in one message, like use a foreach arg loop and check every word i guess.
         //just make it a whole lot better
-        public void Twitch(ChatCommand command, TwitchClient client)
+        public void DepricatedTwitch(ChatCommand command, TwitchClient client)
         {
            
             int DiceCount = 1;
@@ -96,20 +96,18 @@ namespace JefBot.Commands
             }
             
         }
-        public void Discord(SocketMessage arg, DiscordSocketClient discordClient)
+
+        public string Action(Message message)
         {
             try
             {
-
-                var args = arg.Content.Split(' ').ToList().Skip(1).ToList();
-                var result = Dice.Roll(string.Join("", args.ToArray()));
-                arg.Channel.SendMessageAsync($"{arg.Author.Username} got {result}");
+                var result = Dice.Roll(string.Join("", message.Arguments.ToArray()));
+                return $"{message.Username} got {result}";
             }
             catch (Exception e)
             {
-                arg.Channel.SendMessageAsync($"{e.Message}");
+                return e.Message;
             }
-
         }
 
 

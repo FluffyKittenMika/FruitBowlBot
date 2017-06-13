@@ -26,6 +26,11 @@ namespace JefBot.Commands
         List<IPluginCommand> plug = new List<IPluginCommand>();
         public static Random rng = new Random();
 
+        public string Action(Message message)
+        {
+            return GetLink(message.Arguments);
+        }
+
         public void Twitch(ChatCommand command, TwitchClient client)
         {
             client.SendMessage(command.ChatMessage.Channel, GetLink(command.ArgumentsAsList));
@@ -56,6 +61,11 @@ namespace JefBot.Commands
                 if (frames < 1)
                     frames = 1;
 
+                if (stars > 10000)
+                    stars = 10000;
+                if (stars < 100)
+                    stars = 100;
+
                 return MakeGif(Galaxy(stars, dimension, frames));
 
             }
@@ -71,6 +81,12 @@ namespace JefBot.Commands
         {
             var args = arg.Content.Split(' ').ToList().Skip(1).ToList(); //skips the !g
             arg.Channel.SendMessageAsync(GetLink(args));
+        }
+
+
+        public static int Clamp(int val, int min, int max)
+        {
+            return (val < min) ? min : ((val > max) ? max : val);
         }
 
         /// <summary>
@@ -129,31 +145,22 @@ namespace JefBot.Commands
         /// <returns>List of images</returns>
         public static List<Bitmap> Galaxy(int stars = 1000, int Dimension = 250, int TotalFrames = 1)
         {
-            List<Bitmap> OutList = new List<Bitmap>();
+
+            stars = Clamp(stars, 100, 10000);
+            Dimension = Clamp(Dimension, 250, 2000);
+            TotalFrames = Clamp(TotalFrames, 1, 60);
 
             //define the colour white
             System.Drawing.Color c = System.Drawing.Color.FromArgb(255, 255, 255);
 
-            //make and fill image
-    
+            //make and fill images
+            Bitmap[] OutList = new Bitmap[TotalFrames];
 
-            //initialise the list of points
-            List<PolarStar> StarList = new List<PolarStar>();
-            if (stars > 10000)
+            for (int frame = 0; frame < TotalFrames; frame++)
             {
-                stars = 10000;
-            }
-            if (stars < 100)
-            {
-                stars = 100;
+                OutList[frame] = BaseFactory(Dimension, Dimension);
             }
 
-            for (int i = 0; i < stars; i++)
-            {
-                StarList.Add(new PolarStar());
-            }
-
-         
 
             //static things
 
@@ -168,8 +175,8 @@ namespace JefBot.Commands
             //a bit of a random sprinkles to remove the lines
             //double randomoffset = 0.02d;
 
-            //first loop, where we generate everything
-            Parallel.ForEach(StarList, item => {
+            //loop de loop
+            Parallel.For(0, stars, res => {
 
                 //distance from center
                 double distance = rng.NextDouble();
@@ -196,48 +203,29 @@ namespace JefBot.Commands
                 angle = (int)(angle / armdistance) * armdistance + armoffset + rotation;
 
                 //add stars to the mass exodus list
-
-                item.Distance = distance * Dimension * 0.5f;
-                item.AngleD = angle / Math.PI * 180;
-
-                /*
-                try
-                {
-                    StarList.Add(new PolarStar(distance * Dimension * 0.5f, angle));
-
-                }
-                catch (Exception){}*/
-
+                PolarStar star = new PolarStar(distance * Dimension * 0.5f, angle);
                 //maybe not add to list if a star is already there?
+
+                Parallel.For(0, TotalFrames, frame => {
+                    Int32 RNG = rng.Next(10) - 5;
+                    star.RotateDegrees(RNG - (360 / TotalFrames));
+                    CartPoint Point = new CartPoint(star);
+                    Point.Translate((int)(0.5f * (Dimension - 1)), (int)(0.5f * (Dimension - 1)));
+                    int x = Clamp((int)Point.X, 0, Dimension - 1);
+                    int y = Clamp((int)Point.Y, 0, Dimension - 1);
+                    Bitmap frm = OutList[frame];
+                    lock (frm)
+                    {
+                        frm.SetPixel(x, y, c);
+                    }
+                    star.RotateDegrees(0 - RNG);
+                });
             });
 
-
-            //put the dots on the table
-            for (Int32 Index = 0; Index < TotalFrames; Index++)
-            {
-                Bitmap Frame = BaseFactory(Dimension,Dimension);
-                Parallel.ForEach(StarList, item =>
-                {
-                    Int32 RNG = rng.Next(10) - 5;
-                    item.RotateDegrees(RNG - (360 / TotalFrames));
-                    CartPoint Point = new CartPoint(item);
-                    Point.Translate((int)(0.5f * (Dimension - 1)), (int)(0.5f * (Dimension - 1)));
-                    try
-                    {
-                        Frame.SetPixel((int)Point.X, (int)Point.Y, c);
-                    }
-                    catch (Exception) { }
-                    item.RotateDegrees(0 - RNG);
-                });
-                try
-                {
-                    OutList.Add(Frame);
-                }
-                catch (Exception) { }
-            }
-            
-            return OutList;
+            return OutList.ToList();
         }
+
+      
 
         public class PolarStar
         {
