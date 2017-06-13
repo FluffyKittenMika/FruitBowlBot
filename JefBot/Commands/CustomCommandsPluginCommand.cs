@@ -15,7 +15,7 @@ namespace JefBot.Commands
         public string PluginName => "Custom Commands";
         public string Command => "command";
         public string Help => "!cmd add {command name} {command result}";
-        public string[] OtherAliases = {"commands", "cmd", "cmds"};
+        public string[] OtherAliases = { "commands", "cmd", "cmds" };
         public IEnumerable<string> Aliases => CustomCommands.Select(command => command.Command).ToArray().Concat(OtherAliases);
         public List<CCommand> CustomCommands = new List<CCommand>();
         public bool Loaded { get; set; } = true;
@@ -30,13 +30,8 @@ namespace JefBot.Commands
         {
             var response = CustomCommand(message.Command, message.Arguments, message.IsModerator, message.Channel, message.Username);
             if (response != "null")
-            {
                 return response;
-            }
-            else
-            {
-                return null;
-            }
+            return null;
         }
 
         /// <summary>
@@ -60,7 +55,7 @@ namespace JefBot.Commands
                 {
                     if (args.Count > 0)
                     {
-                       if (moderator)
+                        if (moderator)
                         {
                             if (string.Equals(args[0], "add", StringComparison.OrdinalIgnoreCase))
                             {
@@ -71,12 +66,7 @@ namespace JefBot.Commands
 
                                     // Looks like someone is trying to run a command!
                                     if (response.StartsWith("/") && !response.StartsWith("/me"))
-                                    {
-
-                                        //client.SendMessage(command.ChatMessage.Channel, $"I'm sorry, Dave. I'm afraid I can't do that.");
-                                        //client.SendWhisper(command.ChatMessage.Username, $"Custom commands cannot run chat slash commands...");
                                         return $"Custom commands cannot run chat slash commands...";
-                                    }
 
                                     CCommand cmd = new CCommand(newCommand, response, channel);
 
@@ -97,37 +87,26 @@ namespace JefBot.Commands
                                 if (args.Count >= 2)
                                 {
                                     var newCommand = args[1];
-
                                     CustomCommands.RemoveAll(cmd => cmd.Channel == channel && cmd.Command == newCommand);
                                     Save();
-                                   return $"Command {newCommand} has been removed";
+                                    return $"Command {newCommand} has been removed";
                                 }
                                 else
-                                {
-                                    return  "Usage !command remove [command]";
-                                }
+                                    return "Usage !command remove [command]";
                             }
-
                             else
-                            {
-                              return "Usage !command add/remove [command]";
-                            }
+                                return "Usage !command add/remove [command]";
                         }
                         else
-                        {
-                           return $"You're not a moderator {username} :)";
-                        }
+                            return $"You're not a moderator {username} :)";
                     }
                     else
                     {
                         if (moderator)
-                        {
-                            return  $"Usage !command add [command] message]";
-                        }
+                            return $"Usage !command add [command] message]";
 
                         string commands = string.Join(", ", CustomCommands.Where(cmd => cmd.Channel == channel).Select(cmd => cmd.Command).ToArray());
-
-                       return $"Commands: {commands}";
+                        return $"Commands: {commands}";
                     }
                 }
 
@@ -150,7 +129,7 @@ namespace JefBot.Commands
                 return e.Message;
             }
             return "null";
-        } 
+        }
 
         private void Save()
         {
@@ -159,9 +138,7 @@ namespace JefBot.Commands
             using (StreamWriter w = new StreamWriter(memoryPath))
             {
                 foreach (var cmd in CustomCommands)
-                {
                     w.WriteLine($"{cmd.Command}!@!~!@!{cmd.Response}!@!~!@!{cmd.Channel}");
-                }
             }
         }
 
@@ -177,12 +154,7 @@ namespace JefBot.Commands
                     while ((line = r.ReadLine()) != null)
                     {
                         string[] ncmd = line.Split(new[] { "!@!~!@!" }, StringSplitOptions.None);
-
-                        CustomCommands.Add(new CCommand(ncmd[0],ncmd[1],ncmd[2]));
-
-                        //Console.ForegroundColor = ConsoleColor.Yellow;
-                        //Console.WriteLine($"{ncmd[0]} --- {ncmd[1]} --- { ncmd[2] }");
-                        //Console.ForegroundColor = ConsoleColor.White;
+                        CustomCommands.Add(new CCommand(ncmd[0], ncmd[1], ncmd[2]));
                     }
                 }
             }
@@ -194,7 +166,7 @@ namespace JefBot.Commands
             }
         }
 
-    
+
     }
 
     /// <summary>

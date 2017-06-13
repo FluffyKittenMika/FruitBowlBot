@@ -80,16 +80,12 @@ namespace JefBot.Commands
                 if (timestampTwitch.AddMinutes(minutedelay) < DateTime.UtcNow || message.IsModerator)
                 {
                     if (!message.IsModerator)
-                    {
                         timestampTwitch = DateTime.UtcNow;
-                    }
                     if (message.Arguments.Count == 0)
                     {
                         Quote qu = Migo();
                         if (qu.SubmittedBy == null || qu.SubmittedBy == "")
-                        {
                             qu.SubmittedBy = "Unknown";
-                        }
                         return $"{qu.Quotestring} submitted by {qu.SubmittedBy} #{qu.Id}";
                     }
                     else
@@ -99,18 +95,14 @@ namespace JefBot.Commands
                         {
                             Quote qu = SearchMigo(x);
                             if (qu.SubmittedBy == null || qu.SubmittedBy == "")
-                            {
                                 qu.SubmittedBy = "Unknown";
-                            }
                             return $"{qu.Quotestring} QuoteID:{qu.Id}";
                         }
                         else
                         {
                             Quote qu = SearchMigo(msg);
                             if (qu.SubmittedBy == null || qu.SubmittedBy == "")
-                            {
                                 qu.SubmittedBy = "Unknown";
-                            }
                             return $"{qu.Quotestring} QuoteID:{qu.Id}";
                         }
 
@@ -147,9 +139,7 @@ namespace JefBot.Commands
                     }
                     //reader.Close();
                     if (quotes.Count > 0)
-                    {
                         return quotes[rng.Next(quotes.Count)];
-                    }
                     else
                     {
                         Quote nonefound = Migo();
@@ -182,9 +172,7 @@ namespace JefBot.Commands
                     }
                     //reader.Close();
                     if (quotes.Count > 0)
-                    {
                         return quotes[rng.Next(quotes.Count)];
-                    }
                     else
                     {
                         Quote nonefound = Migo();

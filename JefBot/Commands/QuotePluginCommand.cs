@@ -21,7 +21,6 @@ namespace JefBot.Commands
 
         //Non default definitions
         Random rnd = new Random();
-        
 
         public string Action(Message message)
         {

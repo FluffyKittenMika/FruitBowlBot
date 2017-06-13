@@ -31,11 +31,6 @@ namespace JefBot.Commands
             return GetLink(message.Arguments);
         }
 
-        public void Twitch(ChatCommand command, TwitchClient client)
-        {
-            client.SendMessage(command.ChatMessage.Channel, GetLink(command.ArgumentsAsList));
-        }
-
         public string GetLink(List<string> args)
         {
             try
@@ -67,7 +62,6 @@ namespace JefBot.Commands
                     stars = 100;
 
                 return MakeGif(Galaxy(stars, dimension, frames));
-
             }
             catch (Exception err)
             {
@@ -76,13 +70,6 @@ namespace JefBot.Commands
                 return err.Message;
             }
         }
-
-        public void Discord(SocketMessage arg, DiscordSocketClient discordClient)
-        {
-            var args = arg.Content.Split(' ').ToList().Skip(1).ToList(); //skips the !g
-            arg.Channel.SendMessageAsync(GetLink(args));
-        }
-
 
         public static int Clamp(int val, int min, int max)
         {
@@ -130,9 +117,7 @@ namespace JefBot.Commands
             Bitmap bit = new Bitmap(width, height);
             using (Graphics gfx = Graphics.FromImage(bit))
             using (SolidBrush brush = new SolidBrush(System.Drawing.Color.FromArgb(0, 0, 0)))
-            {
                 gfx.FillRectangle(brush, 0, 0, width, height);
-            }
             return bit;
         }
 
@@ -157,9 +142,7 @@ namespace JefBot.Commands
             Bitmap[] OutList = new Bitmap[TotalFrames];
 
             for (int frame = 0; frame < TotalFrames; frame++)
-            {
                 OutList[frame] = BaseFactory(Dimension, Dimension);
-            }
 
 
             //static things
@@ -224,8 +207,6 @@ namespace JefBot.Commands
 
             return OutList.ToList();
         }
-
-      
 
         public class PolarStar
         {
@@ -294,10 +275,7 @@ namespace JefBot.Commands
                 this.X = X;
                 this.Y = Y;
             }
-            public Star()
-            {
-
-            }
+            public Star() { }
             public double X { get; set; }
             public double Y { get; set; }
         }

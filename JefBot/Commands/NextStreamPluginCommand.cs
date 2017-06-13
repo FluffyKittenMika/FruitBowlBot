@@ -55,9 +55,7 @@ namespace JefBot.Commands
                 times.Sort((a, b) => a.CompareTo(b)); //ascending sort
                 TimeSpan span = times[0].Subtract(DateTime.Now);
                 if (span.Minutes < 0)
-                {
                     span = times[1].Subtract(DateTime.Now);
-                }
                 return $"Next stream might be in {span.Days} Day(s), {span.Hours} Hour(s), {span.Minutes} Minute(s), {span.Seconds} Second(s), on the {(start + span).Day}{GetSuffix((start + span).Day)}. That being a total of {span.TotalHours} Hour(s) from now.";
             }
             else
