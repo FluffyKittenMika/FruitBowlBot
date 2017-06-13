@@ -27,7 +27,7 @@ namespace JefBot.Commands
 
         public string Action(Message message)
         {
-            if (message.Channel == "jefmajor")
+            if (message.Channel == "jefmajor" || message.Channel == "236951447634182145")
                 return Time();
             return null;
         }
