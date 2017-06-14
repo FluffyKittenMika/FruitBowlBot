@@ -23,6 +23,7 @@ namespace JefBot
         public static readonly List<IPluginCommand> _plugins = new List<IPluginCommand>();
         public static string SQLConnectionString;
 
+        Random rng = new Random();
         //discord intergration.
         public DiscordSocketClient discordClient;
 
@@ -196,6 +197,14 @@ namespace JefBot
             var enabledPlugins = _plugins.Where(plug => plug.Loaded).ToArray();
             var command = "";
             Storemessage(arg.Content);
+            
+
+            //to annoy jef sometimes
+            if (arg.Author.Id == 170284217207357440 || arg.Id == 170284217207357440)
+                if (rng.Next(0,100) == 80)
+                    arg.Channel.SendMessageAsync(Commands.PiglatinPluginCommand.Piglatin(arg.Content.Split(' ').ToList()));
+
+
             if (arg.Content[0] == '!') //TODO make option for this prefix :D ///meeh
             {
                 try
