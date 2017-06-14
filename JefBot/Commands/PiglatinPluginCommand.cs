@@ -29,9 +29,9 @@ namespace JefBot.Commands
             List<string> temp = new List<string>();
             foreach (var word in pigify)
             {
-                char let1 = word[0];
+                char c = word[0];
                 string restLet = word.Substring(1, word.Length - 1);
-                temp.Add(vowels.Contains(let1) ? word + "way" : restLet + let1 + "ay");
+                temp.Add(vowels.Contains(c) ? word + "way" : restLet + c + "ay");
             }
             return string.Join(" ", temp);
         }
