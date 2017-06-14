@@ -31,13 +31,9 @@ namespace JefBot
         {
             var uptime = TwitchApi.Streams.GetUptime(channel);
             if (uptime.Ticks > 0)
-            {
                 return true;
-            }
             else
-            {
                 return false;
-            }
         }
 
         //constructor
@@ -99,12 +95,8 @@ namespace JefBot
             discordClient.MessageReceived += async (e) =>
             {
                 Console.WriteLine($"{e.Channel.Name}:{e.Author.Username}:{e.Content}");
-
                 if (!e.Author.IsBot)
-                {
                     await DiscordEventAsync(e);
-                }
-
             };
 
 
@@ -198,12 +190,10 @@ namespace JefBot
             var command = "";
             Storemessage(arg.Content);
             
-
             //to annoy jef sometimes
             if (arg.Author.Id == 170284217207357440 || arg.Id == 170284217207357440)
                 if (rng.Next(0,100) == 80)
                     arg.Channel.SendMessageAsync(Commands.PiglatinPluginCommand.Piglatin(arg.Content.Split(' ').ToList()));
-
 
             if (arg.Content[0] == '!') //TODO make option for this prefix :D ///meeh
             {
@@ -219,13 +209,11 @@ namespace JefBot
 
             foreach (var plug in enabledPlugins)
             {
-
                 if (plug.Aliases.Contains(command) || plug.Command == command)
                 {
                     var args = arg.Content.Split(' ').ToList().Skip(1).ToList();
                     try
                     {
-
                         Message msg = new Message()
                         {
                             Arguments = args,
@@ -233,7 +221,8 @@ namespace JefBot
                             Channel = Convert.ToString(arg.Channel.Id),
                             IsModerator = ((SocketGuildUser)arg.Author).GuildPermissions.Administrator,
                             RawMessage = arg.Content,
-                            Username = arg.Author.Username
+                            Username = arg.Author.Username,
+                            MessageIsFromDiscord = true
                         };
 
                         string reaction = plug.Action(msg);
@@ -257,7 +246,6 @@ namespace JefBot
         /// <param name="msg"></param>
         private void Storemessage(string msg)
         {
-
             using (MySqlConnection con = new MySqlConnection(Bot.SQLConnectionString))
             {
                 con.Open();
@@ -267,7 +255,6 @@ namespace JefBot
                 _cmd.ExecuteNonQuery();
             }
         }
-
 
         //Don't remove this, it's critical to see the chat in the bot, it quickly tells me if it's absolutely broken...
         private void Chatmsg(object sender, OnMessageReceivedArgs e)
@@ -284,7 +271,6 @@ namespace JefBot
 
         private void RecivedResub(object sender, OnReSubscriberArgs e)
         {
-
             var chatClient = (TwitchClient)sender;
             Console.WriteLine($@"{e.ReSubscriber.DisplayName} subbed for {e.ReSubscriber.Months} with the message '{e.ReSubscriber.ResubMessage}' :)");
         }
@@ -306,12 +292,9 @@ namespace JefBot
             var enabledPlugins = _plugins.Where(plug => plug.Loaded).ToArray();
             var command = e.Command.Command.ToLower();
 
-            var mainExecuted = false;
-            //var aliasExecuted = false;
-
             foreach (var plug in enabledPlugins)
             {
-                if (plug.Command == command)
+                if (plug.Command == command || plug.Aliases.Contains(command))
                 {
                     Message msg = new Message()
                     {
@@ -320,41 +303,15 @@ namespace JefBot
                         Channel = e.Command.ChatMessage.Channel,
                         IsModerator = e.Command.ChatMessage.IsModerator,
                         RawMessage = e.Command.ChatMessage.Message,
-                        Username = e.Command.ChatMessage.Username
+                        Username = e.Command.ChatMessage.Username,
+                        MessageIsFromDiscord = false
                     };
 
                     string reaction = plug.Action(msg);
                     if (reaction != null)
                         chatClient.SendMessage(e.Command.ChatMessage.Channel, reaction);
-
-                    //plug.Twitch(e.Command, chatClient);
-                    mainExecuted = true;
                     break;
-                }
-            }
-            if (mainExecuted) return;
-            foreach (var plug in enabledPlugins)
-            {
-                if (plug.Aliases.Contains(command))
-                {
-                    Message msg = new Message()
-                    {
-                        Arguments = e.Command.ArgumentsAsList,
-                        Command = command,
-                        Channel = e.Command.ChatMessage.Channel,
-                        IsModerator = e.Command.ChatMessage.IsModerator,
-                        RawMessage = e.Command.ChatMessage.Message,
-                        Username = e.Command.ChatMessage.Username
-                    };
-
-                    string reaction = plug.Action(msg);
-                    if (reaction != null)
-                        chatClient.SendMessage(e.Command.ChatMessage.Channel, reaction);
-
-                    //plug.Twitch(e.Command, chatClient);
-                    //aliasExecuted = true;
-                    break;
-                }
+                }//do nothing if no match
             }
         }
 
@@ -365,9 +322,7 @@ namespace JefBot
                 //anything we type into the console is broadcasted to every channel we're inn. so don't be chatty :^)
                 string msg = Console.ReadLine();
                 if (msg == "quit" || msg == "stop")
-                {
                     Environment.Exit(0);
-                }
                 else
                 {
                     foreach (var ChatClient in Clients)
