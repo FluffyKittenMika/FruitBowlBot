@@ -76,6 +76,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Bot.cs" />
+    <Compile Include="Commands\PiglatinPluginCommand.cs" />
     <Compile Include="Commands\RestartPluginCommand.cs" />
     <Compile Include="Commands\8ballPluginCommand.cs" />
     <Compile Include="Commands\CoinPluginCommand.cs" />
