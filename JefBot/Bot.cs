@@ -192,7 +192,7 @@ namespace JefBot
             
             //to annoy jef sometimes
             if (arg.Author.Id == 170284217207357440 || arg.Id == 170284217207357440)
-                if (rng.Next(0,20) == 10)
+                if (rng.Next(0,100) == 10)
                     arg.Channel.SendMessageAsync(Commands.PiglatinPluginCommand.Piglatin(arg.Content.Split(' ').ToList()));
 
             if (arg.Content[0] == '!') //TODO make option for this prefix :D ///meeh
