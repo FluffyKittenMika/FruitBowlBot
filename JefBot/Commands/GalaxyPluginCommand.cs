@@ -202,13 +202,13 @@ namespace JefBot.Commands
             Bitmap[] OutList = new Bitmap[TotalFrames];
 
             Parallel.For(0, TotalFrames, po, frame => {
-                Bitmap b = BaseFactory(Dimension, Dimension);
+                Bitmap b = BaseFactory(Dimension);
 
                 BitmapData bData = b.LockBits(new Rectangle(0, 0, Dimension, Dimension), ImageLockMode.ReadWrite, b.PixelFormat);
 
                 /* GetBitsPerPixel just does a switch on the PixelFormat and returns the number */
 
-                int bitsPerPixel = Image.GetPixelFormatSize(bData.PixelFormat);
+                int bitsPerPixel = System.Drawing.Image.GetPixelFormatSize(bData.PixelFormat);
                 int bytesPerPixel = bitsPerPixel / 8;
 
                 /*the size of the image in bytes */
