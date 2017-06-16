@@ -25,7 +25,7 @@ namespace JefBot.Commands
         public static HttpClient client = new HttpClient();
 
 
-        Random rng = new Random();
+        public static Random rng = new Random();
         //define the colour white
         System.Drawing.Color c = System.Drawing.Color.FromArgb(255, 255, 255);
 
