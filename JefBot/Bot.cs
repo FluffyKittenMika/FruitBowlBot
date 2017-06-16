@@ -13,8 +13,6 @@ using System.Threading.Tasks;
 
 namespace JefBot
 {
-
-
     class Bot
     {
         ConnectionCredentials Credentials;
@@ -230,22 +228,39 @@ namespace JefBot
 
             Storemessage(arg.Content);
 
-            Message msg = new Message()
-            {
-                Arguments = args,
-                Command = command,
-                Channel = Convert.ToString(arg.Channel.Id),
-                IsModerator = ((SocketGuildUser)arg.Author).GuildPermissions.Administrator,
-                RawMessage = arg.Content,
-                Username = arg.Author.Username,
-                MessageIsFromDiscord = true
-            };
 
             if (arg.Content[0] == '!') //TODO make option for this prefix :D 
             {
                 try
                 {
                     command = arg.Content.Remove(0, 1).Split(' ')[0].ToLower();
+
+                    Message msg = new Message()
+                    {
+                        Arguments = args,
+                        Command = command,
+                        Channel = Convert.ToString(236951447634182145), //TODO: Fetch Discord Server ID dynamically.
+                        IsModerator = ((SocketGuildUser)arg.Author).GuildPermissions.Administrator,
+                        RawMessage = arg.Content,
+                        Username = arg.Author.Username,
+                        MessageIsFromDiscord = true
+                    };
+
+                    //just a hardcoded command for enabling / disabling plugins
+                    if (command == "plugin" && msg.IsModerator)
+                    {
+                        arg.Channel.SendMessageAsync(PluginManager(msg));
+                    }
+
+                    foreach (var plug in enabledPlugins)
+                    {
+                        if (plug.Command == command || plug.Aliases.Contains(command))
+                        {
+                            string reaction = plug.Action(msg);
+                            if (reaction != null)
+                                arg.Channel.SendMessageAsync(plug.Action(msg));
+                        }
+                    }
                 }
                 catch (Exception err)
                 {
@@ -253,29 +268,9 @@ namespace JefBot
                 }
             }
 
-            //just a hardcoded command for enabling / disabling plugins
-            if (command == "plugin" && msg.IsModerator)
-            {
-                arg.Channel.SendMessageAsync(PluginManager(msg)); 
-            }
+           
 
-            foreach (var plug in enabledPlugins)
-            {
-                if (plug.Aliases.Contains(command) || plug.Command == command)
-                {
-                    try
-                    {
-                        string reaction = plug.Action(msg);
-                        if (reaction != null)
-                            arg.Channel.SendMessageAsync(plug.Action(msg));
-                    }
-                    catch (Exception err)
-                    {
-                        Console.WriteLine(err.Message);
-                    }
-                    break;
-                }
-            }
+           
             return Task.CompletedTask;
         }
 

@@ -28,7 +28,7 @@ namespace JefBot.Commands
 
         public string Action(Message message)
         {
-            var response = CustomCommand(message.Command, message.Arguments, message.IsModerator, message.Channel, message.Username);
+            var response = CustomCommand(message);
             if (response != "null")
                 return response;
             return null;
@@ -41,36 +41,36 @@ namespace JefBot.Commands
         /// <param name="args">arguments</param>
         /// <param name="moderator">if the user is an administrator</param>
         /// <returns></returns>
-        private string CustomCommand(string command, List<string> args, bool moderator, string channel = null, string username = null)
+        private string CustomCommand(Message msg)
         {
             try
             {
                 // Main command methods
                 if (
-                    string.Equals(command, "command", StringComparison.OrdinalIgnoreCase) ||
-                    string.Equals(command, "commands", StringComparison.OrdinalIgnoreCase) ||
-                    string.Equals(command, "cmd", StringComparison.OrdinalIgnoreCase) ||
-                    string.Equals(command, "cmds", StringComparison.OrdinalIgnoreCase)
+                    string.Equals(msg.Command, "command", StringComparison.OrdinalIgnoreCase) ||
+                    string.Equals(msg.Command, "commands", StringComparison.OrdinalIgnoreCase) ||
+                    string.Equals(msg.Command, "cmd", StringComparison.OrdinalIgnoreCase) ||
+                    string.Equals(msg.Command, "cmds", StringComparison.OrdinalIgnoreCase)
                     )
                 {
-                    if (args.Count > 0)
+                    if (msg.Arguments.Count > 0)
                     {
-                        if (moderator)
+                        if (msg.IsModerator)
                         {
-                            if (string.Equals(args[0], "add", StringComparison.OrdinalIgnoreCase))
+                            if (string.Equals(msg.Arguments[0], "add", StringComparison.OrdinalIgnoreCase))
                             {
-                                if (args.Count >= 3)
+                                if (msg.Arguments.Count >= 3)
                                 {
-                                    var newCommand = args[1];
-                                    var response = string.Join(" ", args.Skip(2));
+                                    var newCommand = msg.Arguments[1];
+                                    var response = string.Join(" ", msg.Arguments.Skip(2));
 
                                     // Looks like someone is trying to run a command!
                                     if (response.StartsWith("/") && !response.StartsWith("/me"))
                                         return $"Custom commands cannot run chat slash commands...";
 
-                                    CCommand cmd = new CCommand(newCommand, response, channel);
+                                    CCommand cmd = new CCommand(newCommand, response, msg.Channel);
 
-                                    CustomCommands.RemoveAll(cmdx => cmdx.Channel == channel && cmdx.Command == newCommand);
+                                    CustomCommands.RemoveAll(cmdx => cmdx.Channel == msg.Channel && cmdx.Command == newCommand);
 
                                     CustomCommands.Add(cmd);
                                     Save();
@@ -82,12 +82,12 @@ namespace JefBot.Commands
                                 }
                             }
 
-                            else if (string.Equals(args[0], "remove", StringComparison.OrdinalIgnoreCase))
+                            else if (string.Equals(msg.Arguments[0], "remove", StringComparison.OrdinalIgnoreCase))
                             {
-                                if (args.Count >= 2)
+                                if (msg.Arguments.Count >= 2)
                                 {
-                                    var newCommand = args[1];
-                                    CustomCommands.RemoveAll(cmd => cmd.Channel == channel && cmd.Command == newCommand);
+                                    var newCommand = msg.Arguments[1];
+                                    CustomCommands.RemoveAll(cmd => cmd.Channel == msg.Channel && cmd.Command == newCommand);
                                     Save();
                                     return $"Command {newCommand} has been removed";
                                 }
@@ -98,14 +98,14 @@ namespace JefBot.Commands
                                 return "Usage !command add/remove [command]";
                         }
                         else
-                            return $"You're not a moderator {username} :)";
+                            return $"You're not a moderator {msg.Username} :)";
                     }
                     else
                     {
-                        if (moderator)
+                        if (msg.IsModerator)
                             return $"Usage !command add [command] message]";
 
-                        string commands = string.Join(", ", CustomCommands.Where(cmd => cmd.Channel == channel).Select(cmd => cmd.Command).ToArray());
+                        string commands = string.Join(", ", CustomCommands.Where(cmd => cmd.Channel == msg.Channel).Select(cmd => cmd.Command).ToArray());
                         return $"Commands: {commands}";
                     }
                 }
@@ -113,9 +113,9 @@ namespace JefBot.Commands
                 // Twitch custom command
                 foreach (var item in CustomCommands)
                 {
-                    if (item.Command == command && item.Channel == channel)
+                    if (item.Command == msg.Command && item.Channel == msg.Channel)
                     {
-                        var message = item.Response.Replace("{username}", username); //Display name will make the name blank if the user have no display name set;;
+                        var message = item.Response.Replace("{username}", msg.Username); //Display name will make the name blank if the user have no display name set;;
                         return message;
                     }
                 }
