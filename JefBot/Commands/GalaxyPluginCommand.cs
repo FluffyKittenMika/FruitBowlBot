@@ -19,7 +19,7 @@ namespace JefBot.Commands
     {
         public string PluginName => "Galaxy";
         public string Command => "galaxy";
-        public string Help => "!galaxy {stars} {dimension} {frames}";
+        public string Help => "!galaxy {stars} {dimension} {frames} {arms}";
         public IEnumerable<string> Aliases => new[] { "g" };
         public bool Loaded { get; set; } = true;
         public static HttpClient client = new HttpClient();
@@ -43,6 +43,7 @@ namespace JefBot.Commands
                 int stars = 2500;
                 int dimension = 500;
                 int frames = 1;
+                int arms = 100;
 
                 if (args.ElementAtOrDefault(0) != null) //check if position 0 of array is set for stars
                     Int32.TryParse(args[0], out stars);
@@ -50,8 +51,10 @@ namespace JefBot.Commands
                     Int32.TryParse(args[1], out dimension);
                 if (args.ElementAtOrDefault(2) != null)
                     Int32.TryParse(args[2], out frames);
-			
-                return MakeGif(Galaxy(stars, dimension, frames));
+                if (args.ElementAtOrDefault(3) != null)
+                    Int32.TryParse(args[3], out arms);
+
+                return MakeGif(Galaxy(stars, dimension, frames, arms));
             }
             catch (Exception err)
             {
@@ -135,13 +138,19 @@ namespace JefBot.Commands
         /// <param name="Dimension">Size of the image</param>
         /// <param name="TotalFrames">Number of frames</param>
         /// <returns>List of images</returns>
-        public static Bitmap[] Galaxy(int stars = 1000, int Dimension = 250, int TotalFrames = 1)
+        public static Bitmap[] Galaxy(int stars = 1000, int Dimension = 250, int TotalFrames = 1, int Arms = 100)
         {
-           
             stars = Clamp(stars, 100, 10000);
             Dimension = Clamp(Dimension, 250, 2000);
             TotalFrames = Clamp(TotalFrames, 1, 60);
 
+            //amount of galaxy branches
+            int arms;
+
+            if (Arms == 100)
+                arms = rng.Next(2, 10);
+            else
+                arms = Clamp(Arms, 1, 10);
 
             //static things
             var po = new ParallelOptions
@@ -152,8 +161,7 @@ namespace JefBot.Commands
             int centerX = (int)(0.5f * Dimension);
             int centerY = (int)(0.5f * Dimension);
 
-            //amount of galaxy branches
-            int arms = rng.Next(2, 10);
+        
             //max range of stars
             double maxStarDistance = Dimension / 2;
             //max arm width in degrees
