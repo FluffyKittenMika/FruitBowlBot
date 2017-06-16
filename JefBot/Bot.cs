@@ -207,7 +207,7 @@ namespace JefBot
                 {
                     combined[0].Loaded = toggle;
                     string status = toggle ? "Enabled" : "Disabled";
-                    return $"{combined[0].PluginName} is now { toggle }";
+                    return $"{combined[0].PluginName} is now { status }";
                 }
                 else
                     return $"Could not find a plugin with the command { plugin }";

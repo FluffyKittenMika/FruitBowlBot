@@ -8,7 +8,7 @@ namespace JefBot
 {
     class Program
     {
-        //Yes
+
         static void Main(string[] args)
         {
             while (true)

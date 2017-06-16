@@ -90,6 +90,7 @@
     <Compile Include="Commands\RollPluginCommand.cs" />
     <Compile Include="Commands\TaskPluginCommand.cs" />
     <Compile Include="Commands\UptimePluginCommand.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Plugin.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
