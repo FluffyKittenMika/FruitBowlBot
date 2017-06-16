@@ -24,7 +24,14 @@ namespace JefBot.Commands
         public bool Loaded { get; set; } = true;
         public static HttpClient client = new HttpClient();
 
+
+        Random rng = new Random();
+        //define the colour white
+        System.Drawing.Color c = System.Drawing.Color.FromArgb(255, 255, 255);
+
         List<IPluginCommand> plug = new List<IPluginCommand>();
+
+
 
         public string Action(Message message)
         {
@@ -45,11 +52,7 @@ namespace JefBot.Commands
                     Int32.TryParse(args[1], out dimension);
                 if (args.ElementAtOrDefault(2) != null)
                     Int32.TryParse(args[2], out frames);
-				
-				dimension = Clamp(dimension, 250, 2000);
-				frames = Clamp(frames, 1, 60);
-				stars = Clamp(stars, 100, 1000);
-				
+			
                 return MakeGif(Galaxy(stars, dimension, frames));
             }
             catch (Exception err)
@@ -100,8 +103,10 @@ namespace JefBot.Commands
 
         }
 
+
+
         /// <summary>
-        /// makes a black bitmap to the specific size
+        /// Makes a black bitmap to the specific size
         /// </summary>
         /// <param name="width">Width of the image</param>
         /// <param name="height">height of the image</param>
@@ -116,6 +121,16 @@ namespace JefBot.Commands
         }
 
         /// <summary>
+        /// / Makes a black bitmap to the specific dimension 
+        /// </summary>
+        /// <param name="dimension">Sqare size</param>
+        /// <returns>Bitmap</returns>
+        public static Bitmap BaseFactory(int dimension)
+        {
+            return BaseFactory(dimension, dimension);
+        }
+
+        /// <summary>
         /// Returns a list of galaxy images
         /// </summary>
         /// <param name="stars">Number of stars</param>
@@ -124,13 +139,11 @@ namespace JefBot.Commands
         /// <returns>List of images</returns>
         public static Bitmap[] Galaxy(int stars = 1000, int Dimension = 250, int TotalFrames = 1)
         {
-            Random rng = new Random();
+           
             stars = Clamp(stars, 100, 10000);
             Dimension = Clamp(Dimension, 250, 2000);
             TotalFrames = Clamp(TotalFrames, 1, 60);
 
-            //define the colour white
-            System.Drawing.Color c = System.Drawing.Color.FromArgb(255, 255, 255);
 
             //static things
             var po = new ParallelOptions
@@ -180,7 +193,7 @@ namespace JefBot.Commands
             Bitmap[] OutList = new Bitmap[TotalFrames];
 
             Parallel.For(0, TotalFrames, po, frame => {
-                Bitmap b = BaseFactory(Dimension, Dimension);
+                Bitmap b = BaseFactory(Dimension);
 
                 BitmapData bData = b.LockBits(new Rectangle(0, 0, Dimension, Dimension), ImageLockMode.ReadWrite, b.PixelFormat);
 
