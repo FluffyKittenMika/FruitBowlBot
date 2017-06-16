@@ -26,8 +26,6 @@ namespace JefBot.Commands
 
 
         public static Random rng = new Random();
-        //define the colour white
-        System.Drawing.Color c = System.Drawing.Color.FromArgb(255, 255, 255);
 
         List<IPluginCommand> plug = new List<IPluginCommand>();
 
