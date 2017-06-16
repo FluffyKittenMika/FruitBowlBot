@@ -10,7 +10,7 @@ namespace JefBot
         string PluginName { get; }
         string Command { get; }
         IEnumerable<string> Aliases { get; }
-        bool Loaded { get; }
+        bool Loaded { get; set; }
         string Help { get; }
 
         string Action(Message message);

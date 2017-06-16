@@ -180,22 +180,68 @@ namespace JefBot
         }
 
         /// <summary>
+        /// turns off or on a plugin based on its name
+        /// </summary>
+        /// <param name="message"></param>
+        /// <returns>result string</returns>
+        private string PluginManager(Message message)
+        {
+            var plugin = "";
+            var toggle = true;
+
+            if (message.Arguments.Count > 0 && message.Arguments.Count < 3)
+            {
+                if (message.Arguments.ElementAtOrDefault(0) != null)
+                    plugin = message.Arguments[0];
+                if (message.Arguments.ElementAtOrDefault(1) != null)
+                    toggle = Convert.ToBoolean(message.Arguments[1]);
+
+                IPluginCommand[] plugs = _plugins.Where(plug => plug.Command == plugin).ToArray();
+                IPluginCommand[] plugsalas = _plugins.Where(plug => plug.Aliases.Contains(plugin)).ToArray();
+                IPluginCommand[] combined = new IPluginCommand[plugs.Length + plugsalas.Length];
+
+                Array.Copy(plugs, combined, plugs.Length);
+                Array.Copy(plugsalas,0, combined, plugs.Length, plugsalas.Length);
+
+                if (combined.Count() > 0)
+                {
+                    combined[0].Loaded = toggle;
+                    string status = toggle ? "Enabled" : "Disabled";
+                    return $"{combined[0].PluginName} is now { toggle }";
+                }
+                else
+                    return $"Could not find a plugin with the command { plugin }";
+            }
+            return "You must define a plugin command, and a bool";
+        }
+
+
+
+        /// <summary>
         /// custom discord command parser lol
         /// </summary>
         /// <param name="arg"> the whole shibboleetbangbanglesbians</param>
         /// <returns></returns>
         private Task DiscordEventAsync(SocketMessage arg)
         {
+            var args = arg.Content.Split(' ').ToList().Skip(1).ToList();
             var enabledPlugins = _plugins.Where(plug => plug.Loaded).ToArray();
             var command = "";
-            Storemessage(arg.Content);
-            
-            //to annoy jef sometimes
-            if (arg.Author.Id == 170284217207357440 || arg.Id == 170284217207357440)
-                if (rng.Next(0,100) == 10)
-                    arg.Channel.SendMessageAsync(Commands.PiglatinPluginCommand.Piglatin(arg.Content.Split(' ').ToList()));
 
-            if (arg.Content[0] == '!') //TODO make option for this prefix :D ///meeh
+            Storemessage(arg.Content);
+
+            Message msg = new Message()
+            {
+                Arguments = args,
+                Command = command,
+                Channel = Convert.ToString(arg.Channel.Id),
+                IsModerator = ((SocketGuildUser)arg.Author).GuildPermissions.Administrator,
+                RawMessage = arg.Content,
+                Username = arg.Author.Username,
+                MessageIsFromDiscord = true
+            };
+
+            if (arg.Content[0] == '!') //TODO make option for this prefix :D 
             {
                 try
                 {
@@ -207,28 +253,21 @@ namespace JefBot
                 }
             }
 
+            //just a hardcoded command for enabling / disabling plugins
+            if (command == "plugin" && msg.IsModerator)
+            {
+                arg.Channel.SendMessageAsync(PluginManager(msg)); 
+            }
+
             foreach (var plug in enabledPlugins)
             {
                 if (plug.Aliases.Contains(command) || plug.Command == command)
                 {
-                    var args = arg.Content.Split(' ').ToList().Skip(1).ToList();
                     try
                     {
-                        Message msg = new Message()
-                        {
-                            Arguments = args,
-                            Command = command,
-                            Channel = Convert.ToString(arg.Channel.Id),
-                            IsModerator = ((SocketGuildUser)arg.Author).GuildPermissions.Administrator,
-                            RawMessage = arg.Content,
-                            Username = arg.Author.Username,
-                            MessageIsFromDiscord = true
-                        };
-
                         string reaction = plug.Action(msg);
                         if (reaction != null)
                             arg.Channel.SendMessageAsync(plug.Action(msg));
-                        //plug.Discord(arg, discordClient);
                     }
                     catch (Exception err)
                     {
@@ -292,21 +331,27 @@ namespace JefBot
             var enabledPlugins = _plugins.Where(plug => plug.Loaded).ToArray();
             var command = e.Command.Command.ToLower();
 
+            Message msg = new Message()
+            {
+                Arguments = e.Command.ArgumentsAsList,
+                Command = command,
+                Channel = e.Command.ChatMessage.Channel,
+                IsModerator = e.Command.ChatMessage.IsModerator,
+                RawMessage = e.Command.ChatMessage.Message,
+                Username = e.Command.ChatMessage.Username,
+                MessageIsFromDiscord = false
+            };
+
+            //just a hardcoded command for enabling / disabling plugins
+            if (command == "plugin" && msg.IsModerator)
+            {
+                chatClient.SendMessage(e.Command.ChatMessage.Channel, PluginManager(msg));
+            }
+
             foreach (var plug in enabledPlugins)
             {
                 if (plug.Command == command || plug.Aliases.Contains(command))
                 {
-                    Message msg = new Message()
-                    {
-                        Arguments = e.Command.ArgumentsAsList,
-                        Command = command,
-                        Channel = e.Command.ChatMessage.Channel,
-                        IsModerator = e.Command.ChatMessage.IsModerator,
-                        RawMessage = e.Command.ChatMessage.Message,
-                        Username = e.Command.ChatMessage.Username,
-                        MessageIsFromDiscord = false
-                    };
-
                     string reaction = plug.Action(msg);
                     if (reaction != null)
                         chatClient.SendMessage(e.Command.ChatMessage.Channel, reaction);
