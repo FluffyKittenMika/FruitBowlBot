@@ -141,38 +141,41 @@ namespace JefBot.Commands
             int centerY = (int)(0.5f * Dimension);
 
             //amount of galaxy branches
-            int arms = rng.Next(2, 10);
-            //max range of stars
-            double maxStarDistance = Dimension / 2;
-            //max arm width in degrees
-            double maxArmWidth = 90d;
-            //amount of bend in degrees
-            double maxBend = 60d;
-            double bend = rng.NextDouble() * maxBend;
-
+            int arms = rng.Next(1, 10);
+            double armoffsetmax = 0.8d;
+            double armdistance = 2 * Math.PI / arms;
+            double armrotation = rng.Next(3, 9);
 
             Tuple<double, double>[] starList = new Tuple<double, double>[stars];
 
             Parallel.For(0, stars, po, i => {
-                // distance from center
-                double distance = rng.NextDouble() * maxStarDistance;
-                // randomize arm
-                int arm = rng.Next(0, arms);
-                // calc arm angle
-                double angle = arm * 360 / arms;
-                // likelyhood of offset = inverse square-ish of distance to arm angle
-                double f = rng.NextDouble() - 0.5d;
-                double multi = f < 0 ? -1 : 1;
-                double baseOffsetMulti = Math.Pow(f, 2d) * multi;
-                baseOffsetMulti = (2d*baseOffsetMulti + f) / 3d;
-                // likelyhood of offset = smaller the further from center
-                double distanceMulti = maxStarDistance / Math.Pow(distance, 1.3d);
-                // calc random offset
-                double angleOffset = baseOffsetMulti * distanceMulti * maxArmWidth;
-                
-                double bendOffset = bend * Math.Pow(distance, 1.5d) / Math.Pow(maxStarDistance, 1.2d);
+                //distance from center
+                double distance = rng.NextDouble();
+                distance = Math.Pow(distance, 2);
 
-                starList[i] = new Tuple<double, double>(distance, angle + angleOffset - bendOffset);
+                //angle of a circle
+                double angle = rng.NextDouble() * 2 * Math.PI;
+
+                //set the offset
+                double armoffset = rng.NextDouble() * armoffsetmax;
+                armoffset = armoffset - armoffsetmax / 2; //limits it to the lines
+                armoffset = armoffset * (1 / distance); //spread em out a bit
+
+                //sqare em up
+                double sqaredarmoffset = Math.Pow(armoffset, 2);
+                if (armoffset < 0)
+                    sqaredarmoffset = sqaredarmoffset * -1;
+                armoffset = sqaredarmoffset;
+
+                //calculate rotation point
+                double rotation = distance * armrotation;
+
+                //manipulate it a bit
+                angle = (int)(angle / armdistance) * armdistance + armoffset + rotation;
+
+                //add stars to the mass exodus list
+                
+                starList[i] = new Tuple<double, double>(distance * Dimension * 0.5f, angle / Math.PI * 180);
             });
 
             //make and fill images
@@ -200,7 +203,9 @@ namespace JefBot.Commands
                 Parallel.For(0, starList.Count(), po, i => {
                     Tuple<double, double> star = starList[i];
 
-                    double newAngle = star.Item2 + 360 * frame / TotalFrames;
+                    Int32 RNG = rng.Next(10) - 5;
+
+                    double newAngle = star.Item2 + RNG - frame * (360 / TotalFrames);
 
                     int newX = centerX + (int)Math.Floor(Math.Cos(newAngle / 180 * Math.PI) * star.Item1);
                     int newY = centerY + (int)Math.Floor(Math.Sin(newAngle / 180 * Math.PI) * star.Item1);
