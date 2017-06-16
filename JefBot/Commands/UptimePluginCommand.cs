@@ -26,11 +26,12 @@ namespace JefBot.Commands
 
         public string Action(Message message)
         {
-            if (message.Arguments.Count != 0)
-                if (!message.MessageIsFromDiscord)
-                    return Res(message.Channel);
-                else
-                    return Res(message.Arguments[0]);
+            if (!message.MessageIsFromDiscord)
+                return Res(message.Channel);
+
+            if (message.Arguments.Count > 0)
+                return Res(message.Arguments[0]);
+
             return "Can't do that sir, i require an argument after the command.";
         }
     }
