@@ -11,6 +11,7 @@ using System.Net;
 using System.Net.Http;
 using System.Globalization;
 using System.Threading.Tasks;
+using System.Drawing.Imaging;
 
 namespace JefBot.Commands
 {
@@ -18,12 +19,17 @@ namespace JefBot.Commands
     {
         public string PluginName => "Galaxy";
         public string Command => "galaxy";
-        public string Help => "!galaxy {stars} {dimension} {frames}";
+        public string Help => "!galaxy {stars} {dimension} {frames} {arms}";
         public IEnumerable<string> Aliases => new[] { "g" };
         public bool Loaded { get; set; } = true;
         public static HttpClient client = new HttpClient();
 
+
+        public static Random rng = new Random();
+
         List<IPluginCommand> plug = new List<IPluginCommand>();
+
+
 
         public string Action(Message message)
         {
@@ -37,6 +43,7 @@ namespace JefBot.Commands
                 int stars = 2500;
                 int dimension = 500;
                 int frames = 1;
+                int arms = 100;
 
                 if (args.ElementAtOrDefault(0) != null) //check if position 0 of array is set for stars
                     Int32.TryParse(args[0], out stars);
@@ -44,12 +51,10 @@ namespace JefBot.Commands
                     Int32.TryParse(args[1], out dimension);
                 if (args.ElementAtOrDefault(2) != null)
                     Int32.TryParse(args[2], out frames);
-				
-				dimension = Clamp(dimension, 250, 2000);
-				frames = Clamp(frames, 1, 60);
-				stars = Clamp(stars, 100, 1000);
-				
-                return MakeGif(Galaxy(stars, dimension, frames));
+                if (args.ElementAtOrDefault(3) != null)
+                    Int32.TryParse(args[3], out arms);
+
+                return MakeGif(Galaxy(stars, dimension, frames, arms));
             }
             catch (Exception err)
             {
@@ -99,8 +104,10 @@ namespace JefBot.Commands
 
         }
 
+
+
         /// <summary>
-        /// makes a black bitmap to the specific size
+        /// Makes a black bitmap to the specific size
         /// </summary>
         /// <param name="width">Width of the image</param>
         /// <param name="height">height of the image</param>
@@ -115,21 +122,35 @@ namespace JefBot.Commands
         }
 
         /// <summary>
+        /// / Makes a black bitmap to the specific dimension 
+        /// </summary>
+        /// <param name="dimension">Sqare size</param>
+        /// <returns>Bitmap</returns>
+        public static Bitmap BaseFactory(int dimension)
+        {
+            return BaseFactory(dimension, dimension);
+        }
+
+        /// <summary>
         /// Returns a list of galaxy images
         /// </summary>
         /// <param name="stars">Number of stars</param>
         /// <param name="Dimension">Size of the image</param>
         /// <param name="TotalFrames">Number of frames</param>
         /// <returns>List of images</returns>
-        public static Bitmap[] Galaxy(int stars = 1000, int Dimension = 250, int TotalFrames = 1)
+        public static Bitmap[] Galaxy(int stars = 1000, int Dimension = 250, int TotalFrames = 1, int Arms = 100)
         {
-            Random rng = new Random();
             stars = Clamp(stars, 100, 10000);
             Dimension = Clamp(Dimension, 250, 2000);
             TotalFrames = Clamp(TotalFrames, 1, 60);
 
-            //define the colour white
-            System.Drawing.Color c = System.Drawing.Color.FromArgb(255, 255, 255);
+            //amount of galaxy branches
+            int arms;
+
+            if (Arms == 100)
+                arms = rng.Next(2, 10);
+            else
+                arms = Clamp(Arms, 1, 10);
 
             //static things
             var po = new ParallelOptions
@@ -141,7 +162,6 @@ namespace JefBot.Commands
             int centerY = (int)(0.5f * Dimension);
 
             //amount of galaxy branches
-            int arms = rng.Next(1, 10);
             double armoffsetmax = 0.8d;
             double armdistance = 2 * Math.PI / arms;
             double armrotation = rng.Next(3, 9);
