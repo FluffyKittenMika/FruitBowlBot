@@ -11,6 +11,7 @@ using System.Net;
 using System.Net.Http;
 using System.Globalization;
 using System.Threading.Tasks;
+using System.Drawing.Imaging;
 
 namespace JefBot.Commands
 {
@@ -185,7 +186,7 @@ namespace JefBot.Commands
 
                 /* GetBitsPerPixel just does a switch on the PixelFormat and returns the number */
 
-                int bitsPerPixel = Image.GetPixelFormatSize(bData.PixelFormat);
+                int bitsPerPixel = System.Drawing.Image.GetPixelFormatSize(bData.PixelFormat);
                 int bytesPerPixel = bitsPerPixel / 8;
 
                 /*the size of the image in bytes */
