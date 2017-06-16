@@ -24,7 +24,6 @@ namespace JefBot.Commands
         public static HttpClient client = new HttpClient();
 
         List<IPluginCommand> plug = new List<IPluginCommand>();
-        public static Random rng = new Random();
 
         public string Action(Message message)
         {
@@ -45,7 +44,11 @@ namespace JefBot.Commands
                     Int32.TryParse(args[1], out dimension);
                 if (args.ElementAtOrDefault(2) != null)
                     Int32.TryParse(args[2], out frames);
-
+				
+				dimension = Clamp(dimension, 250, 2000);
+				frames = Clamp(frames, 1, 60);
+				stars = Clamp(stars, 100, 1000);
+				
                 return MakeGif(Galaxy(stars, dimension, frames));
             }
             catch (Exception err)
@@ -61,23 +64,28 @@ namespace JefBot.Commands
             return (val < min) ? min : ((val > max) ? max : val);
         }
 
+        public static double Lerp(double min, double max, double val)
+        {
+            return min + val * (max - min);
+        }
+
         /// <summary>
         /// Compiles a list of bitmaps into a gif, and uploads it automatically
         /// </summary>
         /// <param name="bitmaps"></param>
         /// <returns></returns>
-        public string MakeGif(List<Bitmap> bitmaps)
+        public string MakeGif(Bitmap[] bitmaps)
         {
             Stream stream = new MemoryStream();
             System.Drawing.Image image;
             var gif = File.OpenWrite("gif.gif");
             var encoder = new BumpKit.GifEncoder(gif) { FrameDelay = new TimeSpan(1) };
 
-            for (int i = 0; i < bitmaps.Count; i++)
+			foreach (Bitmap b in bitmaps)
             {
                 //move bitmap to memory stream
                 stream.Position = 0;
-                bitmaps[i].Save(stream, System.Drawing.Imaging.ImageFormat.Png);
+                b.Save(stream, System.Drawing.Imaging.ImageFormat.Png);
                 stream.Position = 0;
                 image = System.Drawing.Image.FromStream(stream);
                 encoder.AddFrame(image);
@@ -113,9 +121,9 @@ namespace JefBot.Commands
         /// <param name="Dimension">Size of the image</param>
         /// <param name="TotalFrames">Number of frames</param>
         /// <returns>List of images</returns>
-        public static List<Bitmap> Galaxy(int stars = 1000, int Dimension = 250, int TotalFrames = 1)
+        public static Bitmap[] Galaxy(int stars = 1000, int Dimension = 250, int TotalFrames = 1)
         {
-
+            Random rng = new Random();
             stars = Clamp(stars, 100, 10000);
             Dimension = Clamp(Dimension, 250, 2000);
             TotalFrames = Clamp(TotalFrames, 1, 60);
@@ -123,111 +131,99 @@ namespace JefBot.Commands
             //define the colour white
             System.Drawing.Color c = System.Drawing.Color.FromArgb(255, 255, 255);
 
+            //static things
+            var po = new ParallelOptions
+            {
+                MaxDegreeOfParallelism = 100
+            };
+
+            int centerX = (int)(0.5f * Dimension);
+            int centerY = (int)(0.5f * Dimension);
+
+            //amount of galaxy branches
+            int arms = rng.Next(2, 10);
+            //max range of stars
+            double maxStarDistance = Dimension / 2;
+            //max arm width in degrees
+            double maxArmWidth = 90d;
+            //amount of bend in degrees
+            double maxBend = 60d;
+            double bend = rng.NextDouble() * maxBend;
+
+
+            Tuple<double, double>[] starList = new Tuple<double, double>[stars];
+
+            Parallel.For(0, stars, po, i => {
+                // distance from center
+                double distance = rng.NextDouble() * maxStarDistance;
+                // randomize arm
+                int arm = rng.Next(0, arms);
+                // calc arm angle
+                double angle = arm * 360 / arms;
+                // likelyhood of offset = inverse square-ish of distance to arm angle
+                double f = rng.NextDouble() - 0.5d;
+                double multi = f < 0 ? -1 : 1;
+                double baseOffsetMulti = Math.Pow(f, 2d) * multi;
+                baseOffsetMulti = (2d*baseOffsetMulti + f) / 3d;
+                // likelyhood of offset = smaller the further from center
+                double distanceMulti = maxStarDistance / Math.Pow(distance, 1.3d);
+                // calc random offset
+                double angleOffset = baseOffsetMulti * distanceMulti * maxArmWidth;
+                
+                double bendOffset = bend * Math.Pow(distance, 1.5d) / Math.Pow(maxStarDistance, 1.2d);
+
+                starList[i] = new Tuple<double, double>(distance, angle + angleOffset - bendOffset);
+            });
+
             //make and fill images
             Bitmap[] OutList = new Bitmap[TotalFrames];
 
-            for (int frame = 0; frame < TotalFrames; frame++)
-                OutList[frame] = BaseFactory(Dimension, Dimension);
+            Parallel.For(0, TotalFrames, po, frame => {
+                Bitmap b = BaseFactory(Dimension, Dimension);
 
+                BitmapData bData = b.LockBits(new Rectangle(0, 0, Dimension, Dimension), ImageLockMode.ReadWrite, b.PixelFormat);
 
-            //static things
+                /* GetBitsPerPixel just does a switch on the PixelFormat and returns the number */
 
-            //amount of galaxy branches
-            int arms = rng.Next(1, 10);
-            //offset (width of branches)
-            double armoffsetmax = 0.8d;
-            //prefered distance between the branches
-            double armdistance = 2 * Math.PI / arms;
-            //define the bend
-            double armrotation = rng.Next(3, 9);
-            //a bit of a random sprinkles to remove the lines
-            //double randomoffset = 0.02d;
+                int bitsPerPixel = Image.GetPixelFormatSize(bData.PixelFormat);
+                int bytesPerPixel = bitsPerPixel / 8;
 
-            //loop de loop
-            Parallel.For(0, stars, res =>
-            {
+                /*the size of the image in bytes */
+                int size = bData.Stride * bData.Height;
 
-                //distance from center
-                double distance = rng.NextDouble();
-                distance = Math.Pow(distance, 2);
+                /*Allocate buffer for image*/
+                byte[] data = new byte[size];
 
-                //angle of a circle
-                double angle = rng.NextDouble() * 2 * Math.PI;
+                /*This overload copies data of /size/ into /data/ from location specified (/Scan0/)*/
+                System.Runtime.InteropServices.Marshal.Copy(bData.Scan0, data, 0, size);
 
-                //set the offset
-                double armoffset = rng.NextDouble() * armoffsetmax;
-                armoffset = armoffset - armoffsetmax / 2; //limits it to the lines
-                armoffset = armoffset * (1 / distance); //spread em out a bit
+                Parallel.For(0, starList.Count(), po, i => {
+                    Tuple<double, double> star = starList[i];
 
-                //sqare em up
-                double sqaredarmoffset = Math.Pow(armoffset, 2);
-                if (armoffset < 0)
-                    sqaredarmoffset = sqaredarmoffset * -1;
-                armoffset = sqaredarmoffset;
+                    double newAngle = star.Item2 + 360 * frame / TotalFrames;
 
-                //calculate rotation point
-                double rotation = distance * armrotation;
+                    int newX = centerX + (int)Math.Floor(Math.Cos(newAngle / 180 * Math.PI) * star.Item1);
+                    int newY = centerY + (int)Math.Floor(Math.Sin(newAngle / 180 * Math.PI) * star.Item1);
 
-                //manipulate it a bit
-                angle = (int)(angle / armdistance) * armdistance + armoffset + rotation;
-
-                //add stars to the mass exodus list
-                PolarStar star = new PolarStar(distance * Dimension * 0.5f, angle);
-                //maybe not add to list if a star is already there?
-
-                Parallel.For(0, TotalFrames, frame =>
-                {
-                    Int32 RNG = rng.Next(10) - 5;
-                    CartPoint Point = new CartPoint(star.Distance, star.AngleD + RNG - (frame * 360 / TotalFrames));
-                    Point.Translate((int)(0.5f * (Dimension - 1)), (int)(0.5f * (Dimension - 1)));
-                    int x = Clamp((int)Point.X, 0, Dimension - 1);
-                    int y = Clamp((int)Point.Y, 0, Dimension - 1);
-                    Bitmap frm = OutList[frame];
-                    lock (frm)
+                    if (newX > 0 && newX < Dimension && newY > 0 && newY < Dimension)
                     {
-                        frm.SetPixel(x, y, c);
+                        int xoff = bytesPerPixel * newX;
+                        int yoff = bytesPerPixel * Dimension * newY;
+                        for (int bite = 0; bite < bytesPerPixel; bite++)
+                        {
+                            data[xoff + yoff + bite] = 255;
+                        }
                     }
                 });
+
+                System.Runtime.InteropServices.Marshal.Copy(data, 0, bData.Scan0, data.Length);
+
+                b.UnlockBits(bData);
+
+                OutList[frame] = b;
             });
 
-            return OutList.ToList();
-        }
-
-        public class PolarStar
-        {
-            public PolarStar(double Distance, double AngleR)
-            {
-                this.Distance = Distance;
-                AngleD = AngleR / Math.PI * 180;
-            }
-            public PolarStar() { }
-            public void RotateDegrees(double Degrees)
-            {
-                AngleD += Degrees;
-            }
-            public double Distance { get; set; }
-            public double AngleD { get; set; }
-        }
-
-        public class CartPoint
-        {
-            public CartPoint(double Distance, double AngleD)
-            {
-                X = Math.Cos(AngleD / 180 * Math.PI) * Distance;
-                Y = Math.Sin(AngleD / 180 * Math.PI) * Distance;
-            }
-            public CartPoint(PolarStar Star)
-            {
-                X = Math.Cos(Star.AngleD / 180 * Math.PI) * Star.Distance;
-                Y = Math.Sin(Star.AngleD / 180 * Math.PI) * Star.Distance;
-            }
-            public void Translate(int NewCenterX, int NewCenterY)
-            {
-                X += NewCenterX;
-                Y += NewCenterY;
-            }
-            public double X { get; set; }
-            public double Y { get; set; }
+            return OutList;
         }
 
         public static class UploadImage
@@ -256,18 +252,6 @@ namespace JefBot.Commands
                 var res = client.PostAsync("http://u.rubixy.com/", form);
                 return res.Result.Content.ReadAsStringAsync().Result;
             }
-        }
-
-        public class Star
-        {
-            public Star(double X, double Y)
-            {
-                this.X = X;
-                this.Y = Y;
-            }
-            public Star() { }
-            public double X { get; set; }
-            public double Y { get; set; }
         }
     }
 }
