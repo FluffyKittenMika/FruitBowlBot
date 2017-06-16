@@ -43,23 +43,8 @@ namespace JefBot.Commands
                     Int32.TryParse(args[0], out stars);
                 if (args.ElementAtOrDefault(1) != null) //dimension
                     Int32.TryParse(args[1], out dimension);
-
-                if (dimension > 2000)
-                    dimension = 2000;
-                if (dimension < 250)
-                    dimension = 250;
-
                 if (args.ElementAtOrDefault(2) != null)
                     Int32.TryParse(args[2], out frames);
-                if (frames > 60)
-                    frames = 60;
-                if (frames < 1)
-                    frames = 1;
-
-                if (stars > 10000)
-                    stars = 10000;
-                if (stars < 100)
-                    stars = 100;
 
                 return MakeGif(Galaxy(stars, dimension, frames));
             }
@@ -193,8 +178,7 @@ namespace JefBot.Commands
                 Parallel.For(0, TotalFrames, frame =>
                 {
                     Int32 RNG = rng.Next(10) - 5;
-                    star.RotateDegrees(RNG - (360 / TotalFrames));
-                    CartPoint Point = new CartPoint(star);
+                    CartPoint Point = new CartPoint(star.Distance, star.AngleD + RNG - (frame * 360 / TotalFrames));
                     Point.Translate((int)(0.5f * (Dimension - 1)), (int)(0.5f * (Dimension - 1)));
                     int x = Clamp((int)Point.X, 0, Dimension - 1);
                     int y = Clamp((int)Point.Y, 0, Dimension - 1);
@@ -203,7 +187,6 @@ namespace JefBot.Commands
                     {
                         frm.SetPixel(x, y, c);
                     }
-                    star.RotateDegrees(0 - RNG);
                 });
             });
 
@@ -228,6 +211,11 @@ namespace JefBot.Commands
 
         public class CartPoint
         {
+            public CartPoint(double Distance, double AngleD)
+            {
+                X = Math.Cos(AngleD / 180 * Math.PI) * Distance;
+                Y = Math.Sin(AngleD / 180 * Math.PI) * Distance;
+            }
             public CartPoint(PolarStar Star)
             {
                 X = Math.Cos(Star.AngleD / 180 * Math.PI) * Star.Distance;
