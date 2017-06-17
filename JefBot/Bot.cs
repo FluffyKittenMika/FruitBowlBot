@@ -267,9 +267,6 @@ namespace JefBot
                     Console.Write(err.Message);
                 }
             }
-
-           
-
            
             return Task.CompletedTask;
         }
@@ -339,9 +336,7 @@ namespace JefBot
 
             //just a hardcoded command for enabling / disabling plugins
             if (command == "plugin" && msg.IsModerator)
-            {
                 chatClient.SendMessage(e.Command.ChatMessage.Channel, PluginManager(msg));
-            }
 
             foreach (var plug in enabledPlugins)
             {

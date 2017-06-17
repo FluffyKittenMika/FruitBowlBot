@@ -28,7 +28,7 @@ namespace JefBot.Commands
         {
             if (message.MessageIsFromDiscord)
             {
-                string temp = "";
+                string temp = "http://u.rubixy.com/u/89ff7483.jpg " + Environment.NewLine;
                 string input = String.Join(" ", message.Arguments);
 
                 for (int i = 0; i < input.Length; i++)
