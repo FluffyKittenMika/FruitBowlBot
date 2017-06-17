@@ -226,8 +226,6 @@ namespace JefBot
             var enabledPlugins = _plugins.Where(plug => plug.Loaded).ToArray();
             var command = "";
 
-            Storemessage(arg.Content);
-
 
             if (arg.Content[0] == '!') //TODO make option for this prefix :D 
             {
@@ -271,26 +269,9 @@ namespace JefBot
             return Task.CompletedTask;
         }
 
-        /// <summary>
-        /// for collecting bot data
-        /// </summary>
-        /// <param name="msg"></param>
-        private void Storemessage(string msg)
-        {
-            using (MySqlConnection con = new MySqlConnection(Bot.SQLConnectionString))
-            {
-                con.Open();
-                MySqlCommand _cmd = con.CreateCommand();
-                _cmd.CommandText = "INSERT INTO `Chat` (`CHAT`, `ID`) VALUES (@chat, NULL)";
-                _cmd.Parameters.AddWithValue("@chat", msg);
-                _cmd.ExecuteNonQuery();
-            }
-        }
-
         //Don't remove this, it's critical to see the chat in the bot, it quickly tells me if it's absolutely broken...
         private void Chatmsg(object sender, OnMessageReceivedArgs e)
         {
-            Storemessage(e.ChatMessage.Message);
             Console.WriteLine($"{e.ChatMessage.Channel}-{e.ChatMessage.Username}: {e.ChatMessage.Message}");
         }
 
