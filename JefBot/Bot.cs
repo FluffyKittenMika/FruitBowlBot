@@ -225,8 +225,7 @@ namespace JefBot
             var args = arg.Content.Split(' ').ToList().Skip(1).ToList();
             var enabledPlugins = _plugins.Where(plug => plug.Loaded).ToArray();
             var command = "";
-
-
+            
             if (arg.Content[0] == '!') //TODO make option for this prefix :D 
             {
                 try
@@ -237,13 +236,12 @@ namespace JefBot
                     {
                         Arguments = args,
                         Command = command,
-                        Channel = Convert.ToString(236951447634182145), //TODO: Fetch Discord Server ID dynamically.
+                        Channel = Convert.ToString(((SocketGuildChannel)arg.Channel).Guild.Id),
                         IsModerator = ((SocketGuildUser)arg.Author).GuildPermissions.Administrator,
                         RawMessage = arg.Content,
                         Username = arg.Author.Username,
                         MessageIsFromDiscord = true
                     };
-
                     //just a hardcoded command for enabling / disabling plugins
                     if (command == "plugin" && msg.IsModerator)
                     {
