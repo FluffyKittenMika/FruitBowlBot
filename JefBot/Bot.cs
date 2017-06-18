@@ -111,7 +111,7 @@ namespace JefBot
             //Set up a client for each channel
             foreach (string str in settings["channel"].Split(','))
             {
-                TwitchClient ChatClient = new TwitchClient(Credentials, str, '!', logging: Convert.ToBoolean(settings["debug"]));
+                TwitchClient ChatClient = new TwitchClient(Credentials, str, settings["prefix"][0], logging: Convert.ToBoolean(settings["debug"]));
                 ChatClient.OnChatCommandReceived += RecivedCommand;
                 ChatClient.OnNewSubscriber += RecivedNewSub;
                 ChatClient.OnReSubscriber += RecivedResub;
@@ -225,8 +225,8 @@ namespace JefBot
             var args = arg.Content.Split(' ').ToList().Skip(1).ToList();
             var enabledPlugins = _plugins.Where(plug => plug.Loaded).ToArray();
             var command = "";
-            
-            if (arg.Content[0] == '!') //TODO make option for this prefix :D 
+
+            if (arg.Content[0] == settings["prefix"][0]) 
             {
                 try
                 {

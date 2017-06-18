@@ -13,5 +13,9 @@ dbserver=127.0.0.1
 dbbase=database
 userid=root
 userpassword=password
+#
+#
+#command prefix
+prefix=!
 # Real solid debugging on/off
 debug=false
