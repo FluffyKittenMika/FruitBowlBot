@@ -8,6 +8,7 @@ using System.Linq;
 using TwitchLib.Models.Client;
 using MySql.Data.MySqlClient;
 using Discord.WebSocket;
+using System.Threading.Tasks;
 
 namespace JefBot.Commands
 {
@@ -22,7 +23,15 @@ namespace JefBot.Commands
         //Non default definitions
         Random rnd = new Random();
 
-        public string Action(Message message)
+        public async Task<string> Action(Message message)
+        {
+            string res = null;
+            await Task.Run(() => { res = QuoteAction(message); });
+            return res;
+        }
+
+
+        public string QuoteAction(Message message)
         {
             if (message.Arguments.Count > 0)
             {

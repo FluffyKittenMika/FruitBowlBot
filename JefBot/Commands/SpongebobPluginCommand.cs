@@ -6,6 +6,7 @@ using Discord.Commands;
 using TwitchLib.Models.Client;
 using Discord.WebSocket;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace JefBot.Commands
 {
@@ -19,9 +20,11 @@ namespace JefBot.Commands
 
         Random rng = new Random();
 
-        public string Action(Message message)
+        public async Task<string> Action(Message message)
         {
-            return Bob(message);
+            string res = null;
+            await Task.Run(() => { res =  Bob(message); });
+            return res;
         }
 
         private char GetZalgo()

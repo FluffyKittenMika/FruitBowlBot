@@ -1,7 +1,5 @@
 ﻿using System.Collections.Generic;
-using TwitchLib;
-using TwitchLib.Models.Client;
-using Discord.WebSocket;
+using System.Threading.Tasks;
 
 namespace JefBot
 {
@@ -12,10 +10,8 @@ namespace JefBot
         IEnumerable<string> Aliases { get; }
         bool Loaded { get; set; }
         string Help { get; }
-
-        string Action(Message message);
+        Task<string> Action(Message message);
     }
-
 
     public class Message
     {
@@ -24,7 +20,6 @@ namespace JefBot
         public string Command { get; set; }
         public string Username { get; set; }
         public bool MessageIsFromDiscord { get; set; }
-
         public bool IsModerator { get; set; }
         public List<string> Arguments { get; set; }
     }

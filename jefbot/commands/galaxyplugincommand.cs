@@ -21,7 +21,7 @@ namespace JefBot.Commands
         public string Command => "galaxy";
         public string Help => "!galaxy {stars} {dimension} {frames} {arms}";
         public IEnumerable<string> Aliases => new[] { "g" };
-        public bool Loaded { get; set; } = false; //enable this when we fix this thing to not make black squares
+        public bool Loaded { get; set; } = false; //enable this when we fix black squares
         public static HttpClient client = new HttpClient();
 
 
@@ -31,9 +31,11 @@ namespace JefBot.Commands
 
 
 
-        public string Action(Message message)
+        public async Task<string> Action(Message message)
         {
-            return GetLink(message.Arguments);
+            string res = null;
+            await Task.Run(() => {res = GetLink(message.Arguments); });
+            return res;
         }
 
         public string GetLink(List<string> args)

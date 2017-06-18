@@ -25,7 +25,14 @@ namespace JefBot.Commands
             streamtimes.Add(DayOfWeek.Saturday, TimeSpan.FromHours(21)); 
         }
 
-        public string Action(Message message)
+        public async Task<string> Action(Message message)
+        {
+            string res = null;
+            await Task.Run(() => { res = Time(message); });
+            return res;
+        }
+
+        public string Time(Message message)
         {
             if (message.Channel == "jefmajor" || message.Channel == "236951447634182145")
                 return Time();

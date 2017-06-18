@@ -2,6 +2,7 @@
 using Discord.WebSocket;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using TwitchLib;
 using TwitchLib.Models.Client;
 
@@ -14,13 +15,15 @@ namespace JefBot.Commands
         public string Help => "!task {minutes} {message} (repeats a message every X minutes)";
         public IEnumerable<string> Aliases => new string[0];
         public bool Loaded { get; set; } = true;
-        
+
         //this is just a class for the future
         //not implementing this right now
 
-        public string Action(Message message)
+        public async Task<string> Action(Message message)
         {
-            return null;
+            string res = null;
+            await Task.Run(() => { res = null; });
+            return res;
         }
 
 

@@ -5,6 +5,7 @@ using Discord;
 using Discord.Commands;
 using TwitchLib.Models.Client;
 using Discord.WebSocket;
+using System.Threading.Tasks;
 
 namespace JefBot.Commands
 {
@@ -51,9 +52,12 @@ namespace JefBot.Commands
         };
 
         Random rng = new Random();
-        public string Action(Message message)
+
+        public async Task<string> Action(Message message)
         {
-            return EightBall(message.RawMessage);
+            string res = null;
+            await Task.Run(() => { res = EightBall(message.RawMessage); });
+            return res;
         }
 
         public string EightBall(string args)

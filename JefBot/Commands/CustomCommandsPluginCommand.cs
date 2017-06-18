@@ -6,7 +6,7 @@ using TwitchLib;
 using TwitchLib.Models.Client;
 using Discord.WebSocket;
 using Discord;
-
+using System.Threading.Tasks;
 
 namespace JefBot.Commands
 {
@@ -26,12 +26,13 @@ namespace JefBot.Commands
             Load();
         }
 
-        public string Action(Message message)
+        async Task<string> IPluginCommand.Action(Message message)
         {
-            var response = CustomCommand(message);
-            if (response != "null")
-                return response;
-            return null;
+            string res = null;
+            await Task.Run(() => { res = CustomCommand(message); });
+            if (res != "null")
+                return res;
+            return res;
         }
 
         /// <summary>

@@ -2,6 +2,7 @@
 using Discord.WebSocket;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using TwitchLib;
 using TwitchLib.Models.Client;
 
@@ -24,7 +25,14 @@ namespace JefBot.Commands
                 return $"Channel offline";
         }
 
-        public string Action(Message message)
+        public async Task<string> Action(Message message)
+        {
+            string res = null;
+            await Task.Run(() => { res = Uptime(message); });
+            return res;
+        }
+
+        public string Uptime(Message message)
         {
             if (!message.MessageIsFromDiscord)
                 return Res(message.Channel);
@@ -32,7 +40,7 @@ namespace JefBot.Commands
             if (message.Arguments.Count > 0)
                 return Res(message.Arguments[0]);
 
-            return "Can't do that sir, i require an argument after the command.";
+            return "Can't do that sir, I require an argument after the command.";
         }
     }
 }

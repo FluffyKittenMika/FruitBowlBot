@@ -5,6 +5,7 @@ using Discord;
 using Discord.Commands;
 using TwitchLib.Models.Client;
 using Discord.WebSocket;
+using System.Threading.Tasks;
 
 namespace JefBot.Commands
 {
@@ -17,8 +18,15 @@ namespace JefBot.Commands
         public bool Loaded { get; set; } = true;
 
         Random rng = new Random();
-        
-        public string Action(Message message)
+
+        async Task<string> IPluginCommand.Action(Message message)
+        {
+            string res = null;
+            await Task.Run(() => { res = Coin(message); });
+            return res;
+        }
+
+        public string Coin(Message message)
         {
             if (rng.Next(1000) > 1)
             {

@@ -5,6 +5,7 @@ using System.Linq;
 using Discord;
 using TwitchLib.Models.Client;
 using Discord.WebSocket;
+using System.Threading.Tasks;
 
 namespace JefBot.Commands
 {
@@ -19,7 +20,16 @@ namespace JefBot.Commands
         List<IPluginCommand> plug = new List<IPluginCommand>();
         Random rng = new Random();
 
-        public string Action(Message message)
+
+        public async Task<string> Action(Message message)
+        {
+            string res = null;
+            await Task.Run(() => { res = CommandHelp(message); });
+            return res;
+        }
+
+
+        public string CommandHelp(Message message)
         {
             try
             {

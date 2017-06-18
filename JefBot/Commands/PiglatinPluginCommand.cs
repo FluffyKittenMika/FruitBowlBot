@@ -6,6 +6,7 @@ using Discord.Commands;
 using TwitchLib.Models.Client;
 using Discord.WebSocket;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace JefBot.Commands
 {
@@ -19,7 +20,14 @@ namespace JefBot.Commands
 
         const string vowels = "AEIOUaeiou";
 
-        public string Action(Message message)
+        public async Task<string> Action(Message message)
+        {
+            string res = null;
+            await Task.Run(() => { res = Pig(message); });
+            return res;
+        }
+
+        public string Pig(Message message)
         {
             return Piglatin(message.Arguments);
         }

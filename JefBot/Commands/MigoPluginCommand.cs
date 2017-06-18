@@ -9,6 +9,7 @@ using TwitchLib.Models.Client;
 using MySql.Data;
 using MySql.Data.MySqlClient;
 using Discord.WebSocket;
+using System.Threading.Tasks;
 
 namespace JefBot.Commands
 {
@@ -70,10 +71,14 @@ namespace JefBot.Commands
          
         }
 
+        public async Task<string> Action(Message message)
+        {
+            string res = null;
+            await Task.Run(() => { res = MigoAction(message); });
+            return res;
+        }
 
-
-
-        public string Action(Message message)
+        public string MigoAction(Message message)
         {
             try
             {

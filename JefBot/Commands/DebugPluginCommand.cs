@@ -6,6 +6,7 @@ using TwitchLib.Models.API;
 using TwitchLib.Models.API.Stream;
 using TwitchLib.Models.Client;
 using Discord.WebSocket;
+using System.Threading.Tasks;
 
 namespace JefBot.Commands
 {
@@ -17,7 +18,7 @@ namespace JefBot.Commands
         public IEnumerable<string> Aliases => new string[0];
         public bool Loaded { get; set; } = true;
 
-        public string Action(Message message)
+        public string Debug(Message message)
         {
             if (Bot.IsStreaming(message.Channel))
             {
@@ -38,6 +39,13 @@ namespace JefBot.Commands
 
             }
             return null;
+        }
+
+        public async Task<string> Action(Message message)
+        {
+            string res = null;
+            await Task.Run(() => { res = Debug(message); });
+            return res;
         }
     }
 }

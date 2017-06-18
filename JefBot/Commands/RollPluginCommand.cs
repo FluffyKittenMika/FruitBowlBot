@@ -7,6 +7,7 @@ using TwitchLib.Models.Client;
 using RogueSharp.DiceNotation;
 using System.Linq;
 using Discord.WebSocket;
+using System.Threading.Tasks;
 
 namespace JefBot.Commands
 {
@@ -97,7 +98,15 @@ namespace JefBot.Commands
             
         }
 
-        public string Action(Message message)
+
+        public async Task<string> Action(Message message)
+        {
+            string res = null;
+            await Task.Run(() => { res = Roll(message); });
+            return res;
+        }
+
+        public string Roll(Message message)
         {
             try
             {

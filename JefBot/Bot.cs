@@ -252,9 +252,9 @@ namespace JefBot
                     {
                         if (plug.Command == command || plug.Aliases.Contains(command))
                         {
-                            string reaction = plug.Action(msg);
+                            string reaction = plug.Action(msg).Result;
                             if (reaction != null)
-                                arg.Channel.SendMessageAsync(plug.Action(msg));
+                                arg.Channel.SendMessageAsync(reaction);
                         }
                     }
                 }
@@ -321,7 +321,7 @@ namespace JefBot
             {
                 if (plug.Command == command || plug.Aliases.Contains(command))
                 {
-                    string reaction = plug.Action(msg);
+                    string reaction = plug.Action(msg).Result;
                     if (reaction != null)
                         chatClient.SendMessage(e.Command.ChatMessage.Channel, reaction);
                     break;
