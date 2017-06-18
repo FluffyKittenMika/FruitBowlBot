@@ -91,7 +91,7 @@ namespace JefBot.Commands
 
             if (message.MessageIsFromDiscord && message.Command != "666bob")
             {
-                string temp = "http://u.rubixy.com/u/89ff7483.jpg " + Environment.NewLine;
+                string temp = "http://u.rubixy.com/u/1288584f.png " + Environment.NewLine;
                 for (int i = 0; i < input.Length; i++)
                 {
                     int r = rng.Next(1, 3);
