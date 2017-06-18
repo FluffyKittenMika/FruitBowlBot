@@ -76,7 +76,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Bot.cs" />
-    <Compile Include="Commands\SpongebobPluginZalgoCommand.cs" />
     <Compile Include="Commands\SpongebobPluginCommand.cs" />
     <Compile Include="Commands\PiglatinPluginCommand.cs" />
     <Compile Include="Commands\RestartPluginCommand.cs" />
