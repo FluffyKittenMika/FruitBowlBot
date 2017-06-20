@@ -104,9 +104,7 @@ namespace JefBot
             Credentials = new ConnectionCredentials(settings["username"], settings["oauth"]);
 
             if (settings["clientid"] != null)
-            {
                 TwitchApi.SetClientId(settings["clientid"]);
-            }
 
             //Set up a client for each channel
             foreach (string str in settings["channel"].Split(','))
@@ -244,9 +242,7 @@ namespace JefBot
                     };
                     //just a hardcoded command for enabling / disabling plugins
                     if (command == "plugin" && msg.IsModerator)
-                    {
                         arg.Channel.SendMessageAsync(PluginManager(msg));
-                    }
 
                     foreach (var plug in enabledPlugins)
                     {
@@ -338,15 +334,9 @@ namespace JefBot
                 if (msg == "quit" || msg == "stop")
                     Environment.Exit(0);
                 else
-                {
                     foreach (var ChatClient in Clients)
-                    {
                         foreach (var channel in ChatClient.JoinedChannels)
-                        {
                             ChatClient.SendMessage(channel, msg);
-                        }
-                    }
-                }
             }
         }
     }
