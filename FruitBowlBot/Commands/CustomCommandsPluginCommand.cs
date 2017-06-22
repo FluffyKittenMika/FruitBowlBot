@@ -30,9 +30,10 @@ namespace JefBot.Commands
         {
             string res = null;
             await Task.Run(() => { res = CustomCommand(message); });
-            if (res != "null")
+            if (res != "null" && res != null)
                 return res;
-            return res;
+            else
+                return null;
         }
 
         /// <summary>
