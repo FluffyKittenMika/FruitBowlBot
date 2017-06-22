@@ -10,6 +10,8 @@ using TwitchLib.Models.Client;
 using TwitchLib.Events.Client;
 using MySql.Data.MySqlClient;
 using System.Threading.Tasks;
+using System.Diagnostics;
+using System.Windows.Forms;
 
 namespace JefBot
 {
@@ -75,51 +77,6 @@ namespace JefBot
             #region dbstring
             SQLConnectionString = $"SERVER={settings["dbserver"]}; DATABASE = {settings["dbbase"]}; UID ={settings["userid"]}; PASSWORD = {settings["userpassword"]};";
             #endregion
-            #region discord init
-            if (settings["discordtoken"] != "tokengoeshere")
-            {
-                discordClient = new DiscordSocketClient(
-                  new DiscordSocketConfig
-                  {
-                      WebSocketProvider = Discord.Net.Providers.WS4Net.WS4NetProvider.Instance
-                  });
-
-                await discordClient.LoginAsync(TokenType.Bot, settings["discordtoken"]);
-                await discordClient.GetGroupChannelsAsync();
-                await discordClient.StartAsync();
-                await discordClient.GetConnectionsAsync();
-            }
-
-            discordClient.MessageReceived += async (e) =>
-            {
-                Console.WriteLine($"{e.Channel.Name}:{e.Author.Username}:{e.Content}");
-                if (!e.Author.IsBot)
-                    await DiscordEventAsync(e);
-            };
-
-
-            #endregion
-
-            #region Twitch Chat Client init
-            Credentials = new ConnectionCredentials(settings["username"], settings["oauth"]);
-
-            if (settings["clientid"] != null)
-                TwitchApi.SetClientId(settings["clientid"]);
-
-            //Set up a client for each channel
-            foreach (string str in settings["channel"].Split(','))
-            {
-                TwitchClient ChatClient = new TwitchClient(Credentials, str, settings["prefix"][0], logging: Convert.ToBoolean(settings["debug"]));
-                ChatClient.OnChatCommandReceived += RecivedCommand;
-                ChatClient.OnNewSubscriber += RecivedNewSub;
-                ChatClient.OnReSubscriber += RecivedResub;
-                ChatClient.OnDisconnected += Disconnected;
-                ChatClient.OnMessageReceived += Chatmsg;
-                ChatClient.Connect();
-                Clients.Add(ChatClient);
-            }
-
-            #endregion
 
             #region plugins
             Console.WriteLine("Loading Plugins");
@@ -170,12 +127,71 @@ namespace JefBot
             }
 
             #endregion
+           
+            #region discord init
+            if (settings["discordtoken"] != "tokengoeshere")
+            {
+                discordClient = new DiscordSocketClient(
+                  new DiscordSocketConfig
+                  {
+                      WebSocketProvider = Discord.Net.Providers.WS4Net.WS4NetProvider.Instance
+                  });
+
+                await discordClient.LoginAsync(TokenType.Bot, settings["discordtoken"]);
+                await discordClient.GetGroupChannelsAsync();
+                await discordClient.StartAsync();
+                await discordClient.GetConnectionsAsync();
+            }
+
+            discordClient.Disconnected += async (e) =>
+            {
+                await Rebootasync(e);
+            };
+
+            discordClient.MessageReceived += async (e) =>
+            {
+                Console.WriteLine($"{e.Channel.Name}:{e.Author.Username}:{e.Content}");
+                if (!e.Author.IsBot)
+                    await DiscordEventAsync(e);
+            };
+
+
+            #endregion
+
+            #region Twitch Chat Client init
+            Credentials = new ConnectionCredentials(settings["username"], settings["oauth"]);
+
+            if (settings["clientid"] != null)
+                TwitchApi.SetClientId(settings["clientid"]);
+
+            //Set up a client for each channel
+            foreach (string str in settings["channel"].Split(','))
+            {
+                TwitchClient ChatClient = new TwitchClient(Credentials, str, settings["prefix"][0], logging: Convert.ToBoolean(settings["debug"]));
+                ChatClient.OnChatCommandReceived += RecivedCommand;
+                ChatClient.OnNewSubscriber += RecivedNewSub;
+                ChatClient.OnReSubscriber += RecivedResub;
+                ChatClient.OnDisconnected += Disconnected;
+                ChatClient.OnMessageReceived += Chatmsg;
+                ChatClient.Connect();
+                Clients.Add(ChatClient);
+            }
+
+            #endregion
+
 
             Console.WriteLine("Bot init Complete");
 
         }
 
-        /// <summary>
+        private Task Rebootasync(Exception e)
+        {
+            Process.Start(Application.StartupPath + "\\FruitBowlBot.exe");
+            Process.GetCurrentProcess().Kill();
+            return new Task(null);
+        }
+
+        /// <summary>w
         /// turns off or on a plugin based on its name
         /// </summary>
         /// <param name="message"></param>

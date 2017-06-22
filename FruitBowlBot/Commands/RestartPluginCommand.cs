@@ -31,11 +31,16 @@ namespace JefBot.Commands
         {
             if (message.IsModerator)
             {
-                Process.Start(Application.StartupPath + "\\JefBot.exe");
-                Process.GetCurrentProcess().Kill();
+                Seppoku();
+                return "You'll never get this";
             }
             return "Fuck you, it's January! " + message.Username;
         }
-        
+
+        public static void Seppoku()
+        {
+            Process.Start(Application.StartupPath + "\\FruitBowlBot.exe");
+            Process.GetCurrentProcess().Kill();
+        }
     }
 }

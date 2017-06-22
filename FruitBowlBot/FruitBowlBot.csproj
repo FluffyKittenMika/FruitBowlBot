@@ -7,8 +7,8 @@
     <ProjectGuid>{3D03C4DF-C1F4-4D07-96DE-2FCECA04B140}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>JefBot</RootNamespace>
-    <AssemblyName>JefBot</AssemblyName>
+    <RootNamespace>FruitBowlBot</RootNamespace>
+    <AssemblyName>FruitBowlBot</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <NuGetPackageImportStamp>
