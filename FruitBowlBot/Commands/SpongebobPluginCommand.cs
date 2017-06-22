@@ -95,8 +95,10 @@ namespace JefBot.Commands
                 for (int i = 0; i < input.Length; i++)
                 {
                     int r = rng.Next(1, 3);
-                    if (i != 0 && input[i].IsDigit() == false)
+                    if (i != 0)
                     {
+                        if (char.ToUpper(input[i]) == char.ToUpper(input[i]))
+                            continue;
                         if (input[i] == char.ToUpper(input[i]))
                             temp += char.ToLower(input[i]);
                         if (input[i] == char.ToLower(input[i]))
@@ -117,8 +119,10 @@ namespace JefBot.Commands
                 for (int i = 0; i < input.Length; i++)
                 {
                     int r = rng.Next(1, 3);
-                    if (i != 0 && input[i].IsDigit() == false)
+                    if (i != 0 )
                     {
+                        if (char.ToUpper(input[i]) == char.ToUpper(input[i]))
+                            continue;
                         if (input[i] == char.ToUpper(input[i]))
                             temp += char.ToLower(input[i]);
                         if (input[i] == char.ToLower(input[i]))
