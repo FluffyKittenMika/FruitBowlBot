@@ -143,11 +143,6 @@ namespace JefBot
                 await discordClient.GetConnectionsAsync();
             }
 
-            discordClient.Disconnected += async (e) =>
-            {
-                await Rebootasync(e);
-            };
-
             discordClient.MessageReceived += async (e) =>
             {
                 Console.WriteLine($"{e.Channel.Name}:{e.Author.Username}:{e.Content}");
@@ -184,11 +179,10 @@ namespace JefBot
 
         }
 
-        private Task Rebootasync(Exception e)
+        private void Reboot()
         {
             Process.Start(Application.StartupPath + "\\FruitBowlBot.exe");
             Process.GetCurrentProcess().Kill();
-            return new Task(null);
         }
 
         /// <summary>w
@@ -287,8 +281,7 @@ namespace JefBot
 
         private void Disconnected(object sender, OnDisconnectedArgs e)
         {
-            var chatClient = (TwitchClient)sender;
-            chatClient.Connect();
+             Reboot();
         }
 
         private void RecivedResub(object sender, OnReSubscriberArgs e)
