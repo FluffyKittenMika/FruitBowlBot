@@ -134,7 +134,8 @@ namespace JefBot
                 discordClient = new DiscordSocketClient(
                   new DiscordSocketConfig
                   {
-                      WebSocketProvider = Discord.Net.Providers.WS4Net.WS4NetProvider.Instance
+                      WebSocketProvider = Discord.Net.Providers.WS4Net.WS4NetProvider.Instance,
+                      AlwaysDownloadUsers = true
                   });
 
                 await discordClient.LoginAsync(TokenType.Bot, settings["discordtoken"]);

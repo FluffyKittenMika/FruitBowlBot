@@ -88,58 +88,37 @@ namespace JefBot.Commands
         public string Bob(Message message)
         {
             string input = String.Join(" ", message.Arguments);
+            string temp ="";
 
-            if (message.MessageIsFromDiscord && message.Command != "666bob")
+            if (message.Command != "666bob")
+                temp = "http://u.rubixy.com/u/1288584f.png " + Environment.NewLine;
+            else
+                temp = "http://u.rubixy.com/u/3c34b394.jpg " + Environment.NewLine;
+
+            for (int i = 0; i < input.Length; i++)
             {
-                string temp = "http://u.rubixy.com/u/1288584f.png " + Environment.NewLine;
-                for (int i = 0; i < input.Length; i++)
+                int r = rng.Next(1, 3);
+                if (i != 0)
                 {
-                    int r = rng.Next(1, 3);
-                    if (i != 0)
-                    {
-                        if (char.ToUpper(input[i]) == char.ToUpper(input[i]))
-                            continue;
-                        if (input[i] == char.ToUpper(input[i]))
-                            temp += char.ToLower(input[i]);
-                        if (input[i] == char.ToLower(input[i]))
-                            temp += char.ToUpper(input[i]);
-                    }
-                    else
+                    if (!Char.IsNumber(input[i]))
+                        continue;
+                    if (input[i] == char.ToUpper(input[i]))
                         temp += char.ToLower(input[i]);
-                    for (int n = 1; n <= r; n++)
-                        if (i + n < input.Length)
-                            temp += input[i + n];
-                    i += r;
+                    if (input[i] == char.ToLower(input[i]))
+                        temp += char.ToUpper(input[i]);
                 }
-                return temp;
-            }else if (message.Command == "666bob")
-            {
-                string temp = "http://u.rubixy.com/u/3c34b394.jpg " + Environment.NewLine;
-
-                for (int i = 0; i < input.Length; i++)
-                {
-                    int r = rng.Next(1, 3);
-                    if (i != 0 )
-                    {
-                        if (char.ToUpper(input[i]) == char.ToUpper(input[i]))
-                            continue;
-                        if (input[i] == char.ToUpper(input[i]))
-                            temp += char.ToLower(input[i]);
-                        if (input[i] == char.ToLower(input[i]))
-                            temp += char.ToUpper(input[i]);
-                    }
-                    else
-                        temp += char.ToLower(input[i]);
+                else
+                    temp += char.ToLower(input[i]);
+                if (message.Command == "666bob") //add zalgo
                     for (int z = 0; z < 5; z++)
                         temp += GetZalgo();
-                    for (int n = 1; n <= r; n++)
-                        if (i + n < input.Length)
-                            temp += input[i + n];
-                    i += r;
-                }
-                return temp;
+                for (int n = 1; n <= r; n++)
+                    if (i + n < input.Length)
+                        temp += input[i + n];
+                i += r;
             }
-            return null;
+
+            return temp;
         }
     }
 }
