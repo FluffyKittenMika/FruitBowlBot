@@ -108,8 +108,11 @@ namespace JefBot.Commands
                 else
                     temp += char.ToLower(input[i]);
                 if (message.Command == "666bob") //add zalgo
-                    for (int z = 0; z < 5; z++)
+                {
+                    int u = rng.Next(3, 10);
+                    for (int z = 0; z < u; z++)
                         temp += GetZalgo();
+                }
                 for (int n = 1; n <= r; n++)
                     if (i + n < input.Length)
                         temp += input[i + n];
