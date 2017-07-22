@@ -44,7 +44,7 @@ namespace JefBot.Commands
             TimeSpan uptime = new TimeSpan();
             try
             {
-                uptime = TwitchApi.Streams.GetUptime("jefmajor");
+                uptime = TwitchAPI.Streams.v5.GetUptime("jefmajor").Result.Value;
             }
             catch (Exception){}
             

@@ -29,8 +29,8 @@ namespace JefBot
 
         public static bool IsStreaming(string channel)
         {
-            var uptime = TwitchApi.Streams.GetUptime(channel);
-            if (uptime.Ticks > 0)
+            var uptime = TwitchAPI.Streams.v5.GetUptime(channel).Result;
+            if (uptime.Value.Ticks > 0)
                 return true;
             else
                 return false;
@@ -158,7 +158,8 @@ namespace JefBot
             Credentials = new ConnectionCredentials(settings["username"], settings["oauth"]);
 
             if (settings["clientid"] != null)
-                TwitchApi.SetClientId(settings["clientid"]);
+                TwitchAPI.Settings.ClientId = settings["clientid"];
+
 
             //Set up a client for each channel
             foreach (string str in settings["channel"].Split(','))
@@ -293,7 +294,7 @@ namespace JefBot
 
         private void RecivedNewSub(object sender, OnNewSubscriberArgs e)
         {
-            Console.WriteLine($@"{e.Subscriber.Name} Just subbed! What a bro!' :)");
+            Console.WriteLine($@"{e.Subscriber.DisplayName} Just subbed! What a bro!' :)");
         }
 
 
