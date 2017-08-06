@@ -49,9 +49,9 @@ namespace JefBot.Commands
                     }
                 }
 
-                string dice = command.ArgumentsAsString.Trim(new Char[] { ' ' });
+                string dice = command.ArgumentsAsString.Trim(' ');
 
-                string[] split = dice.ToLower().Split(new Char[] { 'd' });
+                string[] split = dice.ToLower().Split('d');
                 if (split.Length == 2)
                 {
                     try

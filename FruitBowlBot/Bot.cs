@@ -295,7 +295,7 @@ namespace JefBot
             var enabledPlugins = _plugins.Where(plug => plug.Loaded).ToArray();
             var command = e.Command.Command.ToLower();
 
-            Message msg = new Message()
+            Message msg = new Message
             {
                 Arguments = e.Command.ArgumentsAsList,
                 Command = command,

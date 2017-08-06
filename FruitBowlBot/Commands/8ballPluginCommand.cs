@@ -54,7 +54,7 @@ namespace JefBot.Commands
         public async Task<string> Action(Message message)
         {
             string res = null;
-            await Task.Run(() => { res = EightBall(message.RawMessage); });
+            await Task.Run(() => { res = EightBall(message.RawMessage); }).ConfigureAwait(false);
             return res;
         }
 

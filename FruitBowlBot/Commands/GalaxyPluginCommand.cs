@@ -24,7 +24,7 @@ namespace JefBot.Commands
         public bool Loaded { get; set; } = false; //enable this when we fix black squares
         public static HttpClient client = new HttpClient();
 
-        public static Random rng = new Random();
+        readonly Random rng = new Random();
         
         public async Task<string> Action(Message message)
         {
@@ -135,7 +135,7 @@ namespace JefBot.Commands
         /// <param name="Dimension">Size of the image</param>
         /// <param name="TotalFrames">Number of frames</param>
         /// <returns>List of images</returns>
-        public static Bitmap[] Galaxy(int stars = 1000, int Dimension = 250, int TotalFrames = 1, int Arms = 100)
+        public Bitmap[] Galaxy(int stars = 1000, int Dimension = 250, int TotalFrames = 1, int Arms = 100)
         {
             stars = Clamp(stars, 100, 10000);
             Dimension = Clamp(Dimension, 250, 2000);

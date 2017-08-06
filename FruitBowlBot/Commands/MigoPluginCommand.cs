@@ -23,7 +23,7 @@ namespace JefBot.Commands
 
         List<Quote> quotes = new List<Quote>();
         List<Quote> pickedquotes = new List<Quote>();
-        Random rng = new Random();
+        readonly Random rng = new Random();
 
         DateTime timestampTwitch;
         readonly int minutedelay = 1;
@@ -150,7 +150,6 @@ namespace JefBot.Commands
                 MySqlCommand _cmd = con.CreateCommand();
                 _cmd.CommandText = @"SELECT * FROM Quotes WHERE MATCH(Quote) AGAINST(@input IN BOOLEAN MODE)";
                 _cmd.Parameters.AddWithValue("@input", search);
-                List<Quote> quotes = new List<Quote>();
                 using (MySqlDataReader reader = _cmd.ExecuteReader())
                 {
                     while (reader.Read())

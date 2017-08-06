@@ -23,7 +23,7 @@ namespace JefBot.Commands
         {
             string res = null;
             if (message.IsModerator)
-                await Task.Run(() => { res = Commands(message); });
+                await Task.Run(() => { res = Commands(message); }).ConfigureAwait(false);
             return res;
         }
 

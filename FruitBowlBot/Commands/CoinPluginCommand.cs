@@ -17,7 +17,7 @@ namespace JefBot.Commands
         public IEnumerable<string> Aliases => new[] { "c", "flip" };
         public bool Loaded { get; set; } = true;
 
-        Random rng = new Random();
+        readonly Random rng = new Random();
 
         async Task<string> IPluginCommand.Action(Message message)
         {
