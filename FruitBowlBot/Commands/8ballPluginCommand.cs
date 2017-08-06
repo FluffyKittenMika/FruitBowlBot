@@ -17,7 +17,7 @@ namespace JefBot.Commands
         public IEnumerable<string> Aliases => new[] { "8" };
         public bool Loaded { get; set; } = true;
 
-        List<string> responses = new List<string>
+        readonly List<string> responses = new List<string>
         {
             "As i see it, yes",
             "Ask again later",
@@ -48,7 +48,6 @@ namespace JefBot.Commands
             "Only you, my friend, knows this, within your heart",
             ":blep:",
             "bepis"
-
         };
 
         Random rng = new Random();

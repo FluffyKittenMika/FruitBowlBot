@@ -28,7 +28,7 @@ namespace JefBot.Commands
         public async Task<string> Action(Message message)
         {
             string res = null;
-            await Task.Run(() => { res = Time(message); });
+            await Task.Run(() => { res = Time(message); }).ConfigureAwait(false) ;
             return res;
         }
 
@@ -41,14 +41,9 @@ namespace JefBot.Commands
 
         public string Time()
         {
-            TimeSpan uptime = new TimeSpan();
-            try
-            {
-                uptime = TwitchAPI.Streams.v5.GetUptime("jefmajor").Result.Value;
-            }
-            catch (Exception){}
-            
-            if (uptime.Ticks == 0)
+            TimeSpan? uptime = TwitchAPI.Streams.v5.GetUptime(TwitchAPI.Channels.v3.GetChannelByName("jefmajor").Result.Id).Result; ;
+         
+            if (!uptime.HasValue)
             {
                 List<DateTime> times = new List<DateTime>();
                 DateTime start = DateTime.Now;

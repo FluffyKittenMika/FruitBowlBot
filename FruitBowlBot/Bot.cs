@@ -18,9 +18,9 @@ namespace JefBot
     class Bot
     {
         ConnectionCredentials Credentials;
-        public static List<TwitchClient> Clients = new List<TwitchClient>();
+        public List<TwitchClient> Clients = new List<TwitchClient>();
         public static Dictionary<string, string> settings = new Dictionary<string, string>();
-        public static readonly List<IPluginCommand> _plugins = new List<IPluginCommand>();
+        public static List<IPluginCommand> _plugins = new List<IPluginCommand>();
         public static string SQLConnectionString;
 
         Random rng = new Random();
@@ -29,8 +29,8 @@ namespace JefBot
 
         public static bool IsStreaming(string channel)
         {
-            var uptime = TwitchAPI.Streams.v5.GetUptime(channel).Result;
-            if (uptime.Value.Ticks > 0)
+            TimeSpan? uptime = TwitchAPI.Streams.v5.GetUptime(TwitchAPI.Streams.v3.GetStream(channel).Result.Stream.Channel.Id).Result;
+            if (uptime.HasValue)
                 return true;
             else
                 return false;
@@ -121,7 +121,9 @@ namespace JefBot
             }
             catch (Exception e)
             {
+#if DEBUG
                 Console.WriteLine(e.InnerException);
+#endif
                 Console.WriteLine(e.Message);
                 Console.WriteLine(e.StackTrace);
             }

@@ -24,13 +24,8 @@ namespace JefBot.Commands
         public bool Loaded { get; set; } = false; //enable this when we fix black squares
         public static HttpClient client = new HttpClient();
 
-
         public static Random rng = new Random();
-
-        List<IPluginCommand> plug = new List<IPluginCommand>();
-
-
-
+        
         public async Task<string> Action(Message message)
         {
             string res = null;

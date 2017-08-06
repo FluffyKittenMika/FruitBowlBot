@@ -50,23 +50,25 @@ namespace JefBot.Commands
             {
                 string command = commands.Split(' ').First();
                 if (command[0] == '!')
+                {
                     command = command.Substring(1);
-                    foreach (var plug in enabledPlugins)
+                }
+                foreach (var plug in enabledPlugins)
+                {
+                    if (plug.Aliases.Contains(command) || plug.Command == command)
                     {
-                        if (plug.Aliases.Contains(command) || plug.Command == command)
-                        {
-                            Message m = new Message {
-                                Command = command,
-                                IsModerator = message.IsModerator,
-                                Channel = message.Channel,
-                                Username = message.Username,
-                                MessageIsFromDiscord = message.MessageIsFromDiscord,
-                                RawMessage = message.RawMessage, //and this is why you don't use raw for anything but debug, 'cause i just added potential bugs by nesting commands
-                                Arguments = commands.Split(' ').Skip(1).ToList()
-                            };
-                            responses.Add(plug.Action(m).Result);
-                        }
+                        Message m = new Message {
+                            Command = command,
+                            IsModerator = message.IsModerator,
+                            Channel = message.Channel,
+                            Username = message.Username,
+                            MessageIsFromDiscord = message.MessageIsFromDiscord,
+                            RawMessage = message.RawMessage, //and this is why you don't use raw for anything but debug, 'cause i just added potential bugs by nesting commands
+                            Arguments = commands.Split(' ').Skip(1).ToList()
+                        };
+                        responses.Add(plug.Action(m).Result);
                     }
+                }
             }
             return string.Join(Environment.NewLine, responses); 
         }

@@ -39,7 +39,7 @@ namespace JefBot.Commands
 
             if (command.ArgumentsAsList.Count > 0)
             {
-                string[] args = command.ArgumentsAsString.Split(new Char[] { ' ' });
+                string[] args = command.ArgumentsAsString.Split(' ');
                 foreach (string arg in args)
                 {
                     if (arg.Equals("minmax", StringComparison.OrdinalIgnoreCase))

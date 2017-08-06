@@ -23,24 +23,13 @@ namespace JefBot.Commands
 
         List<Quote> quotes = new List<Quote>();
         List<Quote> pickedquotes = new List<Quote>();
-       // string quotefile = @"./RemoteQuotes.dat";
         Random rng = new Random();
 
         DateTime timestampTwitch;
-        DateTime timestampDiscord;
+        readonly int minutedelay = 1;
         
-        int minutedelay = 1;
-
-        /*
-        static string DatePattern = @"((\d{2}.\d{2}.\d{4}) (\d{2}.\d{2}.\d{2}))";
-        static string SubmitterPattern = @"(?:submitted by )([a-zA-Z0-9_-]+)";
-        Regex dateregex = new Regex(DatePattern, RegexOptions.IgnoreCase);
-        Regex submitterregex = new Regex(SubmitterPattern, RegexOptions.IgnoreCase);
-        */
-
         public MigoPluginCommand()
         {
-            timestampDiscord = DateTime.UtcNow;
             timestampTwitch = DateTime.UtcNow;
             try
             {
@@ -175,7 +164,6 @@ namespace JefBot.Commands
                         var channel = reader.GetString(reader.GetOrdinal("CHANNEL"));
                         quotes.Add(new Quote(quote, timestamp, submitter, channel, id));
                     }
-                    //reader.Close();
                     if (quotes.Count > 0)
                         return quotes[rng.Next(quotes.Count)];
                     else

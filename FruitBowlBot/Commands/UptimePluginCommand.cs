@@ -1,5 +1,6 @@
 ﻿using Discord;
 using Discord.WebSocket;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -13,14 +14,14 @@ namespace JefBot.Commands
         public string PluginName => "Uptime";
         public string Command => "uptime";
         public string Help => "!u returns the streams uptime";
-        public IEnumerable<string> Aliases => new[] { "u", "up" };
+        public IEnumerable<string> Aliases => new[] { "u", "up", "uppity"};
         public bool Loaded { get; set; } = true;
 
         public string Res(string channel)
         {
-            var uptime = TwitchAPI.Streams.v5.GetUptime(channel).Result.Value;
-            if (uptime.Ticks > 0)
-                return $"Time: {uptime.Hours}h {uptime.Minutes}m {uptime.Seconds}s";
+            TimeSpan? uptime = TwitchAPI.Streams.v5.GetUptime(TwitchAPI.Channels.v3.GetChannelByName(channel).Result.Id).Result;
+            if (uptime.HasValue)
+                return $"Time: {uptime.Value.Hours}h {uptime.Value.Minutes}m {uptime.Value.Seconds}s";
             else
                 return $"Channel offline";
         }
@@ -28,7 +29,7 @@ namespace JefBot.Commands
         public async Task<string> Action(Message message)
         {
             string res = null;
-            await Task.Run(() => { res = Uptime(message); });
+            await Task.Run(() => { res = Uptime(message); }).ConfigureAwait(false);
             return res;
         }
 
@@ -40,7 +41,7 @@ namespace JefBot.Commands
             if (message.Arguments.Count > 0)
                 return Res(message.Arguments[0]);
 
-            return "Can't do that sir, I require an argument after the command.";
+            return "Please format it like this '!uptime channelname' example '!u jefmajor' or '!u arkentosh'";
         }
     }
 }

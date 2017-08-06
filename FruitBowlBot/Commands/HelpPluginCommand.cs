@@ -16,8 +16,7 @@ namespace JefBot.Commands
         public string Help => "!help {command}";
         public IEnumerable<string> Aliases => new[] { "h" };
         public bool Loaded { get; set; } = true;
-
-        List<IPluginCommand> plug = new List<IPluginCommand>();
+        
         Random rng = new Random();
 
 
@@ -27,8 +26,7 @@ namespace JefBot.Commands
             await Task.Run(() => { res = CommandHelp(message); });
             return res;
         }
-
-
+        
         public string CommandHelp(Message message)
         {
             try
@@ -37,9 +35,10 @@ namespace JefBot.Commands
                 {
                     var args = message.Arguments;
                     var result = "";
-                    plug = new List<IPluginCommand>();
-                    plug.AddRange(Bot._plugins.Where(plug => plug.Aliases.Contains(args[0])).ToList());
-                    plug.AddRange(Bot._plugins.Where(plug => plug.Command == args[0]).ToList());
+                    List<IPluginCommand> plug = new List<IPluginCommand>();
+
+                    plug.AddRange(Bot._plugins.Where(p => p.Aliases.Contains(args[0])).ToList());
+                    plug.AddRange(Bot._plugins.Where(p => p.Command == args[0]).ToList());
 
                     foreach (var item in plug)
                     {

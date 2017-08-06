@@ -22,7 +22,7 @@ namespace JefBot.Commands
         async Task<string> IPluginCommand.Action(Message message)
         {
             string res = null;
-            await Task.Run(() => { res = Coin(message); });
+            await Task.Run(() => { res = Coin(message); }).ConfigureAwait(false);
             return res;
         }
 

@@ -21,7 +21,7 @@ namespace JefBot.Commands
         public bool Loaded { get; set; } = true;
 
         //Non default definitions
-        Random rnd = new Random();
+        static readonly Random rnd = new Random();
 
         public async Task<string> Action(Message message)
         {
