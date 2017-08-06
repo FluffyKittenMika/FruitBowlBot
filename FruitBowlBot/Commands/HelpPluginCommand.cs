@@ -16,9 +16,6 @@ namespace JefBot.Commands
         public string Help => "!help {command}";
         public IEnumerable<string> Aliases => new[] { "h" };
         public bool Loaded { get; set; } = true;
-        
-        Random rng = new Random();
-
 
         public async Task<string> Action(Message message)
         {

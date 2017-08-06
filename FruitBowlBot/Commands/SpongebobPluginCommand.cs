@@ -7,6 +7,7 @@ using TwitchLib.Models.Client;
 using Discord.WebSocket;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Text;
 
 namespace JefBot.Commands
 {
@@ -23,7 +24,7 @@ namespace JefBot.Commands
         public async Task<string> Action(Message message)
         {
             string res = null;
-            await Task.Run(() => { res =  Bob(message); });
+            await Task.Run(() => { res =  Bob(message); }).ConfigureAwait(false);
             return res;
         }
 
@@ -88,12 +89,12 @@ namespace JefBot.Commands
         public string Bob(Message message)
         {
             string input = String.Join(" ", message.Arguments);
-            string temp ="";
+            StringBuilder temp = new StringBuilder();
 
             if (message.Command != "666bob")
-                temp = "http://u.rubixy.com/u/1288584f.png " + Environment.NewLine;
+                temp.Append("http://u.rubixy.com/u/1288584f.png " + Environment.NewLine);
             else
-                temp = "http://u.rubixy.com/u/3c34b394.jpg " + Environment.NewLine;
+                temp.Append("http://u.rubixy.com/u/3c34b394.jpg " + Environment.NewLine);
 
             for (int i = 0; i < input.Length; i++)
             {
@@ -101,25 +102,25 @@ namespace JefBot.Commands
                 if (i != 0 && !Char.IsNumber(input[i]))
                 {
                     if (input[i] == char.ToUpper(input[i]))
-                        temp += char.ToLower(input[i]);
+                        temp.Append(char.ToLower(input[i]));
                     if (input[i] == char.ToLower(input[i]))
-                        temp += char.ToUpper(input[i]);
+                        temp.Append(char.ToUpper(input[i]));
                 }
                 else
-                    temp += char.ToLower(input[i]);
+                    temp.Append(char.ToLower(input[i]));
                 if (message.Command == "666bob") //add zalgo
                 {
                     int u = rng.Next(3, 10);
                     for (int z = 0; z < u; z++)
-                        temp += GetZalgo();
+                        temp.Append(GetZalgo());
                 }
                 for (int n = 1; n <= r; n++)
                     if (i + n < input.Length)
-                        temp += input[i + n];
+                        temp.Append(input[i + n]);
                 i += r;
             }
-
-            return temp;
+            
+            return temp.ToString();
         }
     }
 }

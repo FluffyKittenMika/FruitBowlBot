@@ -63,7 +63,7 @@ namespace JefBot.Commands
         public async Task<string> Action(Message message)
         {
             string res = null;
-            await Task.Run(() => { res = MigoAction(message); });
+            await Task.Run(() => { res = MigoAction(message); }).ConfigureAwait(false);
             return res;
         }
 
@@ -119,7 +119,7 @@ namespace JefBot.Commands
                 MySqlCommand _cmd = con.CreateCommand();
                 _cmd.CommandText = @"SELECT * FROM `Quotes` WHERE `ID` = @input";
                 _cmd.Parameters.AddWithValue("@input", search);
-                List<Quote> quotes = new List<Quote>();
+                quotes = new List<Quote>();
                 using (MySqlDataReader reader = _cmd.ExecuteReader())
                 {
                     while (reader.Read())
@@ -131,7 +131,6 @@ namespace JefBot.Commands
                         var channel = reader.GetString(reader.GetOrdinal("CHANNEL"));
                         quotes.Add(new Quote(quote, timestamp, submitter, channel, id));
                     }
-                    //reader.Close();
                     if (quotes.Count > 0)
                         return quotes[rng.Next(quotes.Count)];
                     else

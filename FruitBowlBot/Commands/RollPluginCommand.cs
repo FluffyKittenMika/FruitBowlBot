@@ -20,7 +20,7 @@ namespace JefBot.Commands
         public bool Loaded { get; set; } = true;
 
         //Non default definitions
-        Random rng = new Random();
+        readonly Random rng = new Random();
 
 
         //TODO make this into a better more recursive thing, so one can roll multiple dice in one message, like use a foreach arg loop and check every word i guess.
@@ -102,7 +102,7 @@ namespace JefBot.Commands
         public async Task<string> Action(Message message)
         {
             string res = null;
-            await Task.Run(() => { res = Roll(message); });
+            await Task.Run(() => { res = Roll(message); }).ConfigureAwait(false) ;
             return res;
         }
 

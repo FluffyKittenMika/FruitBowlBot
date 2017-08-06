@@ -23,7 +23,7 @@ namespace JefBot.Commands
         public async Task<string> Action(Message message)
         {
             string res = null;
-            await Task.Run(() => { res = Pig(message); });
+            await Task.Run(() => { res = Pig(message); }).ConfigureAwait(false);
             return res;
         }
 
