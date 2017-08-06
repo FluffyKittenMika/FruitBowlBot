@@ -117,7 +117,7 @@ namespace JefBot.Commands
                 {
                     if (item.Command == msg.Command && item.Channel == msg.Channel)
                     {
-                        var message = item.Response.Replace("{username}", msg.Username); //Display name will make the name blank if the user have no display name set;;
+                        var message = item.Response.Replace("{username}", msg.Username); //Display name will make the name blank if the user have no display name set
                         return message;
                     }
                 }

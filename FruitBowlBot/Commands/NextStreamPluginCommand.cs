@@ -41,7 +41,7 @@ namespace JefBot.Commands
 
         public string Time()
         {
-            TimeSpan? uptime = TwitchAPI.Streams.v5.GetUptime(TwitchAPI.Channels.v3.GetChannelByName("jefmajor").Result.Id).Result; ;
+            TimeSpan? uptime = TwitchAPI.Streams.v5.GetUptime(TwitchAPI.Channels.v3.GetChannelByName("jefmajor").Result.Id).Result;
          
             if (!uptime.HasValue)
             {

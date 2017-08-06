@@ -23,7 +23,6 @@ namespace JefBot
         public static List<IPluginCommand> _plugins = new List<IPluginCommand>();
         public static string SQLConnectionString;
 
-        Random rng = new Random();
         //discord intergration.
         public DiscordSocketClient discordClient;
 
@@ -168,8 +167,6 @@ namespace JefBot
             {
                 TwitchClient ChatClient = new TwitchClient(Credentials, str, settings["prefix"][0], logging: Convert.ToBoolean(settings["debug"]));
                 ChatClient.OnChatCommandReceived += RecivedCommand;
-                ChatClient.OnNewSubscriber += RecivedNewSub;
-                ChatClient.OnReSubscriber += RecivedResub;
                 ChatClient.OnDisconnected += Disconnected;
                 ChatClient.OnMessageReceived += Chatmsg;
                 ChatClient.Connect();
@@ -287,18 +284,6 @@ namespace JefBot
         {
              Reboot();
         }
-
-        private void RecivedResub(object sender, OnReSubscriberArgs e)
-        {
-            var chatClient = (TwitchClient)sender;
-            Console.WriteLine($@"{e.ReSubscriber.DisplayName} subbed for {e.ReSubscriber.Months} with the message '{e.ReSubscriber.ResubMessage}' :)");
-        }
-
-        private void RecivedNewSub(object sender, OnNewSubscriberArgs e)
-        {
-            Console.WriteLine($@"{e.Subscriber.DisplayName} Just subbed! What a bro!' :)");
-        }
-
 
         /// <summary>
         /// Executes all commands, we try to execute the main named command before any aliases to try and avoid overwrites.
