@@ -19,7 +19,7 @@ namespace JefBot.Commands
         public IEnumerable<string> Aliases => CustomCommands.Select(command => command.Command).ToArray().Concat(OtherAliases);
         public List<CCommand> CustomCommands = new List<CCommand>();
         public bool Loaded { get; set; } = true;
-        private string memoryPath = "./customCommands.txt";
+        private readonly string memoryPath = "./customCommands.txt";
 
         public CustomCommandsPluginCommand()
         {
@@ -29,7 +29,7 @@ namespace JefBot.Commands
         async Task<string> IPluginCommand.Action(Message message)
         {
             string res = null;
-            await Task.Run(() => { res = CustomCommand(message); });
+            await Task.Run(() => { res = CustomCommand(message); }).ConfigureAwait(false);
             if (res != "null" && res != null)
                 return res;
             else

@@ -119,7 +119,6 @@ namespace JefBot.Commands
                 MySqlCommand _cmd = con.CreateCommand();
                 _cmd.CommandText = @"SELECT * FROM `Quotes` WHERE `ID` = @input";
                 _cmd.Parameters.AddWithValue("@input", search);
-                quotes = new List<Quote>();
                 using (MySqlDataReader reader = _cmd.ExecuteReader())
                 {
                     while (reader.Read())

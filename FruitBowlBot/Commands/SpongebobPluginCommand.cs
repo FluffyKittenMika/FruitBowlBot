@@ -19,7 +19,7 @@ namespace JefBot.Commands
         public IEnumerable<string> Aliases => new[] { "bob","sponge","mock", "666bob" };
         public bool Loaded { get; set; } = true;
 
-        Random rng = new Random();
+        readonly Random rng = new Random();
 
         public async Task<string> Action(Message message)
         {
@@ -39,7 +39,6 @@ namespace JefBot.Commands
                 case 1:
                     source = ZalgoDown;
                     break;
-                case 2:
                 default:
                     source = ZalgoMid;
                     break;

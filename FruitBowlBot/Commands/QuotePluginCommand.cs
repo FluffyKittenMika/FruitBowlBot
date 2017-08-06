@@ -26,7 +26,7 @@ namespace JefBot.Commands
         public async Task<string> Action(Message message)
         {
             string res = null;
-            await Task.Run(() => { res = QuoteAction(message); });
+            await Task.Run(() => { res = QuoteAction(message); }).ConfigureAwait(false);
             return res;
         }
 

@@ -29,7 +29,7 @@ namespace JefBot.Commands
         public async Task<string> Action(Message message)
         {
             string res = null;
-            await Task.Run(() => {res = GetLink(message.Arguments); });
+            await Task.Run(() => {res = GetLink(message.Arguments); }).ConfigureAwait(false);
             return res;
         }
 

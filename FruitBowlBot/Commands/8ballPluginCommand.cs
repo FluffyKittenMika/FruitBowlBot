@@ -16,6 +16,7 @@ namespace JefBot.Commands
         public string Help => "!8ball to get wise";
         public IEnumerable<string> Aliases => new[] { "8" };
         public bool Loaded { get; set; } = true;
+        readonly Random rng = new Random();
 
         readonly List<string> responses = new List<string>
         {
@@ -49,8 +50,6 @@ namespace JefBot.Commands
             ":blep:",
             "bepis"
         };
-
-        Random rng = new Random();
 
         public async Task<string> Action(Message message)
         {

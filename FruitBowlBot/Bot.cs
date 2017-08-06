@@ -17,7 +17,6 @@ namespace JefBot
 {
     class Bot
     {
-        ConnectionCredentials Credentials;
         public List<TwitchClient> Clients = new List<TwitchClient>();
         public static Dictionary<string, string> settings = new Dictionary<string, string>();
         public static List<IPluginCommand> _plugins = new List<IPluginCommand>();
@@ -149,14 +148,14 @@ namespace JefBot
             {
                 Console.WriteLine($"{e.Channel.Name}:{e.Author.Username}:{e.Content}");
                 if (!e.Author.IsBot)
-                    await DiscordEventAsync(e);
+                    await DiscordEventAsync(e).ConfigureAwait(false);
             };
 
 
             #endregion
 
             #region Twitch Chat Client init
-            Credentials = new ConnectionCredentials(settings["username"], settings["oauth"]);
+            ConnectionCredentials Credentials = new ConnectionCredentials(settings["username"], settings["oauth"]);
 
             if (settings["clientid"] != null)
                 TwitchAPI.Settings.ClientId = settings["clientid"];
@@ -241,7 +240,7 @@ namespace JefBot
                 {
                     command = arg.Content.Remove(0, 1).Split(' ')[0].ToLower();
 
-                    Message msg = new Message()
+                    Message msg = new Message
                     {
                         Arguments = args,
                         Command = command,

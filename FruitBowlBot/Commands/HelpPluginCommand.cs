@@ -20,7 +20,7 @@ namespace JefBot.Commands
         public async Task<string> Action(Message message)
         {
             string res = null;
-            await Task.Run(() => { res = CommandHelp(message); });
+            await Task.Run(() => { res = CommandHelp(message); }).ConfigureAwait(false);
             return res;
         }
         
