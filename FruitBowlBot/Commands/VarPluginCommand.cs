@@ -37,13 +37,12 @@ namespace JefBot.Commands
 
             var enabledPlugins = Bot._plugins.Where(plug => plug.Loaded).ToArray();
 
-            //make argument list holder, will skip each command
-            List<string> args = new List<string>();
             //join args list into 1d string, and space them like a normal string, with spaces..
             string temp = string.Join(" ", message.Arguments);
 
+            //make argument list holder, will skip each command
             //split at every prefix, and make this list of strings like !command arg1 arg2 arg3, aka regular unparsed commands
-            args = Regex.Split(temp, $"(?={Bot.settings["prefix"][0]})").Skip(1).ToList();
+            List<string> args = Regex.Split(temp, $"(?={Bot.settings["prefix"][0]})").Skip(1).ToList();
            
             
             foreach (string commands in args)
