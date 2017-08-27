@@ -42,6 +42,7 @@ namespace JefBot.Commands
             return null;
         }
 
+        //TODO: add error checking, we're currently ignoring if the quote actually got submitted, we're just assuming it works
         public string Quote(List<string> args, string channel, string username)
         {
             if (args.Count > 0)

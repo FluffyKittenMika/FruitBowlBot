@@ -5,6 +5,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using TwitchLib;
 using TwitchLib.Models.Client;
+using MySql.Data;
+using MySql.Data.MySqlClient;
 
 namespace JefBot.Commands
 {
@@ -12,19 +14,87 @@ namespace JefBot.Commands
     {
         public string PluginName => "Task";
         public string Command => "task";
-        public string Help => "!task {minutes} {message} (repeats a message every X minutes)";
+        public string Help => "!task add/remove/get {name} {message} [minutes] (repeats a message every X sec (default 5 min))";
         public IEnumerable<string> Aliases => new string[0];
         public bool Loaded { get; set; } = true;
-
-        //this is just a class for the future
-        //not implementing this right now
 
         public async Task<string> Action(Message message)
         {
             string res = null;
-            await Task.Run(() => { res = null; }).ConfigureAwait(false);
+            await Task.Run(() => { res = Handle(message); }).ConfigureAwait(false);
             return res;
         }
+
+        public string Handle(Message message)
+        {
+            return "";
+        }
+        
+        public string AddTask(string taskname, string taskresult, string channel, int waittime = 500)
+        {
+            using(MySqlConnection con = new MySqlConnection(Bot.SQLConnectionString))
+	        {
+                con.Open();
+                MySqlCommand cmd = con.CreateCommand();
+                cmd.CommandText = @"INSERT INTO `TaskScheduler` (`CHANNEL`, `LASTRUN`, `TASKNAME`, `TASKRESULT`, `NEXTRUNTIME`)
+                                    VALUES (@channel, CURRENT_TIMESTAMP, @taskname, @taskresult, @waittime)";
+                cmd.Parameters.AddWithValue("@taskname", taskname);
+                cmd.Parameters.AddWithValue("@taskresult", taskresult);
+                cmd.Parameters.AddWithValue("@channel", channel);
+                cmd.Parameters.AddWithValue("@waittime", waittime);
+                var res = cmd.ExecuteNonQuery();
+                if (res == -1)
+	            {
+                    return $"Query returned -1, might be an error, task might not have been added";
+	            }else
+	            {
+                    return $"{taskname} has been added.";
+	            }
+	        }
+        }
+		
+
+        public string RemoveTask(string taskname, string channel)
+        {
+            using(MySqlConnection con = new MySqlConnection(Bot.SQLConnectionString))
+            {
+                con.Open();
+                MySqlCommand cmd = con.CreateCommand();
+                cmd.CommandText = @"DELETE FROM `TaskScheduler` WHERE `TASKNAME` = @tasknam AND `CHANNEL` = @channel ";
+                cmd.Parameters.AddWithValue("@taskname", taskname);
+                cmd.Parameters.AddWithValue("@channel", channel);
+                var res = cmd.ExecuteNonQuery();
+                if (res == -1)
+                {
+                    return "Could not remove task";
+                }else
+                {
+					return "Task removed";
+                }
+            }
+        }
+
+        public string GetTasks(string channel)
+		{
+			using (MySqlConnection con = new MySqlConnection(Bot.SQLConnectionString))
+			{
+				con.Open();
+				MySqlCommand cmd = con.CreateCommand();
+				cmd.CommandText = @"SELECT * FROM `TaskScheduler` WHERE `CHANNEL` = @channel";
+				cmd.Parameters.AddWithValue("@channel", channel);
+
+				var res = cmd.ExecuteNonQuery();
+				if (res == -1)
+				{
+					return "Could not fetch tasks";
+				}
+				else
+				{
+					return "";
+				}
+			}
+		}
+
 
 
     }
