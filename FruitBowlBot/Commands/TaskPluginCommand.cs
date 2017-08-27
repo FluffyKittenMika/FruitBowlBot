@@ -7,6 +7,7 @@ using TwitchLib;
 using TwitchLib.Models.Client;
 using MySql.Data;
 using MySql.Data.MySqlClient;
+using System;
 
 namespace JefBot.Commands
 {
@@ -27,7 +28,7 @@ namespace JefBot.Commands
 
         public string Handle(Message message)
         {
-            return "";
+            return null;
         }
         
         public string AddTask(string taskname, string taskresult, string channel, int waittime = 500)
@@ -83,14 +84,23 @@ namespace JefBot.Commands
 				cmd.CommandText = @"SELECT * FROM `TaskScheduler` WHERE `CHANNEL` = @channel";
 				cmd.Parameters.AddWithValue("@channel", channel);
 
-				var res = cmd.ExecuteNonQuery();
-				if (res == -1)
+				//we'll just fetch all info for convinience
+				using (MySqlDataReader reader = cmd.ExecuteReader())
 				{
-					return "Could not fetch tasks";
-				}
-				else
-				{
-					return "";
+					string res = "Result " + Environment.NewLine;
+					res += "---------------------------";
+					while (reader.Read())
+					{
+						var ID = reader.GetInt32(reader.GetOrdinal("ID"));
+						var LASTRUN = reader.GetTimeSpan(reader.GetOrdinal("LASTRUN"));
+						var TASKNAME = reader.GetString(reader.GetOrdinal("TASKNAME"));
+						var TASKRESULT = reader.GetString(reader.GetOrdinal("TASKRESULT"));
+						var NEXTRUNTIME = reader.GetInt32(reader.GetOrdinal("NEXTRUNTIME"));
+
+						res += $"{ID}: {TASKNAME} : interval {NEXTRUNTIME}{Environment.NewLine}";
+					}
+					res += "---------------------------";
+					return res;
 				}
 			}
 		}
