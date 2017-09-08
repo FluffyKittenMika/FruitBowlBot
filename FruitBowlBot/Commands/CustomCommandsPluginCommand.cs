@@ -118,7 +118,12 @@ namespace JefBot.Commands
                     if (item.Command == msg.Command && item.Channel == msg.Channel)
                     {
                         var message = item.Response.Replace("{username}", msg.Username); //Display name will make the name blank if the user have no display name set
-                        if (msg.Arguments.Count >= 1)
+							message = message.Replace("{args}", String.Join(" ", msg.Arguments));
+							message = message.Replace("{args_}", String.Join("_", msg.Arguments));
+							message = message.Replace("{args+}", String.Join("+", msg.Arguments));
+
+
+						if (msg.Arguments.Count >= 1)
                             message = message.Replace("{arg1}", msg.Arguments[0]);
                         else
                             message = message.Replace("{arg1}", string.Empty);
