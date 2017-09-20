@@ -22,3 +22,4 @@ debug=false
 #Webserver
 webserverenabled=true
 webport=8080
+hostname=jefmajor.com

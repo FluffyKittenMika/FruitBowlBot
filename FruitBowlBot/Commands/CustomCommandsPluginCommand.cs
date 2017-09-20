@@ -49,6 +49,7 @@ namespace JefBot.Commands
         {
             try
             {
+				
                 // Main command methods
                 if (
                     string.Equals(msg.Command, "command", StringComparison.OrdinalIgnoreCase) ||
@@ -59,7 +60,12 @@ namespace JefBot.Commands
                 {
                     if (msg.Arguments.Count > 0)
                     {
-                        if (msg.IsModerator)
+						if (msg.Arguments[0].ToLower() == "list")
+						{
+							return string.Join(", ", CustomCommands.Where(cmd => cmd.Channel == msg.Channel).Select(cmd => cmd.Command).ToArray());
+						}
+
+						if (msg.IsModerator)
                         {
                             if (string.Equals(msg.Arguments[0], "add", StringComparison.OrdinalIgnoreCase))
                             {
@@ -71,9 +77,10 @@ namespace JefBot.Commands
                                     // Looks like someone is trying to run a command!
                                     if (response.StartsWith("/") && !response.StartsWith("/me"))
                                         return $"Custom commands cannot run chat slash commands...";
-
+									
                                     CCommand cmd = new CCommand(newCommand, response, msg.Channel);
 
+									//removes existing commands if they have the same command name, also checks if the command is in the same channel.
                                     CustomCommands.RemoveAll(cmdx => cmdx.Channel == msg.Channel && cmdx.Command == newCommand);
 
                                     CustomCommands.Add(cmd);
@@ -90,10 +97,10 @@ namespace JefBot.Commands
                             {
                                 if (msg.Arguments.Count >= 2)
                                 {
-                                    var newCommand = msg.Arguments[1];
-                                    CustomCommands.RemoveAll(cmd => cmd.Channel == msg.Channel && cmd.Command == newCommand);
+                                    var oldCommand = msg.Arguments[1];
+                                    CustomCommands.RemoveAll(cmd => cmd.Channel == msg.Channel && cmd.Command == oldCommand);
                                     Save();
-                                    return $"Command {newCommand} has been removed";
+                                    return $"Command {oldCommand} has been removed";
                                 }
                                 else
                                     return "Usage !command remove [command]";
@@ -107,27 +114,28 @@ namespace JefBot.Commands
                     else
                     {
 						string commands = string.Empty;
+						string list = string.Join(", ", CustomCommands.Where(cmd => cmd.Channel == msg.Channel).Select(cmd => cmd.Command).ToArray());
 
 						if (msg.IsModerator)
-							commands += $"Usage !command add [command] message], also the current commands are : " + string.Join(", ", CustomCommands.Where(cmd => cmd.Channel == msg.Channel).Select(cmd => cmd.Command).ToArray());
+							commands = $"Usage !command add [command] [message], also the current commands are : " + list;
 						else
-							commands = "Custom Commands are: " + string.Join(", ", CustomCommands.Where(cmd => cmd.Channel == msg.Channel).Select(cmd => cmd.Command).ToArray());
+							commands = "Custom Commands are: " + list;
 						
 						return commands;
                     }
                 }
 
-                // Twitch custom command
+                // Keyword replacement parser
                 foreach (var item in CustomCommands)
                 {
-                    if (item.Command == msg.Command && item.Channel == msg.Channel)
+					if (string.Equals(item.Command, msg.Command, StringComparison.OrdinalIgnoreCase) && item.Channel == msg.Channel)
                     {
                         var message = item.Response.Replace("{username}", msg.Username); //Display name will make the name blank if the user have no display name set
 							message = message.Replace("{args}", String.Join(" ", msg.Arguments));
 							message = message.Replace("{args_}", String.Join("_", msg.Arguments));
 							message = message.Replace("{args+}", String.Join("+", msg.Arguments));
 
-
+						//TODO: there's definitly a better way to do this
 						if (msg.Arguments.Count >= 1)
                             message = message.Replace("{arg1}", msg.Arguments[0]);
                         else

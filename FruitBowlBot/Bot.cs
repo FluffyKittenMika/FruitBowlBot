@@ -138,7 +138,7 @@ namespace JefBot
 
 				List<string> prefixes = new List<string>
 				{
-					$"http://localhost:{settings["webport"]}/"
+					$"http://{settings["hostname"]}:{settings["webport"]}/"
 				};
 				webServer = new FruitBowlBot.Webserver.Server(SendResponse, prefixes.ToArray());
 				webServer.Run();
