@@ -106,11 +106,14 @@ namespace JefBot.Commands
                     }
                     else
                     {
-                        if (msg.IsModerator)
-                            return $"Usage !command add [command] message]";
+						string commands = string.Empty;
 
-                        string commands = string.Join(", ", CustomCommands.Where(cmd => cmd.Channel == msg.Channel).Select(cmd => cmd.Command).ToArray());
-                        return $"Commands: {commands}";
+						if (msg.IsModerator)
+							commands += $"Usage !command add [command] message], also the current commands are : " + string.Join(", ", CustomCommands.Where(cmd => cmd.Channel == msg.Channel).Select(cmd => cmd.Command).ToArray());
+						else
+							commands = "Custom Commands are: " + string.Join(", ", CustomCommands.Where(cmd => cmd.Channel == msg.Channel).Select(cmd => cmd.Command).ToArray());
+						
+						return $"Commands: {commands}";
                     }
                 }
 
