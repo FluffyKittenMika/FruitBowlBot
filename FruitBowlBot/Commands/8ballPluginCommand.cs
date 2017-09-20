@@ -13,7 +13,7 @@ namespace JefBot.Commands
     {
         public string PluginName => "8ball";
         public string Command => "8ball";
-        public string Help => "!8ball to get wise";
+		public IEnumerable<string> Help => new[] { "!8ball to get wise" };
         public IEnumerable<string> Aliases => new[] { "8" };
         public bool Loaded { get; set; } = true;
         readonly Random rng = new Random();

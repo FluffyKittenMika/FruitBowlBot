@@ -13,7 +13,7 @@ namespace JefBot.Commands
     {
         public string PluginName => "Uptime";
         public string Command => "uptime";
-        public string Help => "!u returns the streams uptime";
+		public IEnumerable<string> Help => new[] { "!u returns the streams uptime" };
         public IEnumerable<string> Aliases => new[] { "u", "up", "uppity"};
         public bool Loaded { get; set; } = true;
 

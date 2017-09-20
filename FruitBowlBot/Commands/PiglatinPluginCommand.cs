@@ -14,7 +14,7 @@ namespace JefBot.Commands
     {
         public string PluginName => "Piglatin";
         public string Command => "piglatin";
-        public string Help => "!piglatin {string}";
+		public IEnumerable<string> Help => new[] { "!piglatin {string}" };
         public IEnumerable<string> Aliases => new[] { "pig" };
         public bool Loaded { get; set; } = true;
 

@@ -10,16 +10,18 @@ using System.Threading.Tasks;
 
 namespace JefBot.Commands
 {
-    class CustomCommandsPluginCommand : IPluginCommand
-    {
-        public string PluginName => "Custom Commands";
-        public string Command => "command";
-        public string Help => "!cmd add {command name} {command result}";
+	class CustomCommandsPluginCommand : IPluginCommand
+	{
+		public string PluginName => "Custom Commands";
+		public string Command => "command";
+		public IEnumerable<string> Help => new[] { "!cmd add {command name} {command result}" };
         public string[] OtherAliases = { "commands", "cmd", "cmds" };
         public IEnumerable<string> Aliases => CustomCommands.Select(command => command.Command).ToArray().Concat(OtherAliases);
         public List<CCommand> CustomCommands = new List<CCommand>();
         public bool Loaded { get; set; } = true;
-        private readonly string memoryPath = "./customCommands.txt";
+		
+
+		private readonly string memoryPath = "./customCommands.txt";
 
         public CustomCommandsPluginCommand()
         {

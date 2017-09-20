@@ -17,7 +17,7 @@ namespace JefBot.Commands
     {
         public string PluginName => "Migo";
         public string Command => "migo";
-        public string Help => "!m {search string}";
+		public IEnumerable<string> Help => new[] { "!m {search string}" };
         public IEnumerable<string> Aliases => new[] { "m" };
         public bool Loaded { get; set; } = true;
 

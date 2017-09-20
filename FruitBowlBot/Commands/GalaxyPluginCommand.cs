@@ -19,7 +19,7 @@ namespace JefBot.Commands
     {
         public string PluginName => "Galaxy";
         public string Command => "galaxy";
-        public string Help => "!galaxy {stars} {dimension} {frames} {arms}";
+		public IEnumerable<string> Help => new[] { "!galaxy {stars} {dimension} {frames} {arms}" };
         public IEnumerable<string> Aliases => new[] { "g" };
         public bool Loaded { get; set; } = false; //enable this when we fix black squares
         public static HttpClient client = new HttpClient();

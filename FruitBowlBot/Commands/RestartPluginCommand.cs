@@ -15,7 +15,7 @@ namespace JefBot.Commands
     {
         public string PluginName => "Reset";
         public string Command => "reset";
-        public string Help => "!reset to restart the bot";
+		public IEnumerable<string> Help => new[] { "!reset to restart the bot" };
         public IEnumerable<string> Aliases => new string[0];
         public bool Loaded { get; set; } = true;
 

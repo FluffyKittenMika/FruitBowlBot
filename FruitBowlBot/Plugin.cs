@@ -3,13 +3,14 @@ using System.Threading.Tasks;
 
 namespace JefBot
 {
-    public interface IPluginCommand
+
+	public interface IPluginCommand
     {
         string PluginName { get; }
         string Command { get; }
         IEnumerable<string> Aliases { get; }
         bool Loaded { get; set; }
-        string Help { get; }
+		IEnumerable<string> Help { get; }
         Task<string> Action(Message message);
     }
 

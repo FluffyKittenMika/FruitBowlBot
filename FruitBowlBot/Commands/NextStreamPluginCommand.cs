@@ -12,7 +12,7 @@ namespace JefBot.Commands
     {
         public string PluginName => "NextStream";
         public string Command => "next";
-        public string Help => "!next will give the estimated time untill the next stream.";
+		public IEnumerable<string> Help => new[] { "!next will give the estimated time untill the next stream." };
         public IEnumerable<string> Aliases => new[] { "n", "nextstream", "countdown" };
         public bool Loaded { get; set; } = true;
 

@@ -15,7 +15,7 @@ namespace JefBot.Commands
     {
         public string PluginName => "var";
         public string Command => "var";
-        public string Help => "!v {commands}";
+		public IEnumerable<string> Help => new[] { "!v {commands}" };
         public IEnumerable<string> Aliases => new string[0];
         public bool Loaded { get; set; } = true;
         

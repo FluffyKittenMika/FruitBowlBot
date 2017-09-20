@@ -13,7 +13,7 @@ namespace JefBot.Commands
     {
         public string PluginName => "Help";
         public string Command => "help";
-        public string Help => "!help {command}";
+		public IEnumerable<string> Help => new[] { "!help {command}" };
         public IEnumerable<string> Aliases => new[] { "h" };
         public bool Loaded { get; set; } = true;
 
@@ -41,7 +41,7 @@ namespace JefBot.Commands
                     {
                         if (item.Command == args[0] || item.Aliases.Contains(args[0]))
                         {
-                            result = item.Help;
+                            result = string.Join(Environment.NewLine, item.Help);
                             break;
                         }
                     }

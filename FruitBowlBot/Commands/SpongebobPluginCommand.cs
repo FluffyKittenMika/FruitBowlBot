@@ -15,7 +15,7 @@ namespace JefBot.Commands
     {
         public string PluginName => "Spongebob";
         public string Command => "spongebob";
-        public string Help => "!spongebob {string}";
+		public IEnumerable<string> Help => new[] { "!spongebob {string}" };
         public IEnumerable<string> Aliases => new[] { "bob","sponge","mock", "666bob" };
         public bool Loaded { get; set; } = true;
 
