@@ -19,3 +19,6 @@ userpassword=password
 prefix=!
 # Real solid debugging on/off
 debug=false
+#Webserver
+webserverenabled=true
+webport=8080
