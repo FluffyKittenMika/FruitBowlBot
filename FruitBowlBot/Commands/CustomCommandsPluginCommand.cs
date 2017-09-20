@@ -113,7 +113,7 @@ namespace JefBot.Commands
 						else
 							commands = "Custom Commands are: " + string.Join(", ", CustomCommands.Where(cmd => cmd.Channel == msg.Channel).Select(cmd => cmd.Command).ToArray());
 						
-						return $"Commands: {commands}";
+						return commands;
                     }
                 }
 
