@@ -34,14 +34,14 @@ namespace JefBot.Commands
 
         public string Time(Message message)
         {
-            if (message.Channel == "jefmajor" || message.Channel == "236951447634182145")
+            if (message.Channel == "jefmajor")
                 return Time();
             return null;
         }
 
         public string Time()
         {
-            TimeSpan? uptime = TwitchAPI.Streams.v5.GetUptime(TwitchAPI.Channels.v3.GetChannelByName("jefmajor").Result.Id).Result;
+            TimeSpan? uptime = TwitchAPI.Streams.v5.GetUptimeAsync(TwitchAPI.Channels.v3.GetChannelByNameAsync("jefmajor").Result.Id).Result;
          
             if (!uptime.HasValue)
             {

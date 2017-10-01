@@ -19,7 +19,7 @@ namespace JefBot.Commands
 
         public string Res(string channel)
         {
-            TimeSpan? uptime = TwitchAPI.Streams.v5.GetUptime(TwitchAPI.Channels.v3.GetChannelByName(channel).Result.Id).Result;
+            TimeSpan? uptime = TwitchAPI.Streams.v5.GetUptimeAsync(TwitchAPI.Channels.v3.GetChannelByNameAsync(channel).Result.Id).Result;
             if (uptime.HasValue)
                 return $"Time: {uptime.Value.Hours}h {uptime.Value.Minutes}m {uptime.Value.Seconds}s";
             else

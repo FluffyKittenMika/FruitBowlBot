@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 using System.Diagnostics;
 using System.Windows.Forms;
 using System.Net;
+using FruitBowlBot.Webserver;
 
 namespace JefBot
 {
@@ -29,7 +30,7 @@ namespace JefBot
 
 		public static bool IsStreaming(string channel)
 		{
-			TimeSpan? uptime = TwitchAPI.Streams.v5.GetUptime(TwitchAPI.Streams.v3.GetStream(channel).Result.Stream.Channel.Id).Result;
+			TimeSpan? uptime = TwitchAPI.Streams.v5.GetUptimeAsync(TwitchAPI.Streams.v3.GetStreamAsync(channel).Result.Stream.Channel.Id).Result;
 			if (uptime.HasValue)
 				return true;
 			else
@@ -140,8 +141,23 @@ namespace JefBot
 				{
 					$"http://{settings["hostname"]}:{settings["webport"]}/"
 				};
-				webServer = new FruitBowlBot.Webserver.Server(SendResponse, prefixes.ToArray());
-				webServer.Run();
+				foreach (string pre in prefixes)
+				{
+					Console.WriteLine(pre);
+				}
+				try
+				{
+					webServer = new Server(Server.SendResponse, prefixes.ToArray());
+					webServer.Run();
+				}
+				catch (Exception e)
+				{
+					Console.WriteLine(e.Message);
+#if DEBUG
+					Console.WriteLine(e.StackTrace);
+#endif
+				}
+
 			}
 			#endregion
 
@@ -153,13 +169,24 @@ namespace JefBot
 				  new DiscordSocketConfig
 				  {
 					  WebSocketProvider = Discord.Net.Providers.WS4Net.WS4NetProvider.Instance,
-					  AlwaysDownloadUsers = true
+					  AlwaysDownloadUsers = true,
+					  LogLevel = LogSeverity.Verbose
 				  });
+				discordClient.Log += Logger;
 
-				await discordClient.LoginAsync(TokenType.Bot, settings["discordtoken"]);
-				await discordClient.GetGroupChannelsAsync();
-				await discordClient.StartAsync();
-				await discordClient.GetConnectionsAsync();
+
+
+				try
+				{
+					await discordClient.LoginAsync(TokenType.Bot, settings["discordtoken"]);
+					await discordClient.StartAsync();
+					await discordClient.GetGroupChannelsAsync();
+					await discordClient.GetConnectionsAsync();
+				}
+				catch (Exception e)
+				{
+					Console.WriteLine(e.Message);
+				}
 			}
 
 			discordClient.MessageReceived += async (e) =>
@@ -197,14 +224,35 @@ namespace JefBot
 
 		}
 
-		public static string SendResponse(HttpListenerRequest request)
+		private static Task Logger(LogMessage message)
 		{
-			if (Convert.ToBoolean(settings["debug"]))
-				Console.WriteLine(request.RawUrl);
-			return string.Format("<HTML><BODY>My web page.<br>{0}</BODY></HTML>", DateTime.Now);
+			var cc = Console.ForegroundColor;
+			switch (message.Severity)
+			{
+				case LogSeverity.Critical:
+				case LogSeverity.Error:
+					Console.ForegroundColor = ConsoleColor.Red;
+					break;
+				case LogSeverity.Warning:
+					Console.ForegroundColor = ConsoleColor.Yellow;
+					break;
+				case LogSeverity.Info:
+					Console.ForegroundColor = ConsoleColor.White;
+					break;
+				case LogSeverity.Verbose:
+				case LogSeverity.Debug:
+					Console.ForegroundColor = ConsoleColor.DarkGray;
+					break;
+			}
+			Console.WriteLine($"{DateTime.Now,-19} [{message.Severity,8}] {message.Source}: {message.Message}");
+			Console.ForegroundColor = cc;
+
+			return Task.CompletedTask;
 		}
 
-		private void Reboot()
+
+
+			private void Reboot()
 		{
 			Process.Start(Application.StartupPath + "\\FruitBowlBot.exe");
 			Process.GetCurrentProcess().Kill();
@@ -318,7 +366,7 @@ namespace JefBot
 		{
 			var chatClient = (TwitchClient)sender;
 			var enabledPlugins = _plugins.Where(plug => plug.Loaded).ToArray();
-			var command = e.Command.Command.ToLower();
+			var command = e.Command.CommandText.ToLower();
 
 			Message msg = new Message
 			{

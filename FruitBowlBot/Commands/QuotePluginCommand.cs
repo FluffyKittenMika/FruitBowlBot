@@ -35,7 +35,7 @@ namespace JefBot.Commands
         {
             if (message.Arguments.Count > 0)
             {
-                if (message.Channel == "236951447634182145")
+                if (message.Channel == "236951447634182145") //Todo translate this to bound channels
                     message.Channel = "jefmajor";
                 return Quote(message.Arguments, message.Channel, message.Username);
             }

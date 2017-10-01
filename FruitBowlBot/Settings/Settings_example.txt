@@ -19,7 +19,8 @@ userpassword=password
 prefix=!
 # Real solid debugging on/off
 debug=false
+webdebug=false
 #Webserver
-webserverenabled=true
+webserverenabled=false
 webport=8080
 hostname=jefmajor.com

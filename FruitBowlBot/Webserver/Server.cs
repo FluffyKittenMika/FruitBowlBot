@@ -8,7 +8,9 @@ using System.Threading.Tasks;
 
 namespace FruitBowlBot.Webserver
 {
-	public class Server : IDisposable
+	//fuck this
+	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1001:TypesThatOwnDisposableFieldsShouldBeDisposable")]
+	public class Server 
 	{
 		private readonly HttpListener _listener = new HttpListener();
 		private readonly Func<HttpListenerRequest, string> _response;
@@ -17,13 +19,15 @@ namespace FruitBowlBot.Webserver
 		{
 			if (!HttpListener.IsSupported)
 				throw new NotSupportedException("Needs Windows XP SP2, Server 2003 or later.");
-
-			// URI prefixes are required, for example 
-			// "http://localhost:8080/index/".
+			
+			//sets prefixses
 			if (prefixes == null || prefixes.Length == 0)
 				throw new ArgumentException("prefixes");
 			foreach (string s in prefixes)
+			{
 				_listener.Prefixes.Add(s);
+				Console.WriteLine(s);
+			}
 
 			_response = method ?? throw new ArgumentException("method");
 			_listener.Start();
@@ -32,10 +36,6 @@ namespace FruitBowlBot.Webserver
 		public Server(Func<HttpListenerRequest, string> method, params string[] prefixes)
             : this(prefixes, method) { }
 
-		public void Dispose()
-		{
-			((IDisposable)_listener).Dispose();
-		}
 
 		public void Run()
 		{
@@ -67,6 +67,43 @@ namespace FruitBowlBot.Webserver
 				}
 				catch { } // suppress any exceptions
 			});
+		}
+
+		public static string SendResponse(HttpListenerRequest request)
+		{
+			if (Convert.ToBoolean(JefBot.Bot.settings["debug"]))
+				Console.WriteLine(request.RawUrl);
+
+			return GenerateHTML(request);
+		}
+
+		public static string GenerateHTML(HttpListenerRequest req)
+		{
+			//init output
+			string output = "";
+
+			//read index template
+
+
+
+			//make plugin list
+			string plugins = "";
+			foreach (var item in JefBot.Bot._plugins)
+			{
+				string temp = ""; 
+				temp += "<div class=\"plugin\"><p>";
+				temp += $"<h1>{item.PluginName}</h1>";
+				temp += $"<div class=\"command\">{String.Join("; ",item.Command)}</div>";
+				temp += $"<div class=\"aliases\">{String.Join("; ",item.Aliases)}</div>";
+				temp += $"{String.Join("; ", item.Help)}";
+				temp += "</p></div>";
+				plugins += temp;
+			}
+
+			//replace correct part with plugins
+
+			output += plugins;
+			return output;
 		}
 
 		public void Stop()
