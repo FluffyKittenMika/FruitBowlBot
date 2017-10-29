@@ -77,7 +77,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Bot.cs" />
-    <Compile Include="Commands\VarPluginCommand.cs" />
     <Compile Include="Commands\RestartPluginCommand.cs" />
     <Compile Include="Commands\CoinPluginCommand.cs" />
     <Compile Include="Commands\CustomCommandsPluginCommand.cs" />
@@ -87,6 +86,7 @@
     <Compile Include="Commands\RollPluginCommand.cs" />
     <Compile Include="Commands\TaskPluginCommand.cs" />
     <Compile Include="Commands\UptimePluginCommand.cs" />
+    <Compile Include="Commands\VarPluginCommand.cs" />
     <Compile Include="Plugin.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
