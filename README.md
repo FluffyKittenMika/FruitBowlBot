@@ -1,4 +1,2 @@
 # FruitBowlBot
-The bot for twitch.tv/jefmajor and twitch.tv/arkentosh
-
-TODO: add command list here :)
+The bot for twitch.tv/arkentosh
