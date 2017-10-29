@@ -1,10 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using TwitchLib;
-using Discord;
-using Discord.Commands;
-using TwitchLib.Models.Client;
-using Discord.WebSocket;
 using System.Threading.Tasks;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -27,10 +22,6 @@ namespace JefBot.Commands
             return res;
         }
 
-      
-
-        
-
         public string Commands(Message message)
         {
             List<string> responses = new List<string>();
@@ -43,7 +34,6 @@ namespace JefBot.Commands
             //make argument list holder, will skip each command
             //split at every prefix, and make this list of strings like !command arg1 arg2 arg3, aka regular unparsed commands
             List<string> args = Regex.Split(temp, $"(?={Bot.settings["prefix"][0]})").Skip(1).ToList();
-           
             
             foreach (string commands in args)
             {
@@ -61,7 +51,6 @@ namespace JefBot.Commands
                             IsModerator = message.IsModerator,
                             Channel = message.Channel,
                             Username = message.Username,
-                            MessageIsFromDiscord = message.MessageIsFromDiscord,
                             RawMessage = message.RawMessage, //and this is why you don't use raw for anything but debug, 'cause i just added potential bugs by nesting commands
                             Arguments = commands.Split(' ').Skip(1).ToList()
                         };

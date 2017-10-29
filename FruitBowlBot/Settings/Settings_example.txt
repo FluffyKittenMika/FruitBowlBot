@@ -6,17 +6,26 @@ channel=channelmchannelname,otherchannel,thirdchannel,commaseperatedchannel
 clientid=yourapplicationclientid
 #
 #
+#SQL Settings
+#
+dbserver=serverip
+dbbase=dbname
+userid=dbid
+userpassword=dbpass
+#
 #
 #command prefix
 prefix=!
+#
+#
 # Real solid debugging on/off
+#
 debug=false
 webdebug=false
 #
 #
 #Webserver
 #
-#
 webserverenabled=false
 webport=8080
-hostname=jefmajor.com
+hostname=localhost
