@@ -1,18 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using TwitchLib;
-using System.Net;
-using Discord;
-using System.Linq;
-using TwitchLib.Models.Client;
 using MySql.Data.MySqlClient;
-using Discord.WebSocket;
 using System.Threading.Tasks;
 
 namespace JefBot.Commands
 {
-    internal class QuotePluginCommand : IPluginCommand
+	internal class QuotePluginCommand : IPluginCommand
     {
         public string PluginName => "Quote";
         public string Command => "quote";
@@ -35,8 +29,6 @@ namespace JefBot.Commands
         {
             if (message.Arguments.Count > 0)
             {
-                if (message.Channel == "236951447634182145") //Todo translate this to bound channels
-                    message.Channel = "jefmajor";
                 return Quote(message.Arguments, message.Channel, message.Username);
             }
             return null;

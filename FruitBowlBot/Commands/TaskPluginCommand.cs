@@ -1,17 +1,11 @@
-﻿using Discord;
-using Discord.WebSocket;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using TwitchLib;
-using TwitchLib.Models.Client;
-using MySql.Data;
 using MySql.Data.MySqlClient;
 using System;
 
 namespace JefBot.Commands
 {
-    internal class TaskPluginCommand : IPluginCommand
+	internal class TaskPluginCommand : IPluginCommand
     {
         public string PluginName => "Task";
         public string Command => "task";

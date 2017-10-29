@@ -1,15 +1,11 @@
-﻿using Discord;
-using Discord.WebSocket;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using TwitchLib;
-using TwitchLib.Models.Client;
 
 namespace JefBot.Commands
 {
-    internal class UptimePluginCommand : IPluginCommand
+	internal class UptimePluginCommand : IPluginCommand
     {
         public string PluginName => "Uptime";
         public string Command => "uptime";
@@ -19,6 +15,7 @@ namespace JefBot.Commands
 
         public string Res(string channel)
         {
+
             TimeSpan? uptime = TwitchAPI.Streams.v5.GetUptimeAsync(TwitchAPI.Channels.v3.GetChannelByNameAsync(channel).Result.Id).Result;
             if (uptime.HasValue)
                 return $"Time: {uptime.Value.Hours}h {uptime.Value.Minutes}m {uptime.Value.Seconds}s";
@@ -35,13 +32,7 @@ namespace JefBot.Commands
 
         public string Uptime(Message message)
         {
-            if (!message.MessageIsFromDiscord)
-                return Res(message.Channel);
-
-            if (message.Arguments.Count > 0)
-                return Res(message.Arguments[0]);
-
-            return "Please format it like this '!uptime channelname' example '!u jefmajor' or '!u arkentosh'";
+            return Res(message.Channel);
         }
     }
 }

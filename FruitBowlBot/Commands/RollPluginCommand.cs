@@ -1,17 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using TwitchLib;
-using Discord;
 using TwitchLib.Models.Client;
 using RogueSharp.DiceNotation;
-using System.Linq;
-using Discord.WebSocket;
 using System.Threading.Tasks;
 
 namespace JefBot.Commands
 {
-    internal class RollPluginCommand : IPluginCommand
+	internal class RollPluginCommand : IPluginCommand
     {
         public string PluginName => "Roll";
         public string Command => "roll";

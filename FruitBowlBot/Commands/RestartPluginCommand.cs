@@ -1,17 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using TwitchLib;
-using Discord;
-using Discord.Commands;
-using TwitchLib.Models.Client;
-using Discord.WebSocket;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.Windows.Forms;
 using System.Threading.Tasks;
 
 namespace JefBot.Commands
 {
-    internal class RestartPluginCommand : IPluginCommand
+	internal class RestartPluginCommand : IPluginCommand
     {
         public string PluginName => "Reset";
         public string Command => "reset";
@@ -31,13 +25,13 @@ namespace JefBot.Commands
         {
             if (message.IsModerator)
             {
-                Seppoku();
+                Restart();
                 return "You'll never get this";
             }
             return "Fuck you, it's January! " + message.Username;
         }
 
-        public static void Seppoku()
+        public static void Restart()
         {
             Process.Start(Application.StartupPath + "\\FruitBowlBot.exe");
             Process.GetCurrentProcess().Kill();

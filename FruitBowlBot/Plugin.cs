@@ -20,7 +20,6 @@ namespace JefBot
         public string Channel { get; set; }
         public string Command { get; set; }
         public string Username { get; set; }
-        public bool MessageIsFromDiscord { get; set; }
         public bool IsModerator { get; set; }
         public List<string> Arguments { get; set; }
     }

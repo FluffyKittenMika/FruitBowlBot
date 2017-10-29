@@ -4,15 +4,10 @@ using System.Linq;
 using System.IO;
 using TwitchLib;
 using System.Threading;
-using Discord;
-using Discord.WebSocket;
 using TwitchLib.Models.Client;
 using TwitchLib.Events.Client;
-using MySql.Data.MySqlClient;
-using System.Threading.Tasks;
 using System.Diagnostics;
 using System.Windows.Forms;
-using System.Net;
 using FruitBowlBot.Webserver;
 
 namespace JefBot
@@ -24,9 +19,6 @@ namespace JefBot
 		public static List<IPluginCommand> _plugins = new List<IPluginCommand>();
 		public static string SQLConnectionString;
 		public FruitBowlBot.Webserver.Server webServer;
-
-		//discord intergration.
-		public DiscordSocketClient discordClient;
 
 		public static bool IsStreaming(string channel)
 		{
@@ -45,7 +37,7 @@ namespace JefBot
 
 		//Start shit up m8
 #pragma warning disable AvoidAsyncVoid // Avoid async void
-		private async void Init()
+		private void Init()
 #pragma warning restore AvoidAsyncVoid // Avoid async void
 		{
 			#region config loading
@@ -162,42 +154,6 @@ namespace JefBot
 			#endregion
 
 
-			#region discord init
-			if (settings["discordtoken"] != "tokengoeshere")
-			{
-				discordClient = new DiscordSocketClient(
-				  new DiscordSocketConfig
-				  {
-					  WebSocketProvider = Discord.Net.Providers.WS4Net.WS4NetProvider.Instance,
-					  AlwaysDownloadUsers = true,
-					  LogLevel = LogSeverity.Verbose
-				  });
-				discordClient.Log += Logger;
-
-
-
-				try
-				{
-					await discordClient.LoginAsync(TokenType.Bot, settings["discordtoken"]);
-					await discordClient.StartAsync();
-					await discordClient.GetGroupChannelsAsync();
-					await discordClient.GetConnectionsAsync();
-				}
-				catch (Exception e)
-				{
-					Console.WriteLine(e.Message);
-				}
-			}
-
-			discordClient.MessageReceived += async (e) =>
-			{
-				Console.WriteLine($"{e.Channel.Name}:{e.Author.Username}:{e.Content}");
-				if (!e.Author.IsBot)
-					await DiscordEventAsync(e).ConfigureAwait(false);
-			};
-
-
-			#endregion
 
 			#region Twitch Chat Client init
 			ConnectionCredentials Credentials = new ConnectionCredentials(settings["username"], settings["oauth"]);
@@ -224,35 +180,7 @@ namespace JefBot
 
 		}
 
-		private static Task Logger(LogMessage message)
-		{
-			var cc = Console.ForegroundColor;
-			switch (message.Severity)
-			{
-				case LogSeverity.Critical:
-				case LogSeverity.Error:
-					Console.ForegroundColor = ConsoleColor.Red;
-					break;
-				case LogSeverity.Warning:
-					Console.ForegroundColor = ConsoleColor.Yellow;
-					break;
-				case LogSeverity.Info:
-					Console.ForegroundColor = ConsoleColor.White;
-					break;
-				case LogSeverity.Verbose:
-				case LogSeverity.Debug:
-					Console.ForegroundColor = ConsoleColor.DarkGray;
-					break;
-			}
-			Console.WriteLine($"{DateTime.Now,-19} [{message.Severity,8}] {message.Source}: {message.Message}");
-			Console.ForegroundColor = cc;
-
-			return Task.CompletedTask;
-		}
-
-
-
-			private void Reboot()
+		private void Reboot()
 		{
 			Process.Start(Application.StartupPath + "\\FruitBowlBot.exe");
 			Process.GetCurrentProcess().Kill();
@@ -294,58 +222,6 @@ namespace JefBot
 			return "You must define a plugin command, and a bool";
 		}
 
-
-
-		/// <summary>
-		/// custom discord command parser lol
-		/// </summary>
-		/// <param name="arg"> the whole shibboleetbangbanglesbians</param>
-		/// <returns></returns>
-		private Task DiscordEventAsync(SocketMessage arg)
-		{
-			var args = arg.Content.Split(' ').ToList().Skip(1).ToList();
-			var enabledPlugins = _plugins.Where(plug => plug.Loaded).ToArray();
-			var command = "";
-
-			if (arg.Content[0] == settings["prefix"][0])
-			{
-				try
-				{
-					command = arg.Content.Remove(0, 1).Split(' ')[0].ToLower();
-
-					Message msg = new Message
-					{
-						Arguments = args,
-						Command = command,
-						Channel = Convert.ToString(((SocketGuildChannel)arg.Channel).Guild.Id),
-						IsModerator = ((SocketGuildUser)arg.Author).GuildPermissions.Administrator,
-						RawMessage = arg.Content,
-						Username = arg.Author.Username,
-						MessageIsFromDiscord = true
-					};
-					//just a hardcoded command for enabling / disabling plugins
-					if (command == "plugin" && msg.IsModerator)
-						arg.Channel.SendMessageAsync(PluginManager(msg));
-
-					foreach (var plug in enabledPlugins)
-					{
-						if (plug.Command == command || plug.Aliases.Contains(command))
-						{
-							string reaction = plug.Action(msg).Result;
-							if (reaction != null)
-								arg.Channel.SendMessageAsync(reaction);
-						}
-					}
-				}
-				catch (Exception err)
-				{
-					Console.Write(err.Message);
-				}
-			}
-
-			return Task.CompletedTask;
-		}
-
 		//Don't remove this, it's critical to see the chat in the bot, it quickly tells me if it's absolutely broken...
 		private void Chatmsg(object sender, OnMessageReceivedArgs e)
 		{
@@ -375,8 +251,7 @@ namespace JefBot
 				Channel = e.Command.ChatMessage.Channel,
 				IsModerator = e.Command.ChatMessage.IsModerator,
 				RawMessage = e.Command.ChatMessage.Message,
-				Username = e.Command.ChatMessage.Username,
-				MessageIsFromDiscord = false
+				Username = e.Command.ChatMessage.Username
 			};
 
 			//just a hardcoded command for enabling / disabling plugins

@@ -2,10 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using TwitchLib;
-using TwitchLib.Models.Client;
-using Discord.WebSocket;
-using Discord;
 using System.Threading.Tasks;
 
 namespace JefBot.Commands

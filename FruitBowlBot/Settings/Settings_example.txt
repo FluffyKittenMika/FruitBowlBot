@@ -1,18 +1,10 @@
-﻿# Starts with #, it's a comment!
+﻿# # is comments
 # Twitch authentication settings
 username=botmcbotbot
 oauth=oauth:ffffffffffffffffffffffffffffff
 channel=channelmchannelname,otherchannel,thirdchannel,commaseperatedchannel
 clientid=yourapplicationclientid
 #
-#Discord Intergration
-#Bot token
-discordtoken=tokengoeshere
-#Living in the database creds
-dbserver=127.0.0.1
-dbbase=database
-userid=root
-userpassword=password
 #
 #
 #command prefix
@@ -20,7 +12,11 @@ prefix=!
 # Real solid debugging on/off
 debug=false
 webdebug=false
+#
+#
 #Webserver
+#
+#
 webserverenabled=false
 webport=8080
 hostname=jefmajor.com

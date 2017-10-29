@@ -1,14 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using TwitchLib;
-using System.Text.RegularExpressions;
-using Discord;
-using TwitchLib.Models.Client;
-using MySql.Data;
 using MySql.Data.MySqlClient;
-using Discord.WebSocket;
 using System.Threading.Tasks;
 
 namespace JefBot.Commands
