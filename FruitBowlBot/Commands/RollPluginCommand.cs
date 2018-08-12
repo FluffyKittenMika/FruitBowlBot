@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using TwitchLib;
-using TwitchLib.Models.Client;
 using RogueSharp.DiceNotation;
 using System.Threading.Tasks;
+using TwitchLib.Client.Models;
+using TwitchLib.Client;
 
 namespace JefBot.Commands
 {
@@ -13,7 +13,7 @@ namespace JefBot.Commands
         public string Command => "roll";
 		public IEnumerable<string> Help => new[] { "!r {1d6} to roll a 1d6" };
         public IEnumerable<string> Aliases => new[] { "r" };
-        public bool Loaded { get; set; } = true;
+        public bool Loaded { get; set; } = false;
 
         //Non default definitions
         readonly Random rng = new Random();

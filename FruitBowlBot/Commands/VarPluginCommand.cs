@@ -12,7 +12,7 @@ namespace JefBot.Commands
 		public string Command => "var";
 		public IEnumerable<string> Help => new[] { "!v {commands}" };
 		public IEnumerable<string> Aliases => new string[0];
-		public bool Loaded { get; set; } = true;
+		public bool Loaded { get; set; } = false;
 
 		async Task<string> IPluginCommand.Action(Message message)
 		{

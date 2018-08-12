@@ -15,8 +15,15 @@ namespace JefBot.Commands
 
         public string Res(string channel)
         {
+			/*TimeSpan uptime = getUptime(stream.Stream.CreatedAt);
+			string HHmmss = uptime.Hours.Tostring() + ":" + uptime.Minutes.ToString() + ":" + uptime.Seconds.ToString();
 
-            TimeSpan? uptime = TwitchAPI.Streams.v5.GetUptimeAsync(TwitchAPI.Channels.v3.GetChannelByNameAsync(channel).Result.Id).Result;
+			public TimeSpan getUptime(DateTime dt)
+			{
+				return DateTime.Now - dt;
+			}*/
+
+			TimeSpan? uptime = TwitchAPI.Streams.v5.GetUptimeAsync(TwitchAPI.Channels.v3.GetChannelByNameAsync(channel).Result.Id).Result;
             if (uptime.HasValue)
                 return $"Time: {uptime.Value.Hours}h {uptime.Value.Minutes}m {uptime.Value.Seconds}s";
             else
@@ -32,7 +39,17 @@ namespace JefBot.Commands
 
         public string Uptime(Message message)
         {
-            return Res(message.Channel);
+
+			TimeSpan uptime = getUptime(channel.ChannelStream.CreatedAt);
+			string HHmmss = uptime.Hours.Tostring() + ":" + uptime.Minutes.ToString() + ":" + uptime.Seconds.ToString();
+
+
+			return Res(message.Channel);
         }
-    }
+
+		public TimeSpan getUptime(DateTime dt)
+		{
+			return DateTime.Now - dt;
+		}
+	}
 }

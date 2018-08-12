@@ -11,7 +11,7 @@ namespace JefBot.Commands
         public string Command => "task";
 		public IEnumerable<string> Help => new[] { "!task add/remove/get {name} {message} [minutes] (repeats a message every X sec (default 5 min))" };
         public IEnumerable<string> Aliases => new string[0];
-        public bool Loaded { get; set; } = true;
+        public bool Loaded { get; set; } = false;
 
         public async Task<string> Action(Message message)
         {

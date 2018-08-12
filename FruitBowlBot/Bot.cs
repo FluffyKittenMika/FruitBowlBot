@@ -4,11 +4,12 @@ using System.Linq;
 using System.IO;
 using TwitchLib;
 using System.Threading;
-using TwitchLib.Models.Client;
-using TwitchLib.Events.Client;
 using System.Diagnostics;
 using System.Windows.Forms;
-using FruitBowlBot.Webserver;
+using TwitchLib.Client;
+using TwitchLib.Api;
+using TwitchLib.Client.Models;
+using TwitchLib.Client.Events;
 
 namespace JefBot
 {
@@ -18,16 +19,8 @@ namespace JefBot
 		public static Dictionary<string, string> settings = new Dictionary<string, string>();
 		public static List<IPluginCommand> _plugins = new List<IPluginCommand>();
 		public static string SQLConnectionString;
-		public FruitBowlBot.Webserver.Server webServer;
 
-		public static bool IsStreaming(string channel)
-		{
-			TimeSpan? uptime = TwitchAPI.Streams.v5.GetUptimeAsync(TwitchAPI.Streams.v3.GetStreamAsync(channel).Result.Stream.Channel.Id).Result;
-			if (uptime.HasValue)
-				return true;
-			else
-				return false;
-		}
+	
 
 		//constructor
 		public Bot()
@@ -124,40 +117,9 @@ namespace JefBot
 			#endregion
 
 
-			#region WebServer Init
-
-			if (Convert.ToBoolean(settings["webserverenabled"]))
-			{
-
-				List<string> prefixes = new List<string>
-				{
-					$"http://{settings["hostname"]}:{settings["webport"]}/"
-				};
-				foreach (string pre in prefixes)
-				{
-					Console.WriteLine(pre);
-				}
-				try
-				{
-					webServer = new Server(Server.SendResponse, prefixes.ToArray());
-					webServer.Run();
-				}
-				catch (Exception e)
-				{
-					Console.WriteLine(e.Message);
-#if DEBUG
-					Console.WriteLine(e.StackTrace);
-#endif
-				}
-
-			}
-			#endregion
-
-
-
 			#region Twitch Chat Client init
 			ConnectionCredentials Credentials = new ConnectionCredentials(settings["username"], settings["oauth"]);
-
+			
 			if (settings["clientid"] != null)
 				TwitchAPI.Settings.ClientId = settings["clientid"];
 
@@ -243,13 +205,12 @@ namespace JefBot
 			var chatClient = (TwitchClient)sender;
 			var enabledPlugins = _plugins.Where(plug => plug.Loaded).ToArray();
 			var command = e.Command.CommandText.ToLower();
-
 			Message msg = new Message
 			{
 				Arguments = e.Command.ArgumentsAsList,
 				Command = command,
 				Channel = e.Command.ChatMessage.Channel,
-				IsModerator = e.Command.ChatMessage.IsModerator,
+				IsModerator = (e.Command.ChatMessage.IsBroadcaster || e.Command.ChatMessage.IsModerator), // fixes some issues
 				RawMessage = e.Command.ChatMessage.Message,
 				Username = e.Command.ChatMessage.Username
 			};

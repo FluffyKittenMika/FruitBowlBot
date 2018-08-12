@@ -42,7 +42,7 @@ namespace JefBot.Commands
                         }
                     }
                     if (result == "" || result == null)
-                        result = $"No command / alias found for {args[0]} and therefore no help can be given";
+                        result = $"No command / alias found for {args[0]} :(";
                     return $"{result}";
                 }
                 return $"{Help}";
