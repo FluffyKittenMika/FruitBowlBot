@@ -15,16 +15,18 @@ namespace JefBot.Commands
 		public async Task<string> Action(Message message)
 		{
 			string res = null;
-			await Task.Run(() => { res = Uptime(message); }).ConfigureAwait(false);
+			await Task.Run(() => { res = Uptime(message).Result; }).ConfigureAwait(true);
 			return res;
 		}
 
-		public string Uptime(Message message)
+		public async Task<string> Uptime(Message message)
 		{
 			string res = "Offline";
-			TimeSpan uptime = Bot.twitchAPI.Streams.v5.GetUptimeAsync(Bot.GetChannelIDAsync(message.Channel).Result).Result.Value;
-			if (uptime.TotalSeconds > 0)
-				res = uptime.Hours.ToString() + ":" + uptime.Minutes.ToString() + ":" + uptime.Seconds.ToString();
+			var channelid = Bot.GetChannelIDAsync(message.Channel).Result;
+			TimeSpan? waittime = await Bot.twitchAPI.Streams.v5.GetUptimeAsync(channelid);
+			TimeSpan uptime = waittime.GetValueOrDefault();
+			if (uptime.TotalSeconds > 0 && uptime != null)
+				res = $"Time: {uptime.Hours.ToString()}h:{uptime.Minutes.ToString()}m:{uptime.Seconds.ToString()}s";
 			return res;
 		}
 

@@ -65,6 +65,10 @@ namespace JefBot
 					}
 				}
 
+				Console.WriteLine("Detected settings for theese keys");
+				foreach (var item in settings.Keys)
+					Console.WriteLine(item);
+
 			}
 			else
 			{
@@ -75,7 +79,7 @@ namespace JefBot
 			#endregion
 
 			#region dbstring
-			SQLConnectionString = $"SERVER={settings["dbserver"]}; DATABASE = {settings["dbbase"]}; UID ={settings["userid"]}; PASSWORD = {settings["userpassword"]};";
+			SQLConnectionString = $"SERVER={settings["dbserver"]}; DATABASE = {settings["dbbase"]}; UID ={settings["userid"]}; PASSWORD = {settings["userpassword"]};SslMode=none";
 			#endregion
 
 			#region plugins
@@ -92,7 +96,6 @@ namespace JefBot
 				{
 					_plugins.Add((IPluginCommand)Activator.CreateInstance(type));
 				}
-
 				var commands = new List<string>();
 				foreach (var plug in _plugins)
 				{
@@ -207,6 +210,7 @@ namespace JefBot
 
 		private void Disconnected(object sender, OnDisconnectedArgs e)
 		{
+			
 			Reboot();
 		}
 
@@ -238,7 +242,16 @@ namespace JefBot
 			{
 				if (plug.Command == command || plug.Aliases.Contains(command))
 				{
-					string reaction = plug.Action(msg).Result;
+					string reaction = "";
+					try
+					{
+						reaction = plug.Action(msg).Result;
+					}
+					catch (Exception errr)
+					{
+						Console.WriteLine(errr.Message + " ---- " + errr.StackTrace);
+					}
+					
 					if (reaction != null)
 						chatClient.SendMessage(e.Command.ChatMessage.Channel, reaction);
 					break;

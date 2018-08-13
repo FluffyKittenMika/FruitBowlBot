@@ -37,7 +37,7 @@ namespace JefBot.Commands
                         {
                             var quote = reader.GetString(reader.GetOrdinal("QUOTE"));
                             int id = reader.GetInt32(reader.GetOrdinal("ID"));
-                            var submitter = reader.GetString(reader.GetOrdinal("SUBMITTER"));
+							var submitter = reader.GetString(reader.GetOrdinal("SUBMITTER"));
                             DateTime timestamp = reader.GetDateTime(reader.GetOrdinal("TIMESTAMP"));
                             var channel = reader.GetString(reader.GetOrdinal("CHANNEL"));
                             quotes.Add(new Quote(quote, timestamp, submitter, channel, id));
@@ -48,7 +48,7 @@ namespace JefBot.Commands
             catch (Exception e)
             {
                 Loaded = false;
-                Console.WriteLine(e.Message);
+                Console.WriteLine(e.Message + "  " +  e.StackTrace);
             }
          
         }
@@ -70,7 +70,7 @@ namespace JefBot.Commands
                         timestampTwitch = DateTime.UtcNow;
                     if (message.Arguments.Count == 0)
                     {
-                        Quote qu = Migo();
+                        Quote qu = Migo(message.Channel);
                         if (qu.SubmittedBy == null || qu.SubmittedBy == "")
                             qu.SubmittedBy = "Unknown";
                         return $"{qu.Quotestring} submitted by {qu.SubmittedBy} #{qu.Id}";
@@ -80,14 +80,14 @@ namespace JefBot.Commands
                         string msg = String.Join(" ", message.Arguments);
                         if (Int32.TryParse(msg, out int x))
                         {
-                            Quote qu = SearchMigo(x);
+                            Quote qu = SearchMigo(x, message.Channel);
                             if (qu.SubmittedBy == null || qu.SubmittedBy == "")
                                 qu.SubmittedBy = "Unknown";
                             return $"{qu.Quotestring} QuoteID:{qu.Id}";
                         }
                         else
                         {
-                            Quote qu = SearchMigo(msg);
+                            Quote qu = SearchMigo(msg, message.Channel);
                             if (qu.SubmittedBy == null || qu.SubmittedBy == "")
                                 qu.SubmittedBy = "Unknown";
                             return $"{qu.Quotestring} QuoteID:{qu.Id}";
@@ -104,15 +104,16 @@ namespace JefBot.Commands
         }
         
 
-        public Quote SearchMigo(int search)
+        public Quote SearchMigo(int search, string _channel)
         {
             using (MySqlConnection con = new MySqlConnection(Bot.SQLConnectionString))
             {
                 con.Open();
                 MySqlCommand _cmd = con.CreateCommand();
-                _cmd.CommandText = @"SELECT * FROM `Quotes` WHERE `ID` = @input";
+                _cmd.CommandText = @"SELECT * FROM `Quotes` WHERE `ID` = @input AND `CHANNEL` = @channel";
                 _cmd.Parameters.AddWithValue("@input", search);
-                using (MySqlDataReader reader = _cmd.ExecuteReader())
+				_cmd.Parameters.AddWithValue("@channel", _channel);
+				using (MySqlDataReader reader = _cmd.ExecuteReader())
                 {
                     while (reader.Read())
                     {
@@ -127,7 +128,7 @@ namespace JefBot.Commands
                         return quotes[rng.Next(quotes.Count)];
                     else
                     {
-                        Quote nonefound = Migo();
+                        Quote nonefound = Migo(_channel);
                         nonefound.Quotestring = "Found no results, have this one instead: " + nonefound.Quotestring;
                         return nonefound;
                     }
@@ -135,15 +136,16 @@ namespace JefBot.Commands
             }
         }
 
-        public Quote SearchMigo(string search)
+        public Quote SearchMigo(string search, string _channel)
         {
             using (MySqlConnection con = new MySqlConnection(Bot.SQLConnectionString))
             {
                 con.Open();
                 MySqlCommand _cmd = con.CreateCommand();
-                _cmd.CommandText = @"SELECT * FROM Quotes WHERE MATCH(Quote) AGAINST(@input IN BOOLEAN MODE)";
+                _cmd.CommandText = @"SELECT * FROM Quotes WHERE `CHANNEL` = @channel AND MATCH(Quote) AGAINST(@input IN BOOLEAN MODE)";
                 _cmd.Parameters.AddWithValue("@input", search);
-                using (MySqlDataReader reader = _cmd.ExecuteReader())
+				_cmd.Parameters.AddWithValue("@channel", _channel);
+				using (MySqlDataReader reader = _cmd.ExecuteReader())
                 {
                     while (reader.Read())
                     {
@@ -158,7 +160,7 @@ namespace JefBot.Commands
                         return quotes[rng.Next(quotes.Count)];
                     else
                     {
-                        Quote nonefound = Migo();
+                        Quote nonefound = Migo(_channel);
                         nonefound.Quotestring = "Found no results, have this one instead: " + nonefound.Quotestring;
                         return nonefound;
                     }
@@ -166,7 +168,7 @@ namespace JefBot.Commands
             }
           
         }
-        public Quote Migo()
+        public Quote Migo(string channel)
         {
             var derp = quotes.ElementAt(rng.Next(0, quotes.Count));
             pickedquotes.Add(derp);
@@ -176,6 +178,8 @@ namespace JefBot.Commands
                 quotes.AddRange(pickedquotes);
                 pickedquotes.Clear();
             }
+			if (derp.Channel != channel)// recursive solution :)
+				derp = Migo(channel);
             return derp;
         }
 
@@ -189,13 +193,13 @@ namespace JefBot.Commands
         public string SubmittedBy { get; set; }
         public string Channel { get; set; }
         public int Id { get; set; }
-        public Quote(string quote, DateTime date, string submitter ="", string channel="",int id = 0)
+        public Quote(string quote, DateTime date, string submitter, string channel="",int id = 0)
         {
             Quotestring = quote;
             Datesubmitted = date;
-            SubmittedBy = submitter;
+            SubmittedBy  = submitter;
             Channel = channel;
-            this.Id = id;
+            Id = id;
         }
     }
 }

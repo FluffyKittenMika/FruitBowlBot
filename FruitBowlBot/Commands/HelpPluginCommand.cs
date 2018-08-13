@@ -45,7 +45,7 @@ namespace JefBot.Commands
                         result = $"No command / alias found for {args[0]} :(";
                     return $"{result}";
                 }
-                return $"{Help}";
+                return $"{Help.First()}";
             }
             catch (Exception e)
             {

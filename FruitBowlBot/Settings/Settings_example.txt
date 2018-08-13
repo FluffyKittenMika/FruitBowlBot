@@ -21,11 +21,3 @@ prefix=!
 # Real solid debugging on/off
 #
 debug=false
-webdebug=false
-#
-#
-#Webserver
-#
-webserverenabled=false
-webport=8080
-hostname=localhost

@@ -84,9 +84,7 @@
     <Compile Include="Commands\MigoPluginCommand.cs" />
     <Compile Include="Commands\QuotePluginCommand.cs" />
     <Compile Include="Commands\RollPluginCommand.cs" />
-    <Compile Include="Commands\TaskPluginCommand.cs" />
     <Compile Include="Commands\UptimePluginCommand.cs" />
-    <Compile Include="Commands\VarPluginCommand.cs" />
     <Compile Include="Plugin.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

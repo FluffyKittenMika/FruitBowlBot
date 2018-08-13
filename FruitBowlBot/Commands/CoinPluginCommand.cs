@@ -10,7 +10,7 @@ namespace JefBot.Commands
         public string Command => "coin";
 		public IEnumerable<string> Help => new[] { "!c to flip a coin" };
         public IEnumerable<string> Aliases => new[] { "c", "flip" };
-        public bool Loaded { get; set; } = true;
+        public bool Loaded { get; set; } = false;
 
         readonly Random rng = new Random();
 
