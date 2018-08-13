@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.IO;
-using TwitchLib;
 using System.Threading;
 using System.Diagnostics;
 using System.Windows.Forms;
@@ -10,6 +9,7 @@ using TwitchLib.Client;
 using TwitchLib.Api;
 using TwitchLib.Client.Models;
 using TwitchLib.Client.Events;
+using System.Threading.Tasks;
 
 namespace JefBot
 {
@@ -19,13 +19,27 @@ namespace JefBot
 		public static Dictionary<string, string> settings = new Dictionary<string, string>();
 		public static List<IPluginCommand> _plugins = new List<IPluginCommand>();
 		public static string SQLConnectionString;
+		public static TwitchAPI twitchAPI = new TwitchAPI();
 
-	
 
 		//constructor
 		public Bot()
 		{
 			Init();
+		}
+
+		//usefull to get important ID's
+		public static async Task<string> GetChannelIDAsync(string channelname)
+		{
+			string ChannelID;
+			var uL = await twitchAPI.Users.v5.GetUserByNameAsync(channelname);
+			var userList = uL.Matches;
+
+			if (userList == null || userList.Length == 0)
+				ChannelID = string.Empty;
+			else
+				ChannelID = userList[0].Id.Trim();
+			return ChannelID;
 		}
 
 		//Start shit up m8
@@ -108,7 +122,7 @@ namespace JefBot
 			catch (Exception e)
 			{
 #if DEBUG
-                Console.WriteLine(e.InnerException);
+				Console.WriteLine(e.InnerException);
 #endif
 				Console.WriteLine(e.Message);
 				Console.WriteLine(e.StackTrace);
@@ -119,15 +133,16 @@ namespace JefBot
 
 			#region Twitch Chat Client init
 			ConnectionCredentials Credentials = new ConnectionCredentials(settings["username"], settings["oauth"]);
-			
+
 			if (settings["clientid"] != null)
-				TwitchAPI.Settings.ClientId = settings["clientid"];
+				twitchAPI.Settings.ClientId = settings["clientid"];
 
 
 			//Set up a client for each channel
 			foreach (string str in settings["channel"].Split(','))
 			{
-				TwitchClient ChatClient = new TwitchClient(Credentials, str, settings["prefix"][0], logging: Convert.ToBoolean(settings["debug"]));
+				TwitchClient ChatClient = new TwitchClient();
+				ChatClient.Initialize(Credentials, str, settings["prefix"][0]);
 				ChatClient.OnChatCommandReceived += RecivedCommand;
 				ChatClient.OnDisconnected += Disconnected;
 				ChatClient.OnMessageReceived += Chatmsg;
