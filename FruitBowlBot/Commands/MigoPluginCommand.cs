@@ -178,8 +178,6 @@ namespace JefBot.Commands
                 quotes.AddRange(pickedquotes);
                 pickedquotes.Clear();
             }
-			if (derp.Channel != channel)// recursive solution :)
-				derp = Migo(channel);
             return derp;
         }
 
