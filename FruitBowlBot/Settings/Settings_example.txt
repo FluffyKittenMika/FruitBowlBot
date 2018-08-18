@@ -1,5 +1,6 @@
 ﻿# # is comments
 # Twitch authentication settings
+# TODO move this to the SQL aswell
 username=botmcbotbot
 oauth=oauth:ffffffffffffffffffffffffffffff
 channel=channelmchannelname,otherchannel,thirdchannel,commaseperatedchannel
@@ -15,8 +16,11 @@ userpassword=dbpass
 #
 #
 #command prefix
+#TODO, fetch prefix from settings in SQL
 prefix=!
 #
+#
+discordcode=
 #
 # Real solid debugging on/off
 #

@@ -110,7 +110,7 @@ namespace JefBot.Commands
             {
                 con.Open();
                 MySqlCommand _cmd = con.CreateCommand();
-                _cmd.CommandText = @"SELECT * FROM `Quotes` WHERE `ID` = @input AND `CHANNEL` = @channel";
+                _cmd.CommandText = @"SELECT * FROM `Quotes` WHERE `ID` = @input";
                 _cmd.Parameters.AddWithValue("@input", search);
 				_cmd.Parameters.AddWithValue("@channel", _channel);
 				using (MySqlDataReader reader = _cmd.ExecuteReader())
