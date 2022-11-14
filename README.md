@@ -1,5 +1,4 @@
 # FruitBowlBot
-The bot for twitch.tv/jefmajor twitch.tv/mikaelssen twitch.tv/arkentosh
 
 Functions
   Quotes
